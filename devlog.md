@@ -18,8 +18,18 @@
 
 - What could I put in Utilities? Keep a running list?
 
+  - Submit Buttons
+
+  - Landing page section constructor
+
+-
+
+#### Stateful Components
+
+- The values in `RecipesForm` needs to change if editing a recipe vs. creating one.
+
 ### Workflow
 
-- I need to set up my Ubuntu to run SSH keys.
+- I need to set up my Ubuntu to use SSH keys for git and Zeit builds.
 
 - I want a tree alias that automatically excludes node_modules
