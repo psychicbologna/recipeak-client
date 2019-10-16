@@ -14,7 +14,13 @@ import './App.css';
 class App extends Component {
   state = {
     loggedin: true,
-    error: false
+    hasError: false
+  }
+  
+//https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
+  static getDerivedStateFromError(error) {
+    console.error(error)
+    return {hasError: true}
   }
 
   render() {

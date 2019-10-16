@@ -5,10 +5,13 @@ import './normalize.css';
 import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
+import { RecipeListProvider } from './contexts/RecipeCardListContext';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+  <RecipeListProvider>
+    <App/>
+  </RecipeListProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

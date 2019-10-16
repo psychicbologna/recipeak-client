@@ -16,7 +16,6 @@ export class RecipeListProvider extends Component {
   }
 
   setRecipeList = recipeList => {
-    console.log(recipeList);
     this.setState({ recipeList })
   }
 
@@ -26,11 +25,11 @@ export class RecipeListProvider extends Component {
   }
 
   clearError = () => {
-    console.log('Hi bro');
     this.setState({ error: null })
   }
 
   render() {
+    console.log(this.state.recipelist);
     const value = {
       recipeList: this.state.recipeList,
       error: this.state.error,
