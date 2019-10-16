@@ -5,33 +5,34 @@ import RecipeApiService from '../../services/recipes-api-service';
 import { Section } from '../../components/Utils/Utils';
 
 export default class RecipeCardList extends Component {
+
   static contextType = RecipeListContext;
 
   componentDidMount() {
     this.context.clearError()
     RecipeApiService.getRecipes()
-      .then(recipeList => {
-        this.context.setRecipeList(recipeList)
-      })
-      .catch(error => this.context.setError(error))
+      .then(this.context.setRecipeList)
+      .catch(this.context.setError)
   }
 
   renderRecipes() {
     const { recipeList = [] } = this.context;
-    return recipeList.map(recipe =>
+    return recipeList.map(recipe => 
       <div>
-        <h2>I'm a recipe card!</h2>
-        <p>{recipe}</p>
-      </div>)
+        <h2>I'm a recipe card for {recipe.name}!</h2>
+        <p></p>
+      </div>
+      )
   }
 
   render() {
     const { error } = this.context;
     return (
-      <Section list className='recipes-list'>
+      <Section list className='RecipeCardList'>
         {error
           ? <p> Error loading the recipes. </p>
-          : this.renderRecipes()}
+          : this.renderRecipes()
+          }
       </Section>
     )
   }
