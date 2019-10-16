@@ -2,6 +2,8 @@
 
 ## 2019-10-16
 
+- `RecipeCard` and `RecipeCardList` are go. `Recipe` is all that's left, will integrate this implementation with `Ingredients` in the backend.
+
 - Passing context for recipelist, need to finish `RecipeCard` object to complete generated list.
 
 - Tomorrow, must implement route methods in backend to have full functionality and test all the calls.
