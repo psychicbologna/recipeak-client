@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from '../Header/Header';
+import PrivateRoute from '../Utils/PrivateRoute';
+import PublicOnlyRoute from '../Utils/PublicOnlyRoute'
 import LandingPage from '../../routes/LandingPage/LandingPage';
 import AboutPage from '../../routes/AboutPage/AboutPage';
 import SignupPage from '../../routes/SignupPage/SignupPage';
@@ -13,7 +15,6 @@ import './App.css';
 
 class App extends Component {
   state = {
-    loggedin: true,
     hasError: false
   }
   
@@ -32,22 +33,27 @@ class App extends Component {
           <Route
             exact
             path={'/'}
-            component={!this.state.loggedin ? LandingPage : UserHome}
+            component={LandingPage}
           />
-          <Route
+          <PrivateRoute
             exact
             path={'/recipes'}
-            component={!this.state.loggedin ? LoginPage : UserHome}
+            component={UserHome}
+            />
+          <PrivateRoute
+            exact
+            path={'/user'}
+            component={UserHome}
           />
           <Route
             path={'/about'}
             component={AboutPage}
           />
-          <Route
+          <PublicOnlyRoute
             path={'/signup'}
             component={SignupPage}
           />
-          <Route
+          <PrivateRoute
             path={'/recipe/:id'}
             component={RecipePage}
           />
