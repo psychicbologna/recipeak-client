@@ -2,6 +2,8 @@
 
 ## 2019-10-16
 
+- Beginning to implemented protected endpoints, decided on structure for public/private routes.
+
 - `RecipeCard` and `RecipeCardList` are go. `Recipe` is all that's left, will integrate this implementation with `Ingredients` in the backend.
 
 - Passing context for recipelist, need to finish `RecipeCard` object to complete generated list.
