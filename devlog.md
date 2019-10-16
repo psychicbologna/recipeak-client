@@ -1,5 +1,7 @@
 # Development Log
 
+To commit, run `npm run devlog`
+
 ## 2019-10-16
 
 - Beginning to implemented protected endpoints, decided on structure for public/private routes.
