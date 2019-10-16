@@ -3,6 +3,7 @@ import RecipeListContext from '../../contexts/RecipeCardListContext';
 // import RecipeCard from './Recipe/RecipeCard';
 import RecipeApiService from '../../services/recipes-api-service';
 import { Section } from '../../components/Utils/Utils';
+import RecipeCard from './Recipe/RecipeCard';
 
 export default class RecipeCardList extends Component {
 
@@ -18,10 +19,10 @@ export default class RecipeCardList extends Component {
   renderRecipes() {
     const { recipeList = [] } = this.context;
     return recipeList.map(recipe => 
-      <div>
-        <h2>I'm a recipe card for {recipe.name}!</h2>
-        <p></p>
-      </div>
+      <RecipeCard
+        key={recipe.id}
+        recipe={recipe}
+        />
       )
   }
 
