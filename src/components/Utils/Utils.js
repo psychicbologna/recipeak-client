@@ -1,6 +1,10 @@
 import React from 'react';
 import {format as formatDate} from 'date-fns';
 
+export function FullName({user}) {
+  return `${user.first_name} ${user.last_name}`;
+}
+
 export function NiceDate({ date, format='Do MMMM YYYY' }) {
   return formatDate(date, format)
 }
