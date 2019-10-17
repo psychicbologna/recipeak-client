@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default class LandingPage extends Component {
   render() {
     return (
-      <main>
+      <div className='LandingPage'>
         <section>
           <h2>Collect your recipes. Refine your recipes. Master your recipes.</h2>
           <p>Let Recipeak guide you on the path to your culinary crests.</p>
@@ -17,7 +17,7 @@ export default class LandingPage extends Component {
           <h2>Get Started Today!</h2>
           <Link to={`/signup`}>Sign Up Here</Link>
         </section>
-      </main>
+      </div>
     )
   };
 }
