@@ -15,7 +15,6 @@ const RecipeApiService = {
   },
 
   getRecipe(recipeId) {
-    console.log(recipeId);
     return fetch(`http://localhost:8000/api/recipes/${recipeId}`)
     .then(res => 
       (!res.ok)
