@@ -6,12 +6,15 @@ import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { RecipeListProvider } from './contexts/RecipeCardListContext';
+import { RecipeProvider } from './contexts/RecipeContext';
 
 ReactDOM.render(
   <BrowserRouter>
-  <RecipeListProvider>
-    <App/>
-  </RecipeListProvider>
+    <RecipeListProvider>
+      <RecipeProvider>
+        <App />
+      </RecipeProvider>
+    </RecipeListProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );
