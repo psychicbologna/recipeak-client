@@ -8,8 +8,11 @@ import AboutPage from '../../routes/AboutPage/AboutPage';
 import SignupPage from '../../routes/SignupPage/SignupPage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
 import RecipePage from '../../routes/RecipePage/RecipePage';
+import RecipeAddPage from '../../routes/RecipeAddPage/RecipeAddPage';
+import RecipeEditPage from '../../routes/RecipeEditPage/RecipeEditPage';
 import NotFound from '../../routes/NotFound/NotFound';
 import UserHome from '../../routes/UserHome/UserHome';
+import TokenService from '../../services/token-service';
 
 import './App.css';
 
@@ -17,50 +20,66 @@ class App extends Component {
   state = {
     hasError: false
   }
-  
-//https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
+
+  //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
   static getDerivedStateFromError(error) {
     console.error(error)
-    return {hasError: true}
+    return { hasError: true }
   }
 
   render() {
     return (
       <div className="App">
-        <Header>
-        </Header>
-        <Switch>
-          <Route
-            exact
-            path={'/'}
-            component={LandingPage}
-          />
-          <PrivateRoute
-            exact
-            path={'/recipes'}
-            component={UserHome}
+        <Header />
+        <main className='App__main'>
+          <Switch>
+            <Route
+              exact
+              path={'/'}
+              component={
+                !TokenService.hasAuthToken()
+                ? UserHome 
+                : LandingPage}
             />
           <PrivateRoute
-            exact
-            path={'/user'}
-            component={UserHome}
-          />
-          <Route
-            path={'/about'}
-            component={AboutPage}
-          />
-          <PublicOnlyRoute
-            path={'/signup'}
-            component={SignupPage}
-          />
-          <PrivateRoute
-            path={'/recipe/:id'}
-            component={RecipePage}
-          />
-          <Route
-            component={NotFound}
-          />
-        </Switch>
+              exact
+              path={['/recipes', '/user']}
+              component={UserHome}
+            />
+            <PrivateRoute
+              exact
+              path={'/user'}
+              component={UserHome}
+            />
+            <Route
+              path={'/about'}
+              component={AboutPage}
+            />
+            <PublicOnlyRoute
+              path={'/signup'}
+              component={SignupPage}
+            />
+            <PublicOnlyRoute
+              path={'/login'}
+              component={LoginPage}
+            />
+            <Route
+              path={'/user/recipes/:recipe_id'}
+              component={RecipePage}
+            />
+            <PrivateRoute
+              path={'/recipes/:recipe_id/edit'}
+              component={RecipeEditPage}
+            />
+            <PrivateRoute
+              path={'/recipes/:recipe_id/add'}
+              component={RecipeAddPage}
+            />
+            <Route
+              component={NotFound}
+            />
+          </Switch>
+        </main>
       </div>
     )
   };
