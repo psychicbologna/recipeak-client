@@ -1,3 +1,6 @@
+//TODO any way to tidy up these imports?
+//TODO add route for /:user/:recipe?
+
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from '../Header/Header';
@@ -38,8 +41,8 @@ class App extends Component {
               path={'/'}
               component={
                 !TokenService.hasAuthToken()
-                ? UserHome 
-                : LandingPage}
+                ? LandingPage
+                : UserHome}
             />
           <PrivateRoute
               exact
@@ -64,7 +67,7 @@ class App extends Component {
               component={LoginPage}
             />
             <Route
-              path={'/user/recipes/:recipe_id'}
+              path={'/recipes/:recipe_id'}
               component={RecipePage}
             />
             <PrivateRoute
