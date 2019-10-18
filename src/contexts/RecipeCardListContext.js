@@ -29,7 +29,6 @@ export class RecipeListProvider extends Component {
   }
 
   render() {
-    console.log(this.state.recipelist);
     const value = {
       recipeList: this.state.recipeList,
       error: this.state.error,
