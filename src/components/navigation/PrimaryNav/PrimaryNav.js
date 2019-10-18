@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom';
 //TODO the renders for login/logout link are not loading/working properly
 
 export default class PrimaryNav extends Component {
-  handleLogoutClick = () => {}
+  handleLogoutClick = () => {
+    TokenService.clearAuthToken();
+  }
 
   renderLoginLink() {
     return (
