@@ -11,7 +11,9 @@ export default class LandingPage extends Component {
         </section>
         <section>
           <h2>Awesome Foodie Hero Image and Stuff</h2>
-          <a href="./about.html">Click to Learn More</a>
+          <Link to={'/about'}>
+            Click to Learn More
+          </Link>
         </section>
         <section>
           <h2>Get Started Today!</h2>
