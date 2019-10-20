@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import '../navigation.css';
 
 //Stateful component
@@ -8,7 +9,10 @@ export default class PrimaryNav extends Component {
     return (
       <ul className='user-home-menu'>
         <li>
-          <a href="./recipe/recipeadd.html">Add Recipe</a></li>
+          <Link to='/recipes/add'>
+            Add Recipe
+          </Link>
+        </li>
         <li>
           <label htmlFor="category">List by Category (Nonfunctional):</label>
           <select name="category">
