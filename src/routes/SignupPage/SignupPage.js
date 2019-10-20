@@ -1,10 +1,33 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import SignupForm from '../../components/forms/SignupForm/SignupForm';
 
 export default class SignupPage extends Component {
+
+  static defaultProps = {
+    history: {
+      push: () => { },
+    }
+  }
+
+  handleSignupSuccess = user => {
+    const { history } = this.props;
+    history.push('/login');
+  }
+
   render() {
     return (
       <div>
-        Whoop
+        <section className="SignupForm__section">
+          <SignupForm onSignupSuccess={this.handleSignupSuccess} />
+        </section>
+
+        <section className="signup-redirect">
+          <p>Already signed up?</p>
+          <Link to='/login'>
+            Login
+          </Link>
+        </section>
       </div>
     )
   }
