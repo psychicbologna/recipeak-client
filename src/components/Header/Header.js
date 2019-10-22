@@ -5,10 +5,10 @@ export default class Header extends Component {
 
   render() {
     return (
-      <header>
+      <nav className="Header">
         <h1>Recipeak - Cook, Eat, Grow</h1>
         <PrimaryNav />
-      </header>
+      </nav>
     )
   }
 
