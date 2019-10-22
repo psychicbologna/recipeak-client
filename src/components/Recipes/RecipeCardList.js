@@ -11,7 +11,7 @@ export default class RecipeCardList extends Component {
 
   componentDidMount() {
     this.context.clearError()
-    RecipeApiService.getRecipes()
+    RecipeApiService.getUserRecipes()
       .then(this.context.setRecipeList)
       .catch(this.context.setError)
   }

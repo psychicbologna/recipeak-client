@@ -18,7 +18,7 @@ export default class RecipeCard extends Component {
     return (
       <section className='RecipeCard'>
         <header className='RecipeCard__header'>
-          <Link to={`/recipe/${recipe.id}`} className='RecipeCard__recipelink'>
+          <Link to={`/recipes/${recipe.id}`} className='RecipeCard__recipelink'>
             <h3 className='RecipeCard__heading'>{recipe.name}</h3>
           </Link >
           <h4>by {recipe.author}</h4>
