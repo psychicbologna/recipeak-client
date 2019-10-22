@@ -12,7 +12,7 @@ export default class LoginPage extends Component {
   handleLoginSuccess = () => {
     //Track history, move to '/recipes' on successful login
     const { location, history } = this.props;
-    const destination = (location.state || {}).from || '/recipes';
+    const destination = (location.state || {}).from || `/user/`;
     history.push(destination);
   }
 

@@ -21,6 +21,9 @@ export default class LoginForm extends Component {
     })
       .then(res => {
         TokenService.saveAuthToken(res.authToken);
+        this.setState({
+          loggedIn: true,
+        })
         this.props.onLoginSuccess();
       })
       .catch(res => {

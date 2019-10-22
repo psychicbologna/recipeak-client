@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Input } from '../../Utils/Utils';
+import AuthApiService from '../../../services/auth-api-service';
 
 export default class SignupForm extends Component {
 
@@ -13,14 +14,23 @@ export default class SignupForm extends Component {
     ev.preventDefault()
     const { first_name, last_name, username, password } = ev.target;
 
-    console.log('Signup Form submitted...')
-    console.log({ first_name, last_name, username, password })
-
-    first_name.value = '';
-    last_name.value = '';
-    username.value = '';
-    password.value = '';
-    this.props.onSignupSuccess();
+    this.setState({ error: null })
+    AuthApiService.postUser({
+      username: username.value,
+      password: password.value,
+      first_name: first_name.value,
+      last_name: last_name.value,
+    })
+      .then(user => {
+        first_name.value = '';
+        last_name.value = '';
+        username.value = '';
+        password.value = '';
+        this.props.onSignupSuccess();
+      })
+      .catch(res => {
+        this.setState({ error: res.error })
+      })
   }
 
   render() {
@@ -33,25 +43,21 @@ export default class SignupForm extends Component {
         </div>
         <label htmlFor='SignUpForm__first_name'>First Name</label>
         <Input
-          type='text'
           name='first_name'
           id='SignUpForm__first_name'>
         </Input>
         <label htmlFor='SignUpForm__last_name'>Last Name</label>
         <Input
-          type='text'
           name='last_name'
           id='SignUpForm__last_name'>
         </Input>
         <label htmlFor='SignUpForm__username'>Username</label>
         <Input
-          type='text'
           name='username'
           id='SignUpForm__username'>
         </Input>
         <label htmlFor='password'>Password</label>
         <Input
-          type='text'
           name='password'
           id='SignUpForm__password'>
         </Input>
