@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import './normalize.css';
+import './_normalize.css';
+import './_variables.css';
+import './assets/fonts/Assistant-Regular.otf';
+import './assets/fonts/Assistant-SemiBold.otf';
+import './assets/fonts/2-questa_grande_regular_31-webfont.woff';
+import './assets/fonts/2-questa_grande_regular_31-webfont.woff2';
 import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
