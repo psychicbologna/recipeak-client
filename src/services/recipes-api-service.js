@@ -16,8 +16,8 @@ const RecipeApiService = {
       );
   },
 
-  getUserRecipes(username) {
-    return fetch(`${config.API_ENDPOINT}/home/${username}`, {
+  getUserData() {
+    return fetch(`${config.API_ENDPOINT}/users/me`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
