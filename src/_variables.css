@@ -1,0 +1,42 @@
+@font-face {
+  font-family: '2-questa_grande_regular_31';
+  src: local('2-questa_grande_regular_31'),
+       url('./assets/fonts/2-questa_grande_regular_31-webfont.woff2') format('woff2'),
+       url('./assets/fonts/2-questa_grande_regular_31-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Assistant-Regular';
+  src: local('Assistant-Regular'), url('./assets/fonts/Assistant-Regular.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Assistant-Semibold';
+  src: local('Assistant-SemiBold'), url('./assets/fonts/Assistant-SemiBold.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+
+/* Color Vars */
+
+  --base-color: #fcba03;
+  --accent-color-1: #03c2fc;
+  --accent-color-2: #fc3d03;
+  --accent-color-3: #b02b02;
+  --light-gray: #d3d3d3;
+  --dark-gray: #4a4a4a;
+  --off-black: #050505;
+  --off-white: #fafafa;
+
+/* Type Vars */
+
+  --header-family: '2-questa_grande_regular_31', serif;
+  --emph-family: 'Assistant-SemiBold';
+  --base-family: 'Assistant-Regular';
+}
