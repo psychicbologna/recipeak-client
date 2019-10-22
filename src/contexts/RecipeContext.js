@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 export const nullRecipe = {
-//TODO what will go here? User? categories?
 }
 
 const RecipeContext = React.createContext({
@@ -25,7 +24,6 @@ export class RecipeProvider extends Component {
     error: null,
   }
 
-
   setError = error => {
     console.error(error)
     this.setState({ error })
@@ -39,17 +37,18 @@ export class RecipeProvider extends Component {
     this.setState({ recipe })
   }
 
-  clearRecipe = () => {
-    this.setRecipe(nullRecipe)
-  }
-
   setIngredients = ingredients => {
     this.setState({ ingredients })
   }
 
+  clearRecipe = () => {
+    this.setRecipe(nullRecipe)
+    this.setIngredients([])
+  }
+
   addIngredient = ingredient => {
     this.setIngredients([
-      ...this.state.recipe.ingredients,
+      ...this.state.ingredients,
       ingredient
     ])
   }
@@ -57,12 +56,14 @@ export class RecipeProvider extends Component {
   render() {
     const value = {
       recipe: this.state.recipe,
-      // ingredients: this.recipe.ingredients,
+      ingredients: this.state.ingredients,
       error: this.state.error,
       setError: this.setError,
       clearError: this.clearError,
       setRecipe: this.setRecipe,
-      clearRecipe: this.clearRecipe
+      clearRecipe: this.clearRecipe,
+      setIngredients: this.setIngredients,
+      addRecipe: this.addIngredient
     };
 
     return (

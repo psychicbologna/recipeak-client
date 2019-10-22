@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react';
-import RecipeContext, { nullRecipe } from '../../contexts/RecipeContext';
+import RecipeContext from '../../contexts/RecipeContext';
 import RecipeApiService from '../../services/recipes-api-service';
+// import IngredientsList from '../../components/Recipes/Recipe/IngredientsList';
 import { Section } from '../../components/Utils/Utils';
 
 export default class RecipePage extends Component {
@@ -11,55 +12,33 @@ export default class RecipePage extends Component {
 
   static contextType = RecipeContext;
 
-  //TODO private?
   componentDidMount() {
-    const { recipe_id } = this.props.match.params
+    const recipeId = this.props.match.params.recipe_id;
     this.context.clearError()
-    RecipeApiService.getRecipe(recipe_id)
+    RecipeApiService.getRecipe(recipeId)
       .then(this.context.setRecipe)
       .catch(this.context.setError)
-    //TODO get recipe ingredients
+    RecipeApiService.getRecipeIngredients(recipeId)
+      .then(this.context.setIngredients)
+      .catch(this.context.setError)
   }
 
   componentWillUnmount() {
     this.context.clearRecipe();
   }
 
-  //TODO separate ingredient into component
-  renderIngredients() {
-    const { recipe } = this.context;
-    return (
-      <ul className='ingredientslist'>
-        {
-          recipe.ingredients.map(
-            ingredient => {
-              //TODO add key when ingredients separated
-              return (<li className="RecipePage__ingredient">
-                <p className='RecipePage__ingredient-text'>
-                  {ingredient}
-                </p>
-              </li>)
-            }
-          )
-        }
-      </ul>
-    )
-  }
-
   renderRecipe() {
-    //TODO add ingredients when separated
-    const { recipe } = this.context;
+    const { recipe, ingredients } = this.context;
     return (
       <div>
         <h3>{recipe.title}</h3>
-        {/*TODO utility to convert prep time*/}
         <p>Prep Time: {recipe.prep_time}</p>
         <p>Yields {recipe.servings} Servings</p>
-
-        {/*TODO category and rating*/}
         <section>
           <h2>Ingredients</h2>
-          { this.renderIngredients() }
+          <Ingredients
+            ingredients={ingredients}
+           />
         </section>
         <section>
           <h2>Instructions</h2>
@@ -73,7 +52,6 @@ export default class RecipePage extends Component {
   }
 
   render() {
-    //TODO error isn't responding correctly on nonexistant recipe
     const { error, recipe } = this.context;
     let content;
     if (error) {
@@ -90,5 +68,39 @@ export default class RecipePage extends Component {
         {content}
       </Section>
     )
+  }
+}
+
+function Ingredients({ ingredients = []}) {
+  return (
+    <ul>
+      {ingredients.map(ingredient => 
+        <li key={ingredient.id} className='Ingredient'>
+          {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ingredient}
+        </li>)}
+    </ul>
+  )
+}
+
+function UnitFormat(amount, unitData) {
+  if (amount === 1) {
+    return unitData.unit_single;
+  } else {
+    return unitData.unit_plural;
+  }
+}
+
+function AmountFormat(amount, unitData) {
+  if (unitData.unit_plural && unitData.unit_single && amount > 0) {
+    return amount
+  }
+  if (amount === 0.5) {
+    return 'one half';
+  }
+  if (amount === .75) {
+    return 'two thirds';
+  }
+  if (amount === .25) {
+    return 'one fourth';
   }
 }
