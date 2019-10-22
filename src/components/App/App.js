@@ -1,6 +1,3 @@
-//TODO any way to tidy up these imports?
-//TODO add route for /:user/:recipe?
-
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Header from '../Header/Header';
@@ -21,7 +18,8 @@ import './App.css';
 
 class App extends Component {
   state = {
-    hasError: false
+    hasError: false,
+    loggedIn: false
   }
 
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
@@ -31,27 +29,22 @@ class App extends Component {
   }
 
   render() {
+    console.log()
     return (
       <div className="App">
-        <Header />
+        <header className="App__header">
+          <Header />
+        </header>
         <main className='App__main'>
           <Switch>
-            <Route
+            <PublicOnlyRoute
               exact
               path={'/'}
-              component={
-                !TokenService.hasAuthToken()
-                ? LandingPage
-                : UserHome}
-            />
-          <PrivateRoute
-              exact
-              path={['/recipes', '/user']}
-              component={UserHome}
+              component={LandingPage}
             />
             <PrivateRoute
               exact
-              path={'/user'}
+              path={['/user/:username']}
               component={UserHome}
             />
             <Route
@@ -67,16 +60,19 @@ class App extends Component {
               component={LoginPage}
             />
             <Route
+              exact
+              path={'/recipes/add'}
+              component={RecipeAddPage}
+            />
+            <Route
+              exact
               path={'/recipes/:recipe_id'}
               component={RecipePage}
             />
             <PrivateRoute
+              exact
               path={'/recipes/:recipe_id/edit'}
               component={RecipeEditPage}
-            />
-            <PrivateRoute
-              path={'/recipes/:recipe_id/add'}
-              component={RecipeAddPage}
             />
             <Route
               component={NotFound}
