@@ -9,7 +9,8 @@ import { Link } from 'react-router-dom';
 export default class PrimaryNav extends Component {
   handleLogoutClick = () => {
     TokenService.clearAuthToken();
-    this.setState({loggedIn: false})
+    TokenService.clearSessionUserdata();
+    return this.props.onLogOut();
   }
 
   renderLoginLink() {

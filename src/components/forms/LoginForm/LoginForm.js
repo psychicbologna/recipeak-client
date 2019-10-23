@@ -24,7 +24,7 @@ export default class LoginForm extends Component {
         this.setState({
           loggedIn: true,
         })
-        this.props.onLoginSuccess(username.value);
+        this.props.onLoginSuccess();
         
       })
       .catch(res => {

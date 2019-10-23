@@ -5,11 +5,11 @@ import TokenService from '../../services/token-service';
 export default class Header extends Component {
 
   static defaultProps = {
-    userCheck: () => {}
+    userCheck: () => {},
+    onLogOut: () => {}
   }
 
   userCheck(userData) {
-    console.log(userData)
     if (!!userData) {
       return <span className='Header__logininfo'>Logged in as {userData.username}</span>
     }
@@ -22,7 +22,7 @@ export default class Header extends Component {
         <h1>Recipeak</h1>
         <p className='Header__subtitle'>Cook, Eat, Grow</p>
         { this.userCheck(userData) }
-        <PrimaryNav />
+        <PrimaryNav loginStatus={this.props.loginStatus} onLogOut={this.props.onLogOut}/>
       </nav>
     )
   }
