@@ -21,6 +21,7 @@ export default class LoginPage extends Component {
       <section className='LoginPage'>
         <LoginForm
           onLoginSuccess={this.handleLoginSuccess}
+          onLogin={this.props.onLogin}
         />
       </section>
     )
