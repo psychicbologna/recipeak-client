@@ -4,9 +4,10 @@ import RecipesForm from '../../components/forms/RecipesForm/IngredientsForm/Ingr
 export default class RecipeAddPage extends Component {
   render() {
     return (
-      <div>
+      <section className='RecipeAdd'>
+        <h3>Add Recipe</h3>
         <RecipesForm />
-      </div>
+      </section>
     )
   }
 }
