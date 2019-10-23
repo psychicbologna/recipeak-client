@@ -7,8 +7,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2 {
   font-family: var(--header-family);
+}
+h3, h4, h5 {
+  font-family: var(--emph-family);
+}
+
+a {
+  text-decoration: none;
+  color: --accent-color-2;
+}
+
+a:visited {
+  color: --accent-color-3;
 }
 
 code {
