@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import UnitSelect from './UnitSelect';
-import Ingredient from '../../../../components/Recipes/Recipe/Ingredient'
+import Ingredient from '../../../Recipes/Recipe/Ingredient'
 
 export default class IngredientsForm extends Component {
 
   static defaultProps = {
     ingredients: [],
     addIngredients: [],
-    deleteIngredients: [],
-    updateIngredients: [],
     recipe_id: '',
     newIngredient: {
       amount: '', //ing
@@ -31,6 +29,7 @@ export default class IngredientsForm extends Component {
         unit_plural: '',
       }, //json!
     },
+    units: [],
     setInitIngredients: () => { },
     handleAddIngredient: () => { },
     handleRemoveIngredient: () => { },
@@ -54,7 +53,6 @@ export default class IngredientsForm extends Component {
     unit_set:none
     */
   }
-
 
   addNewIngredient(newIngredients, ingredients, newIngredient) {
 
@@ -107,7 +105,7 @@ export default class IngredientsForm extends Component {
   }
 
   render() {
-    console.log(this.props.ingredients);
+    console.log(this.props.units)
     return (
       <section className='IngredientForm'>
         <h3>Ingredients</h3>
@@ -118,7 +116,7 @@ export default class IngredientsForm extends Component {
         }
         <h3>Add Ingredient</h3>
         {this.renderAmountInput()}
-        <UnitSelect />
+        <UnitSelect units={this.props.units} />
         {this.renderIngredientInput()}
         <button onClick={this.addNewIngredient()}>Add Ingredient</button>
       </section>

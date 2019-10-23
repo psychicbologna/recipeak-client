@@ -12,22 +12,37 @@ import RecipeAddPage from '../../routes/RecipeAddPage/RecipeAddPage';
 import RecipeEditPage from '../../routes/RecipeEditPage/RecipeEditPage';
 import NotFound from '../../routes/NotFound/NotFound';
 import UserHome from '../../routes/UserHome/UserHome';
-import TokenService from '../../services/token-service';
+import UnitApiService from '../../services/unit-api-service';
 
 import './App.css';
 
 class App extends Component {
   state = {
     hasError: false,
-    loggedIn: false
+    loggedIn: false,
+    units: [],
+  }
+
+  componentDidMount() {
+    this.handleSetUnits();
   }
 
   handleLogOut() {
-    this.setState({loggedIn: false})
+    this.setState({ loggedIn: false })
   }
 
   handleLogIn() {
-    this.setState({loggedIn: true})
+    this.setState({ loggedIn: true })
+  }
+
+  handleSetUnits(units) {
+    UnitApiService.getUnits()
+      .then(units =>
+        this.setState({ units: units }))
+      .catch(this.setState({
+        hasError: true,
+        error: { message: 'Unable to retrieve unit data.' }
+      }));
   }
 
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
@@ -37,7 +52,6 @@ class App extends Component {
   }
 
   render() {
-    console.log()
     return (
       <div className="App">
         <header className="App__header">
@@ -71,7 +85,7 @@ class App extends Component {
             <Route
               exact
               path={'/recipes/add'}
-              component={RecipeAddPage}
+              render={() => <RecipeAddPage units={this.state.units} />}
             />
             <Route
               exact
