@@ -44,7 +44,7 @@ class App extends Component {
             />
             <PrivateRoute
               exact
-              path={['/user/:username']}
+              path={['/home']}
               component={UserHome}
             />
             <Route
