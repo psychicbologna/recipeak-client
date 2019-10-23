@@ -15,7 +15,6 @@ export default class UserHome extends Component {
     //TODO separate into UserApiService
     RecipeApiService.getUserData()
       .then(userData => {
-        console.dir(userData);
         return TokenService.setSessionUserData(userData)
       })
       .catch(this.context.setError)
@@ -29,13 +28,12 @@ export default class UserHome extends Component {
 
   render() {
     let userData;
-    const { recipes } = this.context.recipeList;
+    // const { recipes } = this.context.recipeList;
 
-    if (TokenService.hasSessionUserdata()) {
+    if (!TokenService.hasSessionUserdata()) {
+      return (<p>Loading User Data...</p>)
+    } else {
       userData = TokenService.getSessionUserdata()
-    };
-
-    if (userData) {
       return (
         <section className='UserHome'>
           <h2>{formatName(userData.first_name)} Recipes</h2>
@@ -47,12 +45,8 @@ export default class UserHome extends Component {
           }
         </section>
       )
-    } else {
-      return (
-        <p>Unable to retrieve user data.</p>
-      )
     }
-  }
+  };
 }
 
 
