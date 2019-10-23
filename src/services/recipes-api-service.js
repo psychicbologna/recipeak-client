@@ -60,7 +60,7 @@ const RecipeApiService = {
   },
 
   updateRecipe(recipeId, newRecipeFields) {
-    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${ingredientId}`, {
+    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -107,14 +107,14 @@ const RecipeApiService = {
       )
   },
 
-  updateRecipeIngredients(ingredientId, recipe_id, newIngredientFields) {
+  updateRecipeIngredients(ingredientId, recipeId, newIngredientFields) {
     return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${ingredientId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
       body: JSON.stringify({
-        recipe_id,
+        recipeId,
         newIngredientFields
       })
       }
