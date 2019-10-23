@@ -22,6 +22,14 @@ class App extends Component {
     loggedIn: false
   }
 
+  handleLogOut() {
+    this.setState({loggedIn: false})
+  }
+
+  handleLogIn() {
+    this.setState({loggedIn: true})
+  }
+
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
   static getDerivedStateFromError(error) {
     console.error(error)
@@ -33,7 +41,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App__header">
-          <Header />
+          <Header loginStatus={this.state.loggedIn} onLogOut={this.handleLogOut} />
         </header>
         <main className='App__main'>
           <Switch>
@@ -58,6 +66,7 @@ class App extends Component {
             <PublicOnlyRoute
               path={'/login'}
               component={LoginPage}
+              onLogin={this.handleLogIn}
             />
             <Route
               exact
