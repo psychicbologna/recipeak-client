@@ -11,15 +11,12 @@ import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { RecipeListProvider } from './contexts/RecipeCardListContext';
 import { RecipeProvider } from './contexts/RecipeContext';
-import { UnitSelectProvider } from './contexts/UnitSelectContext';
 
 ReactDOM.render(
   <BrowserRouter>
     <RecipeListProvider>
       <RecipeProvider>
-        <UnitSelectProvider>
           <App />
-        </UnitSelectProvider>
       </RecipeProvider>
     </RecipeListProvider>
   </BrowserRouter>,

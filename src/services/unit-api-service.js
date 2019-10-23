@@ -2,7 +2,7 @@
 
 import config from '../config';
 
-const UnitService = {
+const UnitApiService = {
   getUnits() {
     return fetch(`${config.API_ENDPOINT}/units`, {
       headers: {
@@ -17,4 +17,4 @@ const UnitService = {
   }
 };
 
-export default UnitService;
+export default UnitApiService;

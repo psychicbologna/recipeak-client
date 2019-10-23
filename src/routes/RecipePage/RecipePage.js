@@ -75,7 +75,7 @@ function Ingredients({ ingredients = []}) {
     <ul>
       {ingredients.map(ingredient => 
         <li key={ingredient.id} className='Ingredient'>
-          {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ingredient}
+          {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ing_text}
         </li>)}
     </ul>
   )
