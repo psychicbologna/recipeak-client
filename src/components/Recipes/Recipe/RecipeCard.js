@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
+import { NiceDate } from '../../Utils/Utils';
 import { Link } from 'react-router-dom';
 import './RecipeCard.css';
 
 export default class RecipeCard extends Component {
 
+  RecipeDate(prepend, date) {
+    return (
+      <p className='RecipeCard__date'>{prepend}: {NiceDate(JSON.stringify(date))}</p>
+    )
+  } 
+
   renderRecipeCardFooter() {
     const { recipe } = this.props
     return (
       <footer className='RecipeCard__footer'>
-        {!recipe.date_updated ? 'Created: ' + recipe.date_created : 'Last Updated: ' + recipe.date_updated}
+        { this.RecipeDate('Created', recipe.date_created) }
+        { this.RecipeDate('Last Updated', recipe.date_updated) }
       </footer>
     )
   }
@@ -23,9 +31,10 @@ export default class RecipeCard extends Component {
           </Link >
           <h4>by {recipe.author}</h4>
         </header>
-        <p>Category: Recipe Category</p>
-        <p>Rating: Recipe Rating</p>
-        {this.renderRecipeCardFooter()}
+        <p>Prep Time: {recipe.prep_time}</p>
+        {/* <p>Category: Recipe Category</p>
+        <p>Rating: Recipe Rating</p> */}
+        {/* {this.renderRecipeCardFooter()} */}
       </section>
 
     )
