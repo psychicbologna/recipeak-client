@@ -31,7 +31,7 @@ export default class RecipePage extends Component {
     const { recipe, ingredients } = this.context;
     return (
       <div>
-        <h3>{recipe.title}</h3>
+        <h3>{recipe.name}</h3>
         <p>Prep Time: {recipe.prep_time}</p>
         <p>Yields {recipe.servings} Servings</p>
         <section>
