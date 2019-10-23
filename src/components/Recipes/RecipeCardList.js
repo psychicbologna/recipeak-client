@@ -1,35 +1,19 @@
 import React, { Component } from 'react';
-import RecipeListContext from '../../contexts/RecipeCardListContext';
-// import RecipeCard from './Recipe/RecipeCard';
-import RecipeApiService from '../../services/recipes-api-service';
 import { Section } from '../../components/Utils/Utils';
+import RecipeListContext from '../../contexts/RecipeCardListContext';
 import RecipeCard from './Recipe/RecipeCard';
+import {Link} from 'react-router-dom';
 import TokenService from '../../services/token-service';
 
 export default class RecipeCardList extends Component {
 
   static contextType = RecipeListContext;
 
-  componentDidMount() {
-    this.context.clearError()
-    //TODO separate into UserApiService
-    RecipeApiService.getUserData()
-      .then(userData => {
-        return TokenService.setSessionUserData(userData)
-      })
-      .catch(this.context.setError)
-    RecipeApiService.getUserData()
-      .then(userData => {
-        console.dir(this.context);
-        const recipeList = userData.recipes;
-        return this.context.setRecipeList(recipeList)
-      })
-  }
-
   renderRecipes() {
     const { recipeList = [] } = this.context;
+    console.log(this.context);
     if (recipeList === []) {
-      return(<p>No recipes found! Try adding a recipe.</p>)
+      return(<p>It looks like you have no recipes yet. <Link to='/recipes/add'>Add one.</Link></p>)
     } else {
     return recipeList.map(recipe => 
       <RecipeCard

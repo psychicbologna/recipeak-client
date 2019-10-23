@@ -47,6 +47,9 @@ const TokenService = {
   },
   getSessionUserdata() {
     return JSON.parse(sessionStorage.getItem('user'));
+  },
+  hasSessionUserdata() {
+    return !!TokenService.getSessionUserdata();
   }
 
 }
