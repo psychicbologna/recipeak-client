@@ -12,9 +12,15 @@ export default class UnitSelect extends Component {
     match: { params: {} },
   }
 
+  static contextType = UnitSelectContext;
+
   componentDidMount() {
     UnitService.getUnits()
       .then(this.context.setUnits)
+      // .then(units => {
+      //   // console.log('Units:', units) //TODO Units are showing up but not passing to context.
+      //   this.context.setUnits(units)
+      // })
       .catch(this.context.setError)
   }
 

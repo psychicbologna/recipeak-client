@@ -11,8 +11,8 @@ export const nullUnit = {
 
 const UnitSelectContext = React.createContext({
   units: [],
-  currentUnit: nullUnit,
-  selectedUnitSet: 'none', //TODO passed down from ingredient?...
+  currentUnit: nullUnit, //TODO passed down from ingredient?...
+  selectedUnitSet: 'none', //TODO passed down from currentUnit?...
   error: null,
   setError: () => { },
   clearError: () => { },
