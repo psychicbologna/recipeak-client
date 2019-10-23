@@ -5,6 +5,7 @@
   "dependencies": {
     "convert-units": "^2.3.4",
     "date-fns": "^2.5.0",
+    "jwt-decode": "^2.2.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-router": "^5.1.2",
