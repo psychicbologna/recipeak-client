@@ -13,7 +13,8 @@ const RecipesFormContext = React.createContext({
 
   setError: () => {},
   updateName: () => {},
-  updatePrepTime: () => {},
+  updatePrepTimeHours: () => {},
+  updatePrepTimeMinutes: () => {},
   updateServings: () => {},
   updateInstructions: () => {},
   handleSubmit: () => {},
@@ -25,7 +26,8 @@ export default RecipesFormContext;
 export class RecipesFormContextProvider extends Component {
   state = {
     name: nullLiveInput,
-    prep_time: nullLiveInput,
+    prep_time_hours: nullLiveInput,
+    prep_time_minutes: nullLiveInput,
     servings: nullLiveInput,
     instructions: nullLiveInput,
     error: null,
@@ -40,8 +42,12 @@ export class RecipesFormContextProvider extends Component {
     this.setState({ name: { value: name, touched: true } })
   }
 
-  updatePrepTime = prep_time => {
-    this.setState({ prep_time: { value: prep_time, touched: true } })
+  updatePrepTimeHours = prep_time_hours => {
+    this.setState({ prep_time_hours: { value: prep_time_hours, touched: true } })
+  }
+
+  updatePrepTimeMinutes = prep_time_minutes => {
+    this.setState({ prep_time_minutes: { value: prep_time_minutes, touched: true } })
   }
 
   updateServings = servings => {
@@ -65,7 +71,8 @@ export class RecipesFormContextProvider extends Component {
   clearForm = () => {
     this.setState({
       name: nullLiveInput,
-      prep_time: nullLiveInput,
+      prep_time_hours: nullLiveInput,
+      prep_time_minutes: nullLiveInput,
       servings: nullLiveInput,
       instructions: nullLiveInput,
     })
@@ -74,13 +81,15 @@ export class RecipesFormContextProvider extends Component {
   render() {
     const value= {
       name: this.state.name,
-      prep_time: this.state.prep_time,
+      prep_time_hours: this.state.prep_time_hours,
+      prep_time_minutes: this.state.prep_time_minutes,
       servings: this.state.servings,
       instructions: this.state.instructions,
       error: this.state.error,
       setError: this.setError,
       updateName: this.updateName,
-      updatePrepTime: this.updatePrepTime,
+      updatePrepTimeHours: this.updatePrepTimeHours,
+      updatePrepTimeMinutes: this.updatePrepTimeMinutes,
       updateServings: this.updateServings,
       updateInstructions: this.updateInstructions,
       handleSubmit: this.handleSubmit,

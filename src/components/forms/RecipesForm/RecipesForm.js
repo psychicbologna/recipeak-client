@@ -17,22 +17,30 @@ export default class RecipesForm extends Component {
     console.log('Context:', this.context);
     return (
       <form
-        className='RecipesForm'
-        onSubmit={this.context.handleSubmit}>
+        className='NewRecipeForm'
+        onSubmit={e => this.context.handleSubmit(e)}>
         <section className='RecipesForm__basic-info'>
-          <h4>Basic Info</h4>
-          <label htmlFor='RecipesForm__name'>Name</label>
-          <input name='RecipesForm__name' id='name' onChange={e => this.context.updateName(e.target.value)} />
-          <label htmlFor='RecipesForm__prep_time'>Prep Time</label>
-          <input name='RecipesForm__prep_time' id='prep_time' onChange={e => this.context.updatePrepTime(e.target.value)} />
+          <h3>Basic Info</h3>
+          <label htmlFor='RecipesForm__name'>Recipe Name</label>
+          <input name='RecipesForm__name' id='name' defaultValue='Bacon Waffles with Butter' onChange={e => this.context.updateName(e.target.value)} /> {/* TODO: Validate: Must be text */}
+          
+          <fieldset>
+            <legend>Prep Time</legend>
+          <label htmlFor='RecipesForm__prep_time_hours'>Hours</label>
+          <input type='number' name='RecipesForm__prep_time_hours' id='prep_time_hours' defaultValue='0' onChange={e => this.context.updatePrepTimeHours(e.target.value)} /> {/* TODO: Validate: Must be integer, may be 0 or null. */}
+          <label htmlFor='RecipesForm__prep_time_minutes'>Minutes</label>
+          <input type='number' max='59' name='RecipesForm__prep_time_minutes' id='prep_time_minutes' defaultValue='0' onChange={e => this.context.updatePrepTimeMinutes(e.target.value)} /> {/* TODO: Validate: Must be integer, may be 0 or null. */}
+          </fieldset>
+
           <label htmlFor='RecipesForm__servings'>Servings</label>
-          <input name='RecipesForm__name' id='servings' onChange={e => this.context.updateServings(e.target.value)} />
+          <input type='number' name='RecipesForm__name' id='servings' onChange={e => this.context.updateServings(e.target.value)} /> {/* TODO: Validate: whole numbers only, no half or fractional servings */}
         </section>
         <IngredientsForm units={this.props.units} onSubmit={this.props.onSubmit} />
         <section className='RecipesForm__'>
-          <h2>Instructions</h2>
+          <h3>Instructions</h3>
           <textarea className='RecipesForm__instructions' defaultValue='Instructions go here.' id='instructions' onChange={e => this.context.updateInstructions(e.target.value)}></textarea>
         </section>
+        
       </form>
     )
   }
