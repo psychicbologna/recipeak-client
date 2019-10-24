@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import RecipesFormContext from '../../../../contexts/RecipesFormContext'
+
 export default class UnitSelect extends Component {
+
+  static contextType = RecipesFormContext;
 
   static defaultProps = {
     ingredient_id: '',
@@ -16,77 +20,61 @@ export default class UnitSelect extends Component {
   }
 
   unitsSorter(units) {
+    //Splits the units into three groups
     let units_apprx, units_metric, units_us;
 
-    units_apprx = units.filter(unit => !unit.unit_data.class );
-    units_us = units.filter(unit => unit.unit_data.class === 'US');
-    units_metric = units.filter(unit => unit.unit_data.class === 'Metric');
+    units_apprx = {
+      units: units.filter(unit =>
+        !unit.unit_data.class)
+    };
+    units_us = {
+      units: units.filter(unit =>
+        unit.unit_data.class === 'US'),
+        class: 'US'
+    };
+    units_metric = {
+      units: units.filter(unit =>
+        unit.unit_data.class === 'Metric'),
+        class: 'Metric'
+    };
 
-    units_us.class = 'US';
-    units_metric.class = 'Metric';
-
-    return {units_apprx, units_us, units_metric}
-
-    // console.log(`Approximate:`, units_apprx)
-    // console.log(`${units_metric.class}:`, units_metric)
-    // console.log(`${units_us.class}:`, units_us)
+    return { units_apprx, units_us, units_metric }
   }
 
   unitOption(unit) {
-    const unit_data = unit.unit_data
-    const unit_set = unit.unit_set
-    const unit_displayName = unit_data.unit_plural // TODO Capitalize first letter
+    const id = unit.id,
+      unit_data = unit.unit_data,
+      unit_set = unit.unit_set,
+      unit_displayName = (unit_set === 'none') ? 'none' : unit_data.unit_plural; // TODO Capitalize first letter
 
     return (
-      <option value={unit_set}>{unit_displayName}</option>
+      <option key={id} value={unit_set}>{unit_displayName}</option>
     )
   }
 
-  unitOptGroup(groupName, units) {
-
-    if (!units) {
-      return <option>Loading Options...</option>
-    } else {
+  unitOptGroup(unitObject) {
       return (
-        <optgroup label={groupName}>
-          {units.map(unit => this.unitOption(unit))}
+        <optgroup label={unitObject.class}>
+          {unitObject.units.map(unit => this.unitOption(unit))}
         </optgroup>
       )
     }
-  }
+  
 
   renderUnitSetSelect(units, recipe_id, ingredient_id) {
     if (!this.props.units.length) {
       return <p>Loading units...</p>
     } else {
       let units = this.props.units;
-      console.log(this.unitsSorter(units));
+      let sortedUnits = this.unitsSorter(units);
+
       return (
-        //TODO Map to optgroup by unit_data.
-        <select className='IngredientForm__unit_set'>
-          
-          {/* <option value='1'>Meep</option>
-        <option value='2'>Moop</option>
-        <option value='3'>Maap</option>
-        <optgroup label='US Measurements'>
-          <option value='oz'>oz</option>
-          <option value='lb'>lb</option>
-          <option value='tsp'>tsp</option>
-          <option value='tbsp'>tbsp</option>
-          <option value='floz'>fl oz</option>
-          <option value='cup'>cup</option>
-          <option value='pt'>pt</option>
-          <option value='qrt'>qrt</option>
-          <option value='gal'>gal</option>
-        </optgroup>
-        <optgroup label='Metric Measurements'>
-          <option value='mg'>mg</option>
-          <option value='g'>g</option>
-          <option value='kg'>kg</option>
-          <option value='ml'>ml</option>
-          <option value='l'>l</option>
-          <option value='dl'>dl</option>
-        </optgroup> */}
+
+        <select className='IngredientForm__unit_set' id='unit_set_select' defaultValue='none' onChange={e => this.context.updateUnitSet(e.target.value)}>
+          <option val='custom'>Custom</option>
+          {sortedUnits.units_apprx.units.map(unit => this.unitOption(unit))}
+          {this.unitOptGroup(sortedUnits.units_us)}
+          {this.unitOptGroup(sortedUnits.units_metric)}
         </select>
       )
     }
@@ -111,14 +99,20 @@ export default class UnitSelect extends Component {
 
   renderUnitDataInput() {
     //TODO Autosuggest from apprx sets?
+
+    if (this.context.currentIngredient.unit_set === 'Custom') {
     return (
-      <section className='IngredientsForm__unit_data'>
+      <fieldset className='IngredientsForm__unit_data'>
+        <legend>Define Custom Unit</legend>
         <label>Unit Singular</label>
-        <input name="IngredientForm__unit_singular" />
+        <input name="IngredientForm__unit_singular" onChange={e => this.context.updateUnitSingular(e.target.value)} />
         <label>Unit Plural</label>
-        <input name="IngredientForm__unit_plural" />
-      </section>
+        <input name="IngredientForm__unit_plural" onChange={e => this.context.updateUnitPlural(e.target.value)} />
+      </fieldset>
     );
+    } else {
+      this.renderSetUnitData(this.context.currentIngredient.unit_set);
+    }
   }
 
   render() {
@@ -127,7 +121,9 @@ export default class UnitSelect extends Component {
         {/* {this.props.unitSetSelected !== 'none'
           ? this.renderSetUnitData()
           : this.renderUnitDataInput()} */}
+        <label>Unit From Set</label>
         {this.renderUnitSetSelect()}
+        {this.renderUnitDataInput()}
       </section>
     )
 

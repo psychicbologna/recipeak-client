@@ -1,82 +1,50 @@
 import React, { Component } from 'react';
 import UnitSelect from './UnitSelect';
 import Ingredient from '../../../Recipes/Recipe/Ingredient'
+import RecipesFormContext from '../../../../contexts/RecipesFormContext'
 
 export default class IngredientsForm extends Component {
 
-  static defaultProps = {
-    ingredients: [],
-    addIngredients: [],
-    recipe_id: '',
-    newIngredient: {
-      amount: '', //ing
-      ingredient: '',
-      unit_set: '',
-      unit_data: {
-        unit_singular: '',
-        unit_plural: '',
-      }
-    }, //json!
-    deleteIngredient: '', //Ingredient id
-    updateIngredient: {
-      id: '',
-      recipe_id: '',
-      amount: '', //ing
-      ingredient: '',
-      unit_set: '',
-      unit_data: {
-        unit_singular: '',
-        unit_plural: '',
-      }, //json!
-    },
-    units: [],
-    setInitIngredients: () => { },
-    handleAddIngredient: () => { },
-    handleRemoveIngredient: () => { },
-    handleRemoveAllIngredients: () => {},
-    handleUpdateIngredient: () => { },
-    clearIngredientInputs: () => { },
-  }
+  static contextType = RecipesFormContext;
 
-  setInitIngredients(ingredientsList) {
-    this.setState({ ingredients: ingredientsList });
-  }
+  render() {
+    const { ingredients, currentIngredient } = this.context;
 
-  //TODO function that clears recipe form inputs
-  clearIngredientInputs() {
-    //clear ingredient form inputs:
-    /*
-    amount,
-    ingredient,
-    unit_singular,
-    unit_plural,
-    unit_set:none
-    */
-  }
+    return (
+      <section className='IngredientForm'>
+        <EnteredIngredients ingredients={ingredients} removeIngredient={this.context.removeIngredient} units={this.props.units} />
+        <fieldset className='RecipeForm__AddIngredient'>
+          <legend>Add Ingredient</legend>
+          <AmountInput updateAmount={this.context.updateAmount} />
+          <UnitSelect units={this.props.units} />
+          <IngTextInput updateIngText={this.context.updateIngText} />
+          <button
+            onClick={e => this.context.addIngredient(e, currentIngredient)}>Add Ingredient</button>
+        </fieldset>
+      </section>
+    )
+  };
+};
 
-  addNewIngredient(newIngredients, ingredients, newIngredient) {
+function EnteredIngredients(props) {
+  const ingredients = props.ingredients;
 
-    //TODO TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
-    // let newIngredients = [...newIngredients, newIngredient]
-    // this.setState({ingredients: [ ...ingredients, newIngredient ] })
-    // this.clearIngredientInputs();
-    // this.renderEnteredIngredients(ingredients);
-  }
-
-  removeIngredient(deleteIngredients, ingredients, id) {
-    this.setState({ ingredients: ingredients.filter(id) })
-    this.renderEnteredIngredients(ingredients);
-  }
-
-  renderEnteredIngredients(ingredients) {
+  if (!ingredients.length) {
+    return <p>Enter an ingredient to get started.</p>
+  } else {
     return (
       <section>
-        <h3>Entered Ingredients</h3>
+        <h3>Ingredients Preview</h3>
         <ul className='entered-ingredients'>
           {ingredients.map(ingredient => {
             return (
-              <Ingredient ingredientdata={ingredient}>
-                <button onClick={this.handleRemoveIngredient()}></button>
+              <Ingredient
+                units={props.units}
+                key={ingredient.tempId}
+                ingredient={ingredient}
+                removeIngredient={props.removeIngredient}>
+
+                <button onClick={e => props.removeIngredient(props.key)}></button>
               </Ingredient>
             );
           })}
@@ -84,51 +52,22 @@ export default class IngredientsForm extends Component {
       </section>
     )
   }
-
-  //TODO move to utils for input
-  renderIngredientInput() {
-    return (
-      <>
-        <label htmlFor='IngredientForm__ingredient'>Ingredient</label>
-        <input className='IngredientForm__ingredient' />
-      </>
-    )
-  }
-
-  renderAmountInput() {
-    return(
-      <>
-        <label htmlFor='IngredientForm__amount'>Amount</label>
-        <input type='number' className='IngredientForm__amount' />
-      </>
-    )
-  }
-
-  render() {
-    console.log(this.props.units)
-    return (
-      <section className='IngredientForm'>
-        <h3>Ingredients</h3>
-        {
-          !this.props.ingredients.length
-            ? <p>Enter an ingredient to get started.</p>
-            : this.renderEnteredIngredients(this.props.ingredients)
-        }
-        <h3>Add Ingredient</h3>
-        {this.renderAmountInput()}
-        <UnitSelect units={this.props.units} />
-        {this.renderIngredientInput()}
-        <button onClick={this.addNewIngredient()}>Add Ingredient</button>
-      </section>
-    )
-  };
-};
-
-function UnitSetToggle() {
-  this.setState(!this.state.unitSetsToggle)
 }
 
-function USMetricToggle() {
-  this.setState(!this.state.usMetricToggle)
+function AmountInput(props) {
+  return (
+    <>
+      <label htmlFor='IngredientForm__amount'>Amount</label>
+      <input type='number' className='IngredientForm__amount' id='amount' onChange={e => props.updateAmount(e.target.value)} /> {/* //TODO Validate cannot be negative */}
+    </>
+  )
 }
 
+function IngTextInput(props) {
+  return (
+    <>
+      <label htmlFor='IngredientForm__ingredient'>Ingredient</label>
+      <input className='IngredientForm__ingredient' id='ing_text' onChange={e => props.updateIngText(e.target.value)} />
+    </>
+  )
+}
