@@ -97,23 +97,7 @@ export default class UnitSelect extends Component {
     }
   }
 
-  renderUnitDataInput() {
-    //TODO Autosuggest from apprx sets?
 
-    if (this.context.currentIngredient.unit_set === 'Custom') {
-    return (
-      <fieldset className='IngredientsForm__unit_data'>
-        <legend>Define Custom Unit</legend>
-        <label>Unit Singular</label>
-        <input name="IngredientForm__unit_singular" onChange={e => this.context.updateUnitSingular(e.target.value)} />
-        <label>Unit Plural</label>
-        <input name="IngredientForm__unit_plural" onChange={e => this.context.updateUnitPlural(e.target.value)} />
-      </fieldset>
-    );
-    } else {
-      this.renderSetUnitData(this.context.currentIngredient.unit_set);
-    }
-  }
 
   render() {
     return (
@@ -123,7 +107,7 @@ export default class UnitSelect extends Component {
           : this.renderUnitDataInput()} */}
         <label>Unit From Set</label>
         {this.renderUnitSetSelect()}
-        {this.renderUnitDataInput()}
+        <UnitDataInput unitSet={this.context.curren} />
       </section>
     )
 
@@ -131,3 +115,21 @@ export default class UnitSelect extends Component {
 
 
 };
+
+function UnitDataInput(props) {
+  //TODO Autosuggest from apprx sets?
+
+  if (this.props.unit_set === 'Custom') {
+  return (
+    <fieldset className='IngredientsForm__unit_data'>
+      <legend>Define Custom Unit</legend>
+      <label>Unit Singular</label>
+      <input name="IngredientForm__unit_singular" onChange={e => this.context.updateUnitSingular(e.target.value)} />
+      <label>Unit Plural</label>
+      <input name="IngredientForm__unit_plural" onChange={e => this.context.updateUnitPlural(e.target.value)} />
+    </fieldset>
+  );
+  } else {
+    this.renderSetUnitData(this.context.currentIngredient.unit_set);
+  }
+}
