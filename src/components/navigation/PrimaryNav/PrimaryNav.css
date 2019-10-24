@@ -1,3 +1,11 @@
 .primary-nav {
   margin: 1em auto;
 }
+
+.primary-nav li a {
+  margin: 1em auto;
+  transform: rotate(-45deg);
+  border: 1px solid;
+  padding: 0.25rem;
+  margin: 0.75rem;
+}
