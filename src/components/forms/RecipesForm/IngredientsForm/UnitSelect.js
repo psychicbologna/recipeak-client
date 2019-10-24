@@ -30,12 +30,12 @@ export default class UnitSelect extends Component {
     units_us = {
       units: units.filter(unit =>
         unit.unit_data.class === 'US'),
-        class: 'US'
+      class: 'US'
     };
     units_metric = {
       units: units.filter(unit =>
         unit.unit_data.class === 'Metric'),
-        class: 'Metric'
+      class: 'Metric'
     };
 
     return { units_apprx, units_us, units_metric }
@@ -53,13 +53,13 @@ export default class UnitSelect extends Component {
   }
 
   unitOptGroup(unitObject) {
-      return (
-        <optgroup label={unitObject.class}>
-          {unitObject.units.map(unit => this.unitOption(unit))}
-        </optgroup>
-      )
-    }
-  
+    return (
+      <optgroup label={unitObject.class}>
+        {unitObject.units.map(unit => this.unitOption(unit))}
+      </optgroup>
+    )
+  }
+
 
   renderUnitSetSelect(units, recipe_id, ingredient_id) {
     if (!this.props.units.length) {
@@ -80,34 +80,24 @@ export default class UnitSelect extends Component {
     }
   }
 
-  renderSetUnitData(unit_data) {
-    let singular, plural
-
-    singular = unit_data.unit_singular;
-    plural = unit_data.unit_plural;
-
-    if (this.props.amount === 1) {
-      return (
-        <p>{singular}</p>
-      )
-    } else {
-      return (
-        <p>{plural}</p>
-      )
-    }
-  }
-
-
-
   render() {
+    const { currentIngredient, updateUnitSingular, updateUnitPlural } = this.context;
+    let singular = currentIngredient.unit_singular.value,
+      plural = currentIngredient.unit_plural.value,
+      unitSet = currentIngredient.unit_set.value;
+
     return (
       <section>
-        {/* {this.props.unitSetSelected !== 'none'
-          ? this.renderSetUnitData()
-          : this.renderUnitDataInput()} */}
         <label>Unit From Set</label>
         {this.renderUnitSetSelect()}
-        <UnitDataInput unitSet={this.context.curren} />
+        <UnitDataInput
+          unitSet={unitSet}
+          singular={singular}
+          plural={plural}
+          updateUnitSingular={updateUnitSingular}
+          updateUnitPlural={updateUnitPlural}
+          amount={currentIngredient.amount}
+        />
       </section>
     )
 
@@ -116,20 +106,36 @@ export default class UnitSelect extends Component {
 
 };
 
+function SetUnitData(props) {
+  console.log(props);
+  if (props.amount === 1) {
+    return (
+      <p>{props.singular}</p>
+    )
+  } else {
+    return (
+      <p>{props.plural}</p>
+    )
+  }
+}
+
 function UnitDataInput(props) {
   //TODO Autosuggest from apprx sets?
-
-  if (this.props.unit_set === 'Custom') {
-  return (
-    <fieldset className='IngredientsForm__unit_data'>
-      <legend>Define Custom Unit</legend>
-      <label>Unit Singular</label>
-      <input name="IngredientForm__unit_singular" onChange={e => this.context.updateUnitSingular(e.target.value)} />
-      <label>Unit Plural</label>
-      <input name="IngredientForm__unit_plural" onChange={e => this.context.updateUnitPlural(e.target.value)} />
-    </fieldset>
-  );
+  if (props.unitSet === 'Custom') {
+    return (
+      <fieldset className='IngredientsForm__unit_data'>
+        <legend>Define Custom Unit</legend>
+        <label>Unit Singular</label>
+        <input name="IngredientForm__unit_singular" onChange={e => props.updateUnitSingular(e.target.value)} />
+        <label>Unit Plural</label>
+        <input name="IngredientForm__unit_plural" onChange={e => props.updateUnitPlural(e.target.value)} />
+      </fieldset>
+    );
   } else {
-    this.renderSetUnitData(this.context.currentIngredient.unit_set);
+    return (
+      <>
+        <SetUnitData amount={props.amount} singular={props.singular} plural={props.plural} />
+      </>
+    )
   }
 }
