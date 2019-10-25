@@ -10,7 +10,6 @@ export default class PrimaryNav extends Component {
   handleLogoutClick = () => {
     TokenService.clearAuthToken();
     TokenService.clearSessionUserdata();
-    return this.props.onLogOut();
   }
 
   renderLoginLink() {

@@ -20,12 +20,10 @@ export default class LoginForm extends Component {
       password: password.value,
     })
       .then(res => {
+        username.value=''
+        password.value=''
         TokenService.saveAuthToken(res.authToken);
-        this.setState({
-          loggedIn: true,
-        })
         this.props.onLoginSuccess();
-        
       })
       .catch(res => {
         this.setState({ error: res.error })

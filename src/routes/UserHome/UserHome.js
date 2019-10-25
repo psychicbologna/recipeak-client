@@ -15,6 +15,7 @@ export default class UserHome extends Component {
     //TODO separate into UserApiService
     RecipeApiService.getUserData()
       .then(userData => {
+        console.log(userData);
         return TokenService.setSessionUserData(userData)
       })
       .catch(this.context.setError)
