@@ -1,11 +1,12 @@
-.primary-nav {
+.Header__PrimaryNav {
   margin: 1em auto;
+  list-style-type: none;
+  display: flex;
 }
 
-.primary-nav li a {
+.PrimaryNav__li {
   margin: 1em auto;
-  transform: rotate(-45deg);
-  border: 1px solid;
+  transform: rotate(-25deg);
   padding: 0.25rem;
   margin: 0.75rem;
 }

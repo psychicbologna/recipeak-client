@@ -1,3 +1,26 @@
-header {
-  display: flex;
+.App__header {
+  margin: 1em 1em 0 1em;
+  display: grid;
+  grid-template-columns: 75px repeat(2, 1fr);
+  grid-template-rows: 75px repeat(2, 1fr);
+}
+
+.Header__logo {
+  grid-row: 1 / 2 px;
+  grid-column: 1 / 2;
+}
+
+header h1 {
+  grid-row: 1 / 2;
+  grid-column: 2 / 4;
+}
+
+.Header__subtitle {
+  grid-row: 2/3;
+  grid-column: 1/ 4;
+}
+
+.Header {
+  grid-row: 3/ 4;
+  grid-column: 1/6;
 }
