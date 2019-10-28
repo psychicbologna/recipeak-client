@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import LoginForm from '../../components/forms/LoginForm/LoginForm';
 
 class LoginPage extends Component {
   static defaultProps = {
     location: {},
     history: {
-      push: () => {},
+      push: () => { },
     },
   }
 
   handleLoginSuccess = () => {
     //Track history, move to '/home' on successful login
-    const { location, history } = this.props;
+    const { location, history, } = this.props
     const destination = (location.state || {}).from || `/home`
-    this.props.history.push(destination)
+    history.push(destination);
   }
 
   render() {

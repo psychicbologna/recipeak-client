@@ -10,7 +10,7 @@ export default class PrimaryNav extends Component {
 
   render() {
     const { loginStatus, checkLoginStatus, onLogoutClick } = this.props;
-
+    checkLoginStatus();
     return (
       <ul className='Header__PrimaryNav'>
         <HomeLink loginStatus={loginStatus} />

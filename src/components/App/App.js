@@ -36,15 +36,12 @@ class App extends Component {
   }
 
   handleLogoutClick = () => {
-    console.log('handlelogoutclick firing')
     TokenService.clearAuthToken();
     TokenService.clearSessionUserdata();
     this.setState({ loggedIn: false })
   }
   
-
-  handleLoginClick() {
-    console.log('handleLoginClick firing')
+  handleLoginClick = () => {
     this.setState({ loggedIn: true })
   }
 
