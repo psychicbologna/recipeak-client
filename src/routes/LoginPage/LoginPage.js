@@ -13,8 +13,8 @@ class LoginPage extends Component {
   handleLoginSuccess = () => {
     //Track history, move to '/home' on successful login
     const { location, history } = this.props;
-    const destination = (location.state || {}).from || `/home`;
-    this.props.history.push(destination);
+    const destination = (location.state || {}).from || `/home`
+    this.props.history.push(destination)
   }
 
   render() {
@@ -22,7 +22,8 @@ class LoginPage extends Component {
       <section className='LoginPage'>
         <LoginForm
           onLoginSuccess={this.handleLoginSuccess}
-          onLogin={this.props.onLogin}
+          onLoginClick={this.props.onLoginClick}
+          loginStatus={this.props.loginStatus}
         />
       </section>
     )

@@ -2,6 +2,10 @@
 
 To commit, run `npm run devlog`
 
+## 2019-10-26
+
+- [Programmatic navigation](https://tylermcginnis.com/react-router-programmatically-navigate/) is getting the history to push on the login page. Also, this is all coming along okay. I had a hard time getting any of the authentication to work for a while.
+
 ## 2019-10-16
 
 - Beginning to implemented protected endpoints, decided on structure for public/private routes.

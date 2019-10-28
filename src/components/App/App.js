@@ -41,6 +41,7 @@ class App extends Component {
     TokenService.clearSessionUserdata();
     this.setState({ loggedIn: false })
   }
+  
 
   handleLoginClick() {
     console.log('handleLoginClick firing')
@@ -90,7 +91,7 @@ class App extends Component {
             />
             <Route
               path={'/login'}
-              render={() => <LoginPage units={this.state.units} loginStatus={this.state.loggedIn} handleLoginClick={this.handleLoginClick} />}
+              render={() => <LoginPage units={this.state.units} loginStatus={this.state.loggedIn} onLoginClick={this.handleLoginClick} />}
               // render={componentProps => (
               //   TokenService.hasAuthToken()
               //     ? <Redirect to={'/user'} />

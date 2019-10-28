@@ -61,7 +61,8 @@ export default class UnitSelect extends Component {
   }
 
 
-  renderUnitSetSelect(units, recipe_id, ingredient_id) {
+  renderUnitSetSelect() {
+    const { updateUnitSet } = this.context;
     if (!this.props.units.length) {
       return <p>Loading units...</p>
     } else {
@@ -70,7 +71,7 @@ export default class UnitSelect extends Component {
 
       return (
 
-        <select className='IngredientForm__unit_set' id='unit_set_select' defaultValue='none' onChange={e => this.context.updateUnitSet(e.target.value)}>
+        <select className='IngredientForm__unit_set' id='unit_set_select' defaultValue='none' onChange={e => updateUnitSet(e.target.value)}>
           <option val='custom'>Custom</option>
           {sortedUnits.units_apprx.units.map(unit => this.unitOption(unit))}
           {this.unitOptGroup(sortedUnits.units_us)}
@@ -107,7 +108,6 @@ export default class UnitSelect extends Component {
 };
 
 function SetUnitData(props) {
-  console.log(props);
   if (props.amount === 1) {
     return (
       <p>{props.singular}</p>
