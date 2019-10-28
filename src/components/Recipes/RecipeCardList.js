@@ -11,7 +11,6 @@ export default class RecipeCardList extends Component {
 
   renderRecipes() {
     const { recipeList = [] } = this.context;
-    console.log(this.context);
     if (recipeList === []) {
       return(<p>It looks like you have no recipes yet. <Link to='/recipes/add'>Add one.</Link></p>)
     } else {

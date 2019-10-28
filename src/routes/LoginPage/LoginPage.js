@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import {withRouter} from 'react-router-dom';
 import LoginForm from '../../components/forms/LoginForm/LoginForm';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
   static defaultProps = {
     location: {},
     history: {
@@ -10,10 +11,10 @@ export default class LoginPage extends Component {
   }
 
   handleLoginSuccess = () => {
-    //Track history, move to '/recipes' on successful login
+    //Track history, move to '/home' on successful login
     const { location, history } = this.props;
     const destination = (location.state || {}).from || `/home`;
-    history.push(destination);
+    this.props.history.push(destination);
   }
 
   render() {
@@ -27,3 +28,6 @@ export default class LoginPage extends Component {
     )
   }
 }
+
+//withRouter allows the component to access history without using it as a component in router.
+export default withRouter(LoginPage);

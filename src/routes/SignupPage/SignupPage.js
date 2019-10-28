@@ -19,6 +19,7 @@ export default class SignupPage extends Component {
     return (
       <div>
         <section className="SignupForm__section">
+          <h2>Sign Up</h2>
           <SignupForm onSignupSuccess={this.handleSignupSuccess} />
         </section>
 

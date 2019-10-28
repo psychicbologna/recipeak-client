@@ -31,6 +31,7 @@ export default class LoginForm extends Component {
   }
 
   render() {
+    console.log('Loginform: ', this.props);
     const { error } = this.state;
     return (
       <form className='LoginForm' onSubmit={this.handleSubmitJwtAuth}>

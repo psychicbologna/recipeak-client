@@ -40,7 +40,6 @@ export class UnitSelectProvider extends Component {
 
   setUnits = units => {
     this.setState({ units })
-    console.log('State:', this.state);
   }
 
   clearUnits = () => {

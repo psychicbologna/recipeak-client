@@ -13,6 +13,7 @@ import RecipeEditPage from '../../routes/RecipeEditPage/RecipeEditPage';
 import NotFound from '../../routes/NotFound/NotFound';
 import UserHome from '../../routes/UserHome/UserHome';
 import UnitApiService from '../../services/unit-api-service';
+import TokenService from '../../services/token-service'
 
 import './App.css';
 
@@ -23,15 +24,26 @@ class App extends Component {
     units: [],
   }
 
-  componentDidMount() {
-    this.handleSetUnits();
+  checkLoginStatus() {
+    TokenService.hasSessionUserdata()
+      ? this.setState({ loggedIn: true })
+      : this.setState({ loggedIn: false })
   }
 
-  handleLogOut() {
+  componentDidMount() {
+    this.handleSetUnits();
+    this.checkLoginStatus();
+  }
+
+  handleLogoutClick = () => {
+    console.log('handlelogoutclick firing')
+    TokenService.clearAuthToken();
+    TokenService.clearSessionUserdata();
     this.setState({ loggedIn: false })
   }
 
-  handleLogIn() {
+  handleLoginClick() {
+    console.log('handleLoginClick firing')
     this.setState({ loggedIn: true })
   }
 
@@ -52,11 +64,10 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div className="App">
-        <header className="App__header">
-          <Header loginStatus={this.state.loggedIn} onLogOut={this.handleLogOut} />
-        </header>
+        <Header loginStatus={this.state.loggedIn} checkLoginStatus={() => this.checkLoginStatus} onLogoutClick={this.handleLogoutClick} />
         <main className='App__main'>
           <Switch>
             <PublicOnlyRoute
@@ -77,10 +88,14 @@ class App extends Component {
               path={'/signup'}
               component={SignupPage}
             />
-            <PublicOnlyRoute
+            <Route
               path={'/login'}
-              component={LoginPage}
-              onLogin={this.handleLogIn}
+              render={() => <LoginPage units={this.state.units} loginStatus={this.state.loggedIn} handleLoginClick={this.handleLoginClick} />}
+              // render={componentProps => (
+              //   TokenService.hasAuthToken()
+              //     ? <Redirect to={'/user'} />
+              //     : <LoginPage {...componentProps} loginStatus={this.state.loggedIn} handleLoginClick={() => this.handleLoginClick} />
+              // )}
             />
             <Route
               exact

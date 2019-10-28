@@ -17,7 +17,6 @@ const RecipeApiService = {
   },
 
   getUserData() {
-    console.log(TokenService.getAuthToken());
     return fetch(`${config.API_ENDPOINT}/users/me`, {
       headers: {
         'Content-Type': 'application/json',

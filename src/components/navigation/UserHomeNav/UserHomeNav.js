@@ -11,7 +11,7 @@ export default class PrimaryNav extends Component {
             Add Recipe
           </Link>
         </li>
-        <li>
+        {/* <li>
           <label htmlFor="category">List by Category (Nonfunctional):</label>
           <select name="category">
             <option value="all">- Show All-</option>
@@ -43,7 +43,7 @@ export default class PrimaryNav extends Component {
         <li>
           Measurements:
           <a href="metric">Metric</a>/<a href="us">US</a>
-        </li>
+        </li> */}
       </ul>
     )
   }
