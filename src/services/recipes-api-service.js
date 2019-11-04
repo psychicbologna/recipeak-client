@@ -1,7 +1,7 @@
 import config from '../config';
 import TokenService from './token-service';
 
-const RecipeApiService = {
+const RecipesApiService = {
   getRecipes() {
     return fetch(`${config.API_ENDPOINT}/recipes`, {
       headers: {
@@ -44,7 +44,7 @@ const RecipeApiService = {
       )
   },
 
-  //TODO construct endpoint in API
+  //TODO test endpoint in api, remove when sure it's working
   addRecipe(recipe, ingredients) {
     return fetch(`${config.API_ENDPOINT}/recipes/add`, {
       method: 'POST',
@@ -64,7 +64,7 @@ const RecipeApiService = {
       )
   },
 
-  //TODO construct endpoint in API
+  //TODO test endpoint in api, remove when sure it's working
   deleteRecipe(recipeId) {
     return fetch(`${config.API_ENDPOINT}/recipes/${recipeId}`, {
       method: 'DELETE',
@@ -80,7 +80,8 @@ const RecipeApiService = {
       )
   },
 
-  //TODO construct endpoint in API
+  //TODO test endpoint in api, remove when sure it's working
+
   updateRecipe(recipeId, newRecipeFields) {
     return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
       method: 'PATCH',
@@ -114,63 +115,7 @@ const RecipeApiService = {
       )
   },
 
-    //TODO construct endpoint in API
-  addIngredient(recipeId, ingredient) {
-      return fetch(`${config.API_ENDPOINT}/recipes/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-        },
-        body: JSON.stringify({
-          recipeId,
-          ingredient
-        })
-      })
-        .then(res =>
-          (!res.ok)
-            ? res.json().then(e => Promise.reject(e))
-            : res.json()
-        )
-    },
-
-  //TODO construct endpoint in API
-  deleteRecipeIngredients(ingredientId) {
-    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${ingredientId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-      }
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-  },
-
-  //TODO construct endpoint in API
-  updateRecipeIngredients(ingredientId, recipeId, newIngredientFields) {
-    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${ingredientId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-      body: JSON.stringify({
-        recipeId,
-        newIngredientFields
-      })
-      }
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-  },
-
 
 }
 
-export default RecipeApiService;
+export default RecipesApiService;
