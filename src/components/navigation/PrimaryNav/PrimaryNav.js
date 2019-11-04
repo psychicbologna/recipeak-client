@@ -18,7 +18,7 @@ export default class PrimaryNav extends Component {
         <LogoutLink loginStatus={loginStatus} onLogoutClick={onLogoutClick} />
         <LoginLink loginStatus={loginStatus} />
         <li className='PrimaryNav__li'>
-          <Link to='/about'>
+          <Link to='/abfoo;kluhoverout'>
             About
           </Link>
         </li>
