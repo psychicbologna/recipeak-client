@@ -115,7 +115,6 @@ const RecipesApiService = {
       )
   },
 
-
 }
 
 export default RecipesApiService;
