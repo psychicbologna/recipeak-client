@@ -40,7 +40,7 @@ function EnteredIngredients(props) {
             return (
               <Ingredient
                 units={props.units}
-                key={ingredient.tempId}
+                key={ingredient.tempId || ingredient.id}
                 ingredient={ingredient}
                 removeIngredient={props.removeIngredient}>
 
