@@ -3,7 +3,6 @@ import { Section } from '../../components/Utils/Utils';
 import RecipeListContext from '../../contexts/RecipeCardListContext';
 import RecipeCard from './Recipe/RecipeCard';
 import {Link} from 'react-router-dom';
-import TokenService from '../../services/token-service';
 
 export default class RecipeCardList extends Component {
 
