@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 
 const RecipeListContext = React.createContext({
   recipeList: [],
+  deleteModalIsOpen: false,
   error: null,
   setError: () => {},
-  clearError: () => {},
   setRecipeList: () => {},
+  toggleDeleteModal: () => {},
+  clearError: () => {},
 })
 export default RecipeListContext
 
