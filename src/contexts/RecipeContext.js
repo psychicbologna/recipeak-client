@@ -12,8 +12,6 @@ const RecipeContext = React.createContext({
   setRecipe: () => { },
   clearRecipe: () => { },
   setIngredients: () => { },
-  addIngredient: () => { }
-  //TODO change/delete ingredient
 })
 
 export default RecipeContext;
@@ -44,13 +42,6 @@ export class RecipeProvider extends Component {
   clearRecipe = () => {
     this.setRecipe(nullRecipe)
     this.setIngredients([])
-  }
-
-  addIngredient = ingredient => {
-    this.setIngredients([
-      ...this.state.ingredients,
-      ingredient
-    ])
   }
 
   render() {
