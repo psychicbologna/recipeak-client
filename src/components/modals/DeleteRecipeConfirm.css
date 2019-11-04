@@ -1,0 +1,6 @@
+.DeleteRecipeConfirm {
+  display: absolute;
+  color: var(--off-white);
+  background-color: var(--accent-color-2);
+  border-color: var(--accent-color-1);
+}
