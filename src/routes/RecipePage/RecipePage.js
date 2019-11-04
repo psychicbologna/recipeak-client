@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import RecipeContext from '../../contexts/RecipeContext';
-import RecipeApiService from '../../services/recipes-api-service';
+import RecipesApiService from '../../services/recipes-api-service';
 import { Section } from '../../components/Utils/Utils';
 
 export default class RecipePage extends Component {
@@ -12,12 +12,13 @@ export default class RecipePage extends Component {
   static contextType = RecipeContext;
 
   componentDidMount() {
+    //TODO authorization if not owner of recipe and it is private?
     const recipeId = this.props.match.params.recipe_id;
     this.context.clearError()
-    RecipeApiService.getRecipe(recipeId)
+    RecipesApiService.getRecipe(recipeId)
       .then(this.context.setRecipe)
       .catch(this.context.setError)
-    RecipeApiService.getRecipeIngredients(recipeId)
+    RecipesApiService.getRecipeIngredients(recipeId)
       .then(this.context.setIngredients)
       .catch(this.context.setError)
   }
