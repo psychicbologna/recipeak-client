@@ -11,7 +11,7 @@ import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { RecipeListProvider } from './contexts/RecipeCardListContext';
 import { RecipeProvider } from './contexts/RecipeContext';
-import { RecipesFormContextProvider} from './contexts/RecipesFormContext'
+import { RecipesFormContextProvider } from './contexts/RecipesFormContext'
 
 ReactDOM.render(
   <BrowserRouter>
