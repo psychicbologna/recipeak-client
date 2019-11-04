@@ -56,8 +56,6 @@ export default class RecipeEditPage extends Component {
     }
   }
 }
-
-//TODO set values on the form to default for recipe
 //TODO delete button and confirmation modal
 //TODO validation for form entries
 //TODO a11y check
