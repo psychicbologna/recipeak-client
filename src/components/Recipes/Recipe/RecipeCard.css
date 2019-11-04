@@ -1,12 +1,14 @@
 .RecipeCard {
   border: 1px solid;
-  margin-bottom: 1rem;
+  border-color: var(--accent-color-1);
+  margin: 0 1rem 1rem 1rem;
 }
 
 .RecipeCard header {
-  background-color: gray;
+  margin: 1rem 0;
+  background-color: var(--light-gray);
 }
 
 .RecipeCard footer {
-  background-color: gray;
+  background-color: var(--light-gray);
 }
