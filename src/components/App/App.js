@@ -21,7 +21,7 @@ class App extends Component {
   state = {
     hasError: false,
     loggedIn: false,
-    units: [],
+    // units: [],
   }
 
   checkLoginStatus() {
@@ -31,7 +31,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.handleSetUnits();
     this.checkLoginStatus();
   }
 
@@ -43,16 +42,6 @@ class App extends Component {
   
   handleLoginClick = () => {
     this.setState({ loggedIn: true })
-  }
-
-  handleSetUnits(units) {
-    UnitApiService.getUnits()
-      .then(units =>
-        this.setState({ units: units }))
-      .catch(this.setState({
-        hasError: true,
-        error: { message: 'Unable to retrieve unit data.' }
-      }));
   }
 
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
@@ -75,7 +64,7 @@ class App extends Component {
             />
             <PrivateRoute
               exact
-              path={['/home']}
+              path={'/home'}
               component={UserHome}
             />
             <Route
@@ -88,17 +77,17 @@ class App extends Component {
             />
             <Route
               path={'/login'}
-              render={() => <LoginPage units={this.state.units} loginStatus={this.state.loggedIn} onLoginClick={this.handleLoginClick} />}
+              render={() => <LoginPage loginStatus={this.state.loggedIn} onLoginClick={this.handleLoginClick} />}
               // render={componentProps => (
               //   TokenService.hasAuthToken()
               //     ? <Redirect to={'/user'} />
               //     : <LoginPage {...componentProps} loginStatus={this.state.loggedIn} handleLoginClick={() => this.handleLoginClick} />
               // )}
             />
-            <Route
+            <PrivateRoute
               exact
               path={'/recipes/add'}
-              render={() => <RecipeAddPage units={this.state.units} />}
+              component={RecipeAddPage}
             />
             <Route
               exact
