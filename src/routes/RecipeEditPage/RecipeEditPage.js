@@ -3,6 +3,7 @@ import RecipesApiService from '../../services/recipes-api-service';
 import RecipesFormContext, { nullLiveInput, nullIngredient } from '../../contexts/RecipesFormContext';
 import RecipesEditForm from '../../components/forms/RecipesForm/RecipeEditForm';
 
+
 export default class RecipeEditPage extends Component {
   static defaultProps = {
     match: { params: {} },
@@ -14,15 +15,15 @@ export default class RecipeEditPage extends Component {
 
   componentDidMount() {
 
-      const recipeId = this.props.match.params.recipe_id;
-      this.context.clearError()
-      RecipesApiService.getRecipe(recipeId)
-        .then(this.context.setRecipe)
-        .catch(this.context.setError)
-      RecipesApiService.getRecipeIngredients(recipeId)
-        .then(this.context.setIngredients)
-        .catch(this.context.setError)
-        .then(this.context.toggleLoading);
+    const recipeId = this.props.match.params.recipe_id;
+    this.context.clearError()
+    RecipesApiService.getRecipe(recipeId)
+      .then(this.context.setRecipe)
+      .catch(this.context.setError)
+    RecipesApiService.getRecipeIngredients(recipeId)
+      .then(this.context.setIngredients)
+      .catch(this.context.setError)
+      .then(this.context.toggleLoading);
   }
 
   componentWillUnmount() {
@@ -30,10 +31,20 @@ export default class RecipeEditPage extends Component {
   }
 
   render() {
-    console.log(this.context.recipe);
-    console.log(this.context.toggleLoading);
-    console.log(this.props.match.params.recipe_id);
-    const { error, recipe } = this.context;
+    const {
+      error,
+      recipe,
+      updateServings,
+      updateAuthor,
+      updateName,
+      updatePrepTimeHours,
+      updatePrepTimeMinutes,
+      updateInstructions,
+      toggleModal,
+      handleSubmit,
+      clearForm
+    } = this.context;
+
     if (this.context.loading) {
       return (
         <p>Loading your recipe...</p>
@@ -45,12 +56,23 @@ export default class RecipeEditPage extends Component {
         ? <p className='red'>Recipe not found</p>
         : <p className='red'>There was an error</p>
     } else if (!recipe.id) {
-      return ( <div className='loading' /> )
+      return (<div className='loading' />)
     } else {
       return (
         <section className={`RecipeEdit`}>
           <h3>Edit {`'${recipe.name}'`}</h3>
-          <RecipesEditForm units={this.props.units} />
+          <RecipesEditForm
+            units={this.props.units}
+            updateServings={updateServings}
+            updateAuthor={updateAuthor}
+            updateName={updateName}
+            updatePrepTimeHours={updatePrepTimeHours}
+            updatePrepTimeMinutes={updatePrepTimeMinutes}
+            updateInstructions={updateInstructions}
+            toggleModal={toggleModal}
+            onSubmit={handleSubmit}
+            clearForm={clearForm}
+          />
         </section>
       )
     }
