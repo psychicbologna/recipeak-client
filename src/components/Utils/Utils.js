@@ -1,11 +1,11 @@
 import React from 'react';
-import {format as formatDate} from 'date-fns';
+import { format as formatDate } from 'date-fns';
 
-export function FullName({user}) {
+export function FullName({ user }) {
   return `${user.first_name} ${user.last_name}`;
 }
 
-export function NiceDate({ date, format='Do MMMM YYYY' }) {
+export function NiceDate({ date, format = 'Do MMMM YYYY' }) {
   return formatDate(date, format)
 }
 
@@ -46,4 +46,28 @@ export function Section({ className, list, ...props }) {
   return (
     <section className={classes} {...props} />
   )
+}
+
+//Selects proper display unit based on unit properties.
+export function chooseDisplayUnit(ingredient, units) {
+  let displayUnit;
+
+  if (ingredient.unit_set === 'Custom') {
+    displayUnit = ingredient.unit_data;
+  } else {
+
+    const unitSet = ingredient.unit_set;
+    const unitsFiltered = units.filter(unit => unit.unit_set === unitSet);
+
+    if (!unitsFiltered || !unitsFiltered.length) {
+      displayUnit = { unit_singular: null, unit_plural: null }
+    } else {
+      displayUnit = unitsFiltered[0].unit_data;
+    }
+  }
+
+  if (ingredient.amount == 1) {
+    return displayUnit.unit_single
+  }
+  else { return displayUnit.unit_plural };
 }
