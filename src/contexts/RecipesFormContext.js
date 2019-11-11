@@ -157,23 +157,24 @@ export class RecipesFormContextProvider extends Component {
     let oldList = this.state.ingredients;
     let newList;
 
-    console.log(oldList);
-
     if (!oldList) {
       newList = [newIngredient]
     } else {
       newList = [...oldList, newIngredient]
     }
 
-    console.log(newList);
-
     this.setState({ ingredients: newList })
     this.setState({ ingredientCount: this.state.ingredients.length + 1 })
     this.clearCurrentIngredient();
   }
 
-  removeIngredient = tempId => {
-    const filteredIngredients = this.context.ingredients.filter(ingredient => ingredient.tempID = tempId)
+  removeIngredient = (event, tempId) => {
+    const { ingredients } = this.state;
+
+    event.preventDefault();
+
+    const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== tempId)
+
     this.setState({ ingredients: filteredIngredients })
     this.setState({ ingredientCount: filteredIngredients.length })
   }
