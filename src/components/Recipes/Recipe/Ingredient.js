@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { chooseDisplayUnit } from '../../Utils/Utils';
 
 export default class Ingredient extends Component {
   static defaultProps = {
@@ -10,29 +11,21 @@ export default class Ingredient extends Component {
   }
 
   render() {
-    const ingredient = this.props.ingredient;
-    const units = this.props.units;
 
-    let displayUnit;
+    const { ingredient, units, removeIngredient, removeId } = this.props
 
-    if (ingredient.unit_set === 'Custom') {
-      displayUnit = ingredient.unit_data;
-    } else {
-
-      const unitSet = ingredient.unit_set;
-      const unitsFiltered = units.filter(unit => unit.unit_set === unitSet);
-
-      if (!unitsFiltered || !unitsFiltered.length) {
-        displayUnit = {unit_singular:null, unit_plural:null}
-      } else {
-        displayUnit = unitsFiltered[0].unit_data;
-      }
-    }
-
-    const pluralChoice = (displayUnit, amount) => amount == 1 ? displayUnit.unit_single : displayUnit.unit_plural;
+    const displayUnit = chooseDisplayUnit(ingredient, units);
 
     return (
-      <li>{ingredient.amount} {pluralChoice(displayUnit, ingredient.amount)} {ingredient.ing_text}</li>
+      <li>{ingredient.amount} {displayUnit} {ingredient.ing_text}
+        {removeIngredient ? <DeleteIngredient removeIngredient={removeIngredient} removeId={removeId}/> : null}
+      </li>
     )
   }
+}
+
+function DeleteIngredient(props) {
+  return (
+    <button onClick={e => props.removeIngredient(e, props.removeId)}>Delete</button>
+  )
 }
