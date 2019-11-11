@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
 import UnitSelect from './UnitSelect';
-import Ingredient from '../../../Recipes/Recipe/Ingredient'
-import RecipesFormContext from '../../../../contexts/RecipesFormContext'
+import Ingredient from '../../../Recipes/Recipe/Ingredient';
+import UnitApiService from '../../../../services/unit-api-service';
+import UnitContext from '../../../../contexts/UnitContext';
 
 export default class IngredientsForm extends Component {
 
-  static contextType = RecipesFormContext;
+  static contextType = UnitContext;
+
+  componentDidMount(){
+    UnitApiService.getUnits()
+    .then(this.context.setUnits)
+    .catch(this.setState({
+      hasError: true,
+      error: { message: 'Unable to retrieve unit data.' }
+    }));
+  }
 
   render() {
-    const { ingredients, currentIngredient } = this.context;
+    const { ingredients, currentIngredient, addIngredient, removeIngredient, updateAmount, updateIngText } = this.props;
 
     return (
       <section className='IngredientForm'>
-        <EnteredIngredients ingredients={ingredients} removeIngredient={this.context.removeIngredient} units={this.props.units} />
+        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} units={this.context.units} />
         <fieldset className='RecipeForm__AddIngredient'>
           <legend>Add Ingredient</legend>
-          <AmountInput updateAmount={this.context.updateAmount} />
-          <UnitSelect units={this.props.units} />
-          <IngTextInput updateIngText={this.context.updateIngText} />
+          <AmountInput updateAmount={updateAmount} />
+          <UnitSelect units={this.context.units} />
+          <IngTextInput updateIngText={updateIngText} />
           <button
-            onClick={e => this.context.addIngredient(e, currentIngredient)}>Add Ingredient</button>
+            onClick={e => addIngredient(e, currentIngredient)}>Add Ingredient</button>
         </fieldset>
       </section>
     )
@@ -42,10 +52,8 @@ function EnteredIngredients(props) {
                 units={props.units}
                 key={ingredient.tempId || ingredient.id}
                 ingredient={ingredient}
-                removeIngredient={props.removeIngredient}>
-
-                <button onClick={e => props.removeIngredient(props.key)}></button>
-              </Ingredient>
+                removeIngredient={props.removeIngredient}
+                removeId={ingredient.tempId || ingredient.id} />
             );
           })}
         </ul>
