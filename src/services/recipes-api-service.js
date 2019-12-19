@@ -4,20 +4,7 @@ import TokenService from './token-service';
 const RecipesApiService = {
   getRecipes() {
     return fetch(`${config.API_ENDPOINT}/recipes`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-      },
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      );
-  },
-
-  getUserData() {
-    return fetch(`${config.API_ENDPOINT}/users/me`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
@@ -32,6 +19,7 @@ const RecipesApiService = {
 
   getRecipe(recipeId) {
     return fetch(`${config.API_ENDPOINT}/recipes/${recipeId}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,

@@ -9,14 +9,14 @@ import './assets/fonts/2-questa_grande_regular_31-webfont.woff2';
 import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
-import { RecipeListProvider } from './contexts/RecipeCardListContext';
+import { UserHomeProvider } from './contexts/UserHomeContext';
 import { RecipeProvider } from './contexts/RecipeContext';
 import { RecipesFormContextProvider } from './contexts/RecipesFormContext'
 import { UnitContextProvider } from './contexts/UnitContext';
 
 ReactDOM.render(
   <BrowserRouter>
-    <RecipeListProvider>
+    <UserHomeProvider>
       <RecipeProvider>
         <RecipesFormContextProvider>
           <UnitContextProvider>
@@ -24,7 +24,7 @@ ReactDOM.render(
           </UnitContextProvider>
         </RecipesFormContextProvider>
       </RecipeProvider>
-    </RecipeListProvider>
+    </UserHomeProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

@@ -1,24 +1,21 @@
 import jwtDecode from 'jwt-decode';
-import config from '../config';
 
 let _timeoutId
 const _TEN_SECONDS_IN_MS = 10000;
 
 const TokenService = {
   saveAuthToken(token) {
-    return window.sessionStorage.setItem(config.TOKEN_KEY, token)
+    return window.sessionStorage.setItem('token', token)
   },
   getAuthToken() {
-    return window.sessionStorage.getItem(config.TOKEN_KEY)
+    return window.sessionStorage.getItem('token')
   },
   clearAuthToken() {
-    return window.sessionStorage.removeItem(config.TOKEN_KEY)
+    console.info('clearing auth token')
+    return window.sessionStorage.removeItem('token')
   },
   hasAuthToken() {
     return !!TokenService.getAuthToken()
-  },
-  makeBasicAuthToken(userName, password) {
-    return window.btoa(`${userName}:${password}`)
   },
   parseJwt(jwt) {
     return jwtDecode(jwt)
@@ -30,7 +27,7 @@ const TokenService = {
     return (payload.exp * 1000) - Date.now()
   },
   queueCallbackBeforeExpiry(callback) {
-    const msUntilExpiry = TokenService._getMsUntilExpiry(TokenService.readJwtToken)
+    const msUntilExpiry = TokenService._getMsUntilExpiry(TokenService.readJwtToken())
     _timeoutId = setTimeout(callback, msUntilExpiry - _TEN_SECONDS_IN_MS)
   },
   clearCallbackBeforeExpiry() {
@@ -39,19 +36,6 @@ const TokenService = {
   fetchUsername() {
     return TokenService.readJwtToken().sub;
   },
-  setSessionUserData(userdata) {
-    sessionStorage.setItem('user', JSON.stringify(userdata.user));
-  },
-  clearSessionUserdata() {
-    sessionStorage.removeItem('user');
-  },
-  getSessionUserdata() {
-    return JSON.parse(sessionStorage.getItem('user'));
-  },
-  hasSessionUserdata() {
-    return !!TokenService.getSessionUserdata();
-  }
-
 }
 
 export default TokenService

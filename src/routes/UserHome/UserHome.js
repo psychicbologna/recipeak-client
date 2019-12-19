@@ -1,47 +1,76 @@
 import React, { Component } from 'react';
 import UserHomeNav from '../../components/navigation/UserHomeNav/UserHomeNav';
-import RecipeApiService from '../../services/recipes-api-service';
-import RecipeListContext from '../../contexts/RecipeCardListContext';
+import UserHomeContext, {nullUser} from '../../contexts/UserHomeContext';
 import RecipeCardList from '../../components/Recipes/RecipeCardList';
-import TokenService from '../../services/token-service';
-import { Link } from 'react-router-dom';
+import UserApiService from '../../services/user-api-service'
 
 export default class UserHome extends Component {
 
-  static contextType = RecipeListContext;
+  static contextType = UserHomeContext;
+
+  state = {
+    error: '',
+    user: nullUser,
+    recipeList: [],
+  }
+
+  setError = error => {
+    this.setState({ error });
+  }
+  clearError = error => {
+    this.setState({ error: null })
+  }
+  setUserData = userData => {
+    this.setState({
+      user: userData.user,
+      recipeList: userData.recipes
+    })
+  }
+
 
   componentDidMount() {
+    //Set userdata in context.
     this.context.clearError()
-    //TODO separate into UserApiService
-    RecipeApiService.getUserData()
+    UserApiService.getUserData()
       .then(userData => {
-        return TokenService.setSessionUserData(userData)
+        this.context.setUserData(userData);
+        this.setUserData(userData);
       })
-      .catch(this.context.setError)
-    RecipeApiService.getUserData()
-      .then(userData => {
-        const recipeList = userData.recipes;
-        return this.context.setRecipeList(recipeList)
-      })
-      .catch(this.context.setError);
+      .catch(error => this.setState({error}))
+  }
+
+  componentWillUnmount() {
+    this.setState({error: null})
+    this.setState({
+      user: nullUser,
+      recipes: []
+    })
   }
 
   render() {
-    let userData;
-    // const { recipes } = this.context.recipeList;
+    const { recipeList, user } = this.state;
 
-    if (!TokenService.hasSessionUserdata()) {
-      return (<p>Loading User Data...</p>)
+    console.log(this.state);
+
+    if (user === nullUser && !recipeList.length) {
+      return (
+        <div className='loading'>
+          {
+            !this.state.error
+              ? <p>Loading User Data...</p>
+              : <p className='error'>{this.state.error.message}</p>
+          }
+        </div>
+      )
     } else {
-      userData = TokenService.getSessionUserdata()
       return (
         <section className='UserHome'>
-          <h2>{formatName(userData.first_name)} Recipes</h2>
-          <UserHomeNav username />
+          <h2>{user.first_name}'s Recipes</h2>
+          <UserHomeNav username={user.username} />
           {
-            !this.context.recipeList.length
-              ? <p>Loading your recipes...</p>
-              : <RecipeCardList listCheck={this.context.recipeList.length} />
+            !recipeList.length
+              ? <p>There doesn't seem to be any recipes here. Try adding one!</p>
+              : <RecipeCardList listCheck={recipeList.length} />
           }
         </section>
       )

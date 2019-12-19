@@ -19,7 +19,7 @@ export default class IngredientsForm extends Component {
 
   render() {
     const { ingredients, currentIngredient, addIngredient, removeIngredient, updateAmount, updateIngText } = this.props;
-
+    console.log(ingredients);
     return (
       <section className='IngredientForm'>
         <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} units={this.context.units} />

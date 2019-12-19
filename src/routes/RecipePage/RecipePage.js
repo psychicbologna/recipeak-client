@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import RecipeContext from '../../contexts/RecipeContext';
 import RecipesApiService from '../../services/recipes-api-service';
-import { Section } from '../../components/Utils/Utils';
+import { Section, PrepTimeDisplay } from '../../components/Utils/Utils';
 
 export default class RecipePage extends Component {
   static defaultProps = {
@@ -12,14 +12,14 @@ export default class RecipePage extends Component {
   static contextType = RecipeContext;
 
   componentDidMount() {
-    //TODO authorization if not owner of recipe and it is private?
     const recipeId = this.props.match.params.recipe_id;
     this.context.clearError()
     RecipesApiService.getRecipe(recipeId)
-      .then(this.context.setRecipe)
-      .catch(this.context.setError)
-    RecipesApiService.getRecipeIngredients(recipeId)
-      .then(this.context.setIngredients)
+      .then(data => {
+        console.log('Response!: ', data)
+        this.context.setRecipe(data.recipe)
+        this.context.setIngredients(data.ingredients)
+      })
       .catch(this.context.setError)
   }
 
@@ -29,16 +29,23 @@ export default class RecipePage extends Component {
 
   renderRecipe() {
     const { recipe, ingredients } = this.context;
+
     return (
       <div>
-        <h3>{recipe.name}</h3>
-        <p>Prep Time: {recipe.prep_time}</p>
-        <p>Yields {recipe.servings} Servings</p>
+        <h3 className="Recipe__name">{recipe.name}</h3>
+        <h4>Prep Time:</h4>
+        <PrepTimeDisplay hours={recipe.prep_time_hours} minutes={recipe.prep_time_minutes}/>
+        <h4>Yields:</h4>
+        <p className="Recipe__servings">{recipe.servings} Servings</p>
         <section>
           <h2>Ingredients</h2>
-          <Ingredients
+          {
+          !!ingredients.length
+          ? <Ingredients
             ingredients={ingredients}
-           />
+          />
+          : <p>Loading ingredients...</p>
+          }
         </section>
         <section>
           <h2>Instructions</h2>
@@ -71,17 +78,20 @@ export default class RecipePage extends Component {
   }
 }
 
-function Ingredients({ ingredients = []}) {
-  return (
-    <ul>
-      {ingredients.map(ingredient => 
-        <li key={ingredient.id} className='Ingredient'>
-          {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ing_text}
-        </li>)}
-    </ul>
-  )
+function Ingredients({ ingredients }) {
+  if (ingredients.length) {
+    return (
+      <ul>
+        {ingredients.map(ingredient =>
+          <li key={ingredient.id} className='Ingredient'>
+            {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ing_text}
+          </li>)}
+      </ul>
+    )
+  }
 }
 
+//Returns the unit as singular or plural depending on the amount.
 function UnitFormat(amount, unitData) {
   if (amount === 1) {
     return unitData.unit_single;

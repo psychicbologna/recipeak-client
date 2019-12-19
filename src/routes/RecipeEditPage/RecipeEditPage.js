@@ -1,77 +1,64 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
-import RecipesFormContext, { nullLiveInput, nullIngredient } from '../../contexts/RecipesFormContext';
 import RecipesEditForm from '../../components/forms/RecipesForm/RecipeEditForm';
+import RecipeEditContext, { nullRecipe, nullIngredient } from '../../contexts/RecipesFormContext';
 
 
 export default class RecipeEditPage extends Component {
   static defaultProps = {
     match: { params: {} },
-    recipe: {},
-    ingredients: {}
+    recipe: nullRecipe,
+    ingredients: [],
+    currentIngredient: nullIngredient,
+    error: null,
   }
 
-  static contextType = RecipesFormContext;
+  state = {
+    loading: true,
+    error: ''
+  }
+
+  static contextType = RecipeEditContext;
 
   componentDidMount() {
-
     const recipeId = this.props.match.params.recipe_id;
-    this.context.clearError()
     RecipesApiService.getRecipe(recipeId)
-      .then(this.context.setRecipe)
+      .then(data => {
+        this.context.setRecipe(data.recipe)
+        this.context.setIngredients(data.ingredients)
+      })
       .catch(this.context.setError)
-    RecipesApiService.getRecipeIngredients(recipeId)
-      .then(this.context.setIngredients)
-      .catch(this.context.setError)
-      .then(this.context.toggleLoading);
+      .then(this.setState({ loading: false }));
   }
 
   componentWillUnmount() {
     this.context.clearRecipe();
   }
 
-  render() {
-    const {
-      error,
-      recipe,
-      updateServings,
-      updateAuthor,
-      updateName,
-      updatePrepTimeHours,
-      updatePrepTimeMinutes,
-      updateInstructions,
-      toggleModal,
-      handleSubmit,
-      clearForm
-    } = this.context;
+  clearError() {
+    this.setState({ error: '' })
+  }
 
-    if (this.context.loading) {
+  render() {
+    const { recipe, ingredients } = this.context;
+    const { loading, error } = this.state;
+
+    if (loading) {
       return (
         <p>Loading your recipe...</p>
       )
     }
-    let content;
     if (error) {
-      content = (error.error === `Recipe doesn't exist`)
-        ? <p className='red'>Recipe not found</p>
-        : <p className='red'>There was an error</p>
-    } else if (!recipe.id) {
-      return (<div className='loading' />)
+      return (
+        <p>{error.error}</p>
+      )
     } else {
       return (
         <section className={`RecipeEdit`}>
-          <h3>Edit {`'${recipe.name}'`}</h3>
+          <h3>Edit {`'${recipe.name.value}'`}</h3>
           <RecipesEditForm
-            units={this.props.units}
-            updateServings={updateServings}
-            updateAuthor={updateAuthor}
-            updateName={updateName}
-            updatePrepTimeHours={updatePrepTimeHours}
-            updatePrepTimeMinutes={updatePrepTimeMinutes}
-            updateInstructions={updateInstructions}
-            toggleModal={toggleModal}
-            onSubmit={handleSubmit}
-            clearForm={clearForm}
+            recipe={recipe}
+            ingredients={ingredients}
           />
         </section>
       )

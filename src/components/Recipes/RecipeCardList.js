@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Section } from '../../components/Utils/Utils';
-import RecipeListContext from '../../contexts/RecipeCardListContext';
+import UserHomeContext from '../../contexts/UserHomeContext';
 import RecipeCard from './Recipe/RecipeCard';
 import {Link} from 'react-router-dom';
 
 export default class RecipeCardList extends Component {
 
-  static contextType = RecipeListContext;
+  static contextType = UserHomeContext;
 
   renderRecipes() {
     const { recipeList = [] } = this.context;

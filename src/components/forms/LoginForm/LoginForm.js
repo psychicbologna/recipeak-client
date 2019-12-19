@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import TokenService from '../../../services/token-service';
 import AuthApiService from '../../../services/auth-api-service';
+import UserHomeContext from '../../../contexts/UserHomeContext'
 import { Button, Input } from '../../Utils/Utils';
 
 export default class LoginForm extends Component {
   static defaultProps = {
     onLoginSuccess: () => { },
-    onLoginClick: () => {}
+    onLoginClick: () => { },
+    resetHeader: () => { }
   };
+
+  static contextType = UserHomeContext
 
   state = { error: null };
 
@@ -21,15 +24,17 @@ export default class LoginForm extends Component {
       password: password.value,
     })
       .then(res => {
-        username.value=''
-        password.value=''
-        TokenService.saveAuthToken(res.authToken)
-        this.props.onLoginClick();
+        username.value = ''
+        password.value = ''
+        //Reset necessary components.
+        this.context.onLogin(res.authToken, res.type);
+        //Move to next/prev page.
         this.props.onLoginSuccess()
       })
       .catch(res => {
         this.setState({ error: res.error })
       })
+
   }
 
   render() {

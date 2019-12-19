@@ -6,6 +6,12 @@ export const nullLiveInput = {
 }
 
 export const nullRecipe = {
+  name: nullLiveInput,
+  author: nullLiveInput,
+  prep_time_hours: nullLiveInput,
+  prep_time_minutes: nullLiveInput,
+  servings: nullLiveInput,
+  instructions: nullLiveInput
 }
 
 export const nullIngredient = {
@@ -17,61 +23,38 @@ export const nullIngredient = {
 }
 
 const RecipesFormContext = React.createContext({
-  loading: true,
   recipe: nullRecipe,
-  name: nullLiveInput,
-  author: nullLiveInput,
-  prep_time: nullLiveInput,
-  servings: nullLiveInput,
-  instructions: nullLiveInput,
   ingredientCount: 0,
   ingredients: [],
   currentIngredient: nullIngredient,
-  deleteModalIsOpen: false,
-  toggleLoading: () => {},
-  setError: () => { },
-  clearError: () => { },
-  updateName: () => { },
-  updateAuthor: () => { },
-  updatePrepTimeHours: () => { },
-  updatePrepTimeMinutes: () => { },
-  updateServings: () => { },
 
-  updateAmount: () => { },
-  updateIngText: () => { },
-  updateUnitSet: () => { },
-  updateUnitSingular: () => { },
-  updateUnitPlural: () => { },
-  addIngredient: () => { },
-  removeIngredient: () => { },
+  setRecipe: () => { },
+  setIngredients: () => { },
+  clearRecipe: () => { },
+  clearIngredients: () => { },
 
-  updateInstructions: () => { },
+  updateRecipeField: () => { },
+  updateIngredientField: () => { },
   handleSubmit: () => { },
   clearForm: () => { },
 
-  toggleDeleteModal: () => { },
-  setRecipe: () => { },
-  setIngredients: () => { },
-  clearRecipe: () => { }
+  addRecipe: () => { },
+  removeRecipe: () => { },
+  updateRecipe: () => { },
+  addIngredient: () => { },
+  removeIngredient: () => { },
+
+
 })
 
 export default RecipesFormContext;
 
 export class RecipesFormContextProvider extends Component {
   state = {
-    loading: true,
-    recipe: {},
-    name: nullLiveInput,
-    author: nullLiveInput,
-    prep_time_hours: nullLiveInput,
-    prep_time_minutes: nullLiveInput,
-    servings: nullLiveInput,
-    instructions: nullLiveInput,
+    recipe: nullRecipe,
     ingredientCount: 0,
     ingredients: [],
     currentIngredient: nullIngredient,
-    deleteModalIsOpen: false,
-    error: null,
   }
 
   toggleLoading = () => {
@@ -81,65 +64,18 @@ export class RecipesFormContextProvider extends Component {
     })
   }
 
-  setError = error => {
-    console.error(error)
-    this.setState({ error })
-  }
-
-  clearError = () => {
-    this.setState({ error: null })
-  }
-
-  updateName = name => {
-    this.setState({ name: { value: name, touched: true } })
-  }
-
-  updateAuthor = author => {
-    this.setState({ author: { value: author, touched: true } })
-  }
-
-  updatePrepTimeHours = prep_time_hours => {
-    this.setState({ prep_time_hours: { value: prep_time_hours, touched: true } })
-  }
-
-  updatePrepTimeMinutes = prep_time_minutes => {
-    this.setState({ prep_time_minutes: { value: prep_time_minutes, touched: true } })
-  }
-
-  updateServings = servings => {
-    this.setState({ servings: { value: servings, touched: true } })
-  }
-
-  updateAmount = amount => {
+  //Update fields of recipe.
+  updateRecipeField = (fieldName, value) => {
     this.setState(prevState => ({
-      currentIngredient: { ...prevState.currentIngredient, amount: { value: amount, touched: true } }
+      recipe: {
+        ...prevState.recipe,
+        [fieldName]: { value: value, touched: true }
+      }
     }));
+    console.log(fieldName, value);
   }
 
-  updateIngText = ingText => {
-    this.setState(prevState => ({
-      currentIngredient: { ...prevState.currentIngredient, ing_text: { value: ingText, touched: true } }
-    }));
-  };
-
-  updateUnitSet = unitSet => {
-    this.setState(prevState => ({
-      currentIngredient: { ...prevState.currentIngredient, unit_set: { value: unitSet, touched: true } }
-    }));
-  };
-
-  updateUnitSingular = singular => {
-    this.setState(prevState => ({
-      currentIngredient: { ...prevState.currentIngredient, unit_singular: { value: singular, touched: true } }
-    }));
-  };
-
-  updateUnitPlural = plural => {
-    this.setState(prevState => ({
-      currentIngredient: { ...prevState.currentIngredient, unit_plural: { value: plural, touched: true } }
-    }));
-  };
-
+  //Submit ingredient
   addIngredient = (ev, ingredient) => {
     ev.preventDefault();
 
@@ -157,6 +93,7 @@ export class RecipesFormContextProvider extends Component {
     let oldList = this.state.ingredients;
     let newList;
 
+    //Start list if ingredient is first, add to start of array if next.
     if (!oldList) {
       newList = [newIngredient]
     } else {
@@ -168,15 +105,21 @@ export class RecipesFormContextProvider extends Component {
     this.clearCurrentIngredient();
   }
 
-  removeIngredient = (event, tempId) => {
+  removeIngredient = (event, id) => {
     const { ingredients } = this.state;
+    console.log('remove firing')
+    console.log(id)
+    console.log(ingredients);
 
     event.preventDefault();
 
-    const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== tempId)
+    const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== id)
 
-    this.setState({ ingredients: filteredIngredients })
+    console.log(filteredIngredients);
+
     this.setState({ ingredientCount: filteredIngredients.length })
+    this.setState({ ingredients: filteredIngredients })
+
   }
 
   clearCurrentIngredient = () => {
@@ -186,39 +129,66 @@ export class RecipesFormContextProvider extends Component {
     document.getElementById('unit_set_select').value = 'none';
   }
 
-  updateInstructions = instructions => {
-    this.setState({ instructions: { value: instructions, touched: true } })
-  }
-
-  handleSubmit = ev => {
-    ev.preventDefault();
+  handleSubmit = (event, type) => {
+    event.preventDefault();
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state;
-    console.log('handleSubmit firing');
-    console.log('Name: ', name);
-    console.log('Prep Time: ', `${prep_time_hours} hours ${prep_time_minutes} minutes`);
-    console.log('Servings: ', servings)
-    console.log('Instructions: ', instructions)
+
+    if (type === 'add') {
+      console.log('handleSubmit firing for add');
+      console.log('Name: ', name);
+      console.log('Prep Time: ', `${prep_time_hours} hours ${prep_time_minutes} minutes`);
+      console.log('Servings: ', servings)
+      console.log('Instructions: ', instructions)
+    }
+
+    if (type === 'edit') {
+      console.log('handleSubmit firing for edit');
+      console.log('Name: ', name);
+      console.log('Prep Time: ', `${prep_time_hours} hours ${prep_time_minutes} minutes`);
+      console.log('Servings: ', servings)
+      console.log('Instructions: ', instructions)
+    }
     //TODO set up submit API on both ends. nullify form values too?
     this.clearForm();
   }
 
   clearForm = () => {
     this.setState({
-      name: nullLiveInput,
-      author: nullLiveInput,
-      prep_time_hours: nullLiveInput,
-      prep_time_minutes: nullLiveInput,
-      servings: nullLiveInput,
-      instructions: nullLiveInput,
+      recipe: nullRecipe,
       ingredientCount: 0,
       ingredients: [],
       currentIngredient: nullIngredient,
     })
   }
 
-  setRecipe = recipe => {
-    this.setState({ recipe })
+  //Returns amount to add to hours and minutes after adding those hours.
+  adjustTime(minutes) {
+    let hours, newMinutes;
+    if (minutes > 60) {
+      hours += Math.floor(minutes / 60)
+      newMinutes = minutes - (hours * 60)
+    }
+    this.setState({
+      prep_time_hours: this.state.prep_time_hours + hours,
+      prep_time_minutes: newMinutes
+    })
   }
+
+  setRecipe = recipe => {
+    const { name, author, prep_time, prep_time_hours, prep_time_minutes, servings, instructions } = recipe;
+
+    this.setState(prevState => ({
+      recipe: {
+        ...prevState.recipe,
+        name: { value: name },
+        author: { value: author },
+        prep_time_hours: { value: prep_time_hours },
+        prep_time_minutes: { value: prep_time_minutes },
+        servings: { value: servings },
+        instructions: { value: instructions }
+      }
+    }));
+  };
 
   setIngredients = ingredients => {
     this.setState({ ingredients })
@@ -237,52 +207,21 @@ export class RecipesFormContextProvider extends Component {
 
   render() {
     const value = {
-      name: this.state.name,
-      author: this.state.author,
-      //Prep time hours and minutes
-      prep_time_hours: this.state.prep_time_hours,
-      prep_time_minutes: this.state.prep_time_minutes,
-      servings: this.state.servings,
-      instructions: this.state.instructions,
-      //Ingredient variables
+      recipe: this.state.recipe,
+      updateRecipeField: this.updateRecipeField,
+
       ingredientCount: this.state.ingredientCount,
       ingredients: this.state.ingredients,
       currentIngredient: this.state.currentIngredient,
-      //Loading
-      loading: this.state.loading,
-      toggleLoading: this.toggleLoading,
-      //Error
-      error: this.state.error,
-      setError: this.setError,
-      clearError: this.clearError,
-      //Update recipe info
-      updateName: this.updateName,
-      updateAuthor: this.updateAuthor,
-      updatePrepTimeHours: this.updatePrepTimeHours,
-      updatePrepTimeMinutes: this.updatePrepTimeMinutes,
-      updateServings: this.updateServings,
-      //Ingredient callbacks
-      updateAmount: this.updateAmount,
-      updateIngText: this.updateIngText,
-      updateUnitSet: this.updateUnitSet,
-      updateUnitSingular: this.updateUnitSingular,
-      updateUnitPlural: this.updateUnitPlural,
-      addIngredient: this.addIngredient,
-      removeIngredient: this.removeIngredient,
-      //Instructions
       updateInstructions: this.updateInstructions,
       //Form submit
       handleSubmit: this.handleSubmit,
       //Form clear
       clearForm: this.clearForm,
       //Recipe Edit Form
-      recipe: this.state.recipe,
       setRecipe: this.setRecipe,
       setIngredients: this.setIngredients,
       clearRecipe: this.clearRecipe,
-      //Delete modal
-      deleteModalIsOpen: this.state.deleteModalIsOpen,
-      toggleDeleteModal: this.toggleDeleteModal,
     };
     return (
       <RecipesFormContext.Provider value={value}>

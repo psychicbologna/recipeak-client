@@ -1,85 +1,70 @@
 import React, { Component } from 'react';
 import './PrimaryNav.css';
 import '../navigation.css';
+import UserHomeContext, { nullUser } from '../../../contexts/UserHomeContext'
 import { Link } from 'react-router-dom';
-import TokenService from '../../../services/token-service';
-
-//TODO the renders for login/logout link are not loading/working properly
 
 export default class PrimaryNav extends Component {
 
+  static contextType = UserHomeContext;
+
   render() {
-    const { loginStatus, checkLoginStatus, onLogoutClick } = this.props;
-    checkLoginStatus();
+    console.log(this.context);
+    const { loggedIn } = this.context;
     return (
       <ul className='Header__PrimaryNav'>
-        <HomeLink loginStatus={loginStatus} />
-        <SignupLink loginStatus={loginStatus} />
-        <LogoutLink loginStatus={loginStatus} onLogoutClick={onLogoutClick} />
-        <LoginLink loginStatus={loginStatus} />
-        <li className='PrimaryNav__li'>
-          <Link to='/abfoo;kluhoverout'>
-            About
-          </Link>
-        </li>
+        {
+          !loggedIn
+            ? <>
+              <SignupLink />
+              <LoginLink />
+            </>
+            : <>
+              <HomeLink />
+              <LogoutLink onLogout={this.context.onLogout} />
+            </>
+        }
       </ul>
     )
   }
 };
 
 function SignupLink(props) {
-  if (!props.loginStatus) {
-    return (
-      <li className='PrimaryNav__li'>
-        <Link to='/signup'>
-          Sign Up
+  return (
+    <li className='PrimaryNav__li'>
+      <Link to='/signup'>
+        Sign Up
         </Link>
-      </li>
-    )
-  } else {
-    return null
-  }
+    </li>
+  )
 }
 
 function LoginLink(props) {
-  if (!props.loginStatus) {
-    return (
-      <li className='PrimaryNav__li'>
-        <Link to='/login'>
-          Log In
+  return (
+    <li className='PrimaryNav__li'>
+      <Link to='/login'>
+        Log In
         </Link>
-      </li>
-    )
-  } else {
-    return null
-  }
+    </li>
+  )
 }
 
 function HomeLink(props) {
-  if (!!props.loginStatus) {
-    return (
-      <li className='PrimaryNav__li'>
-        <Link to='/home'>
-          Home
+  return (
+    <li className='PrimaryNav__li'>
+      <Link to='/home'>
+        Home
         </Link>
-      </li>
-    )
-  } else {
-    return null
-  }
+    </li>
+  )
 }
 
 function LogoutLink(props) {
-  console.log(props)
-  if (!!props.loginStatus) {
-    return (
-      <li className='PrimaryNav__li'>
-        <Link onClick={props.onLogoutClick} to='/' >
-          Log Out
+  return (
+    <li className='PrimaryNav__li'>
+      <Link onClick={() => props.onLogout()} to='/' >
+        Log Out
         </Link>
-      </li>
-    )
-  } else {
-    return null
-  }
+    </li>
+  )
 }

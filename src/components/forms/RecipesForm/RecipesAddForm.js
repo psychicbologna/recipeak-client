@@ -28,7 +28,6 @@ export default class RecipesAddForm extends Component {
   }
 
   render() {
-
     const {
       updateServings,
       updateAuthor,
@@ -56,11 +55,23 @@ export default class RecipesAddForm extends Component {
           updateServings={updateServings}
           updateAuthor={updateAuthor}
           updateName={updateName}
-          updateIngText={updateIngText} />
+        />
         <fieldset>
           <legend>Prep Time</legend>
-          <Input updateField={updatePrepTimeHours} defaultValue={null} inputId='prep_time_hours' inputLabel='Hours' inputType='number' max='59' />
-          <Input updateField={updatePrepTimeMinutes} defaultValue={null} inputId='prep_time_minutes' inputLabel='Minutes' inputType='number' max='59' />
+          <Input
+            updateField={updatePrepTimeHours}
+            defaultValue={null}
+            inputId='prep_time_hours'
+            inputLabel='Hours'
+            inputType='number'
+            max='59' />
+          <Input
+            updateField={updatePrepTimeMinutes}
+            defaultValue={null}
+            inputId='prep_time_minutes'
+            inputLabel='Minutes'
+            inputType='number'
+            max='59' />
         </fieldset>
         <IngredientsForm
           ingredients={ingredients}
@@ -69,7 +80,7 @@ export default class RecipesAddForm extends Component {
           removeIngredient={removeIngredient}
           updateAmount={updateAmount}
           updateIngText={updateIngText}
-          />
+        />
         <TextArea updateField={updateInstructions} defaultValue='Instructions go here.' areaId='instructions' areaLabel='Instructions' />
         <button type='submit'>Submit</button>
         <DeleteRecipeConfirm recipeId={this.props.recipeId} show={this.context.deleteModalIsOpen} onClose={toggleModal} />

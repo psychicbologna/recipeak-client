@@ -19,7 +19,10 @@ export default RecipeContext;
 export class RecipeProvider extends Component {
   state = {
     recipe: nullRecipe,
+    ingredients: [],
     error: null,
+    setRecipe: () => { },
+    setIngredients: () => { }
   }
 
   setError = error => {

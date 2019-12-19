@@ -12,36 +12,28 @@ import RecipeAddPage from '../../routes/RecipeAddPage/RecipeAddPage';
 import RecipeEditPage from '../../routes/RecipeEditPage/RecipeEditPage';
 import NotFound from '../../routes/NotFound/NotFound';
 import UserHome from '../../routes/UserHome/UserHome';
-import UnitApiService from '../../services/unit-api-service';
 import TokenService from '../../services/token-service'
+import AuthApiService from '../../services/token-service';
+import IdleService from '../../services/idle-service';
 
 import './App.css';
 
 class App extends Component {
-  state = {
-    hasError: false,
-    loggedIn: false,
-    // units: [],
-  }
-
-  checkLoginStatus() {
-    TokenService.hasSessionUserdata()
-      ? this.setState({ loggedIn: true })
-      : this.setState({ loggedIn: false })
-  }
 
   componentDidMount() {
-    this.checkLoginStatus();
+    IdleService.setIdleCallback(this.logoutFromIdle)
+
+    if (TokenService.hasAuthToken()) {
+      IdleService.registerIdleTimerResets()
+      TokenService.queueCallbackBeforeExpiry(() => {
+        AuthApiService.postRefreshToken()
+      })
+    }
   }
 
-  handleLogoutClick = () => {
-    TokenService.clearAuthToken();
-    TokenService.clearSessionUserdata();
-    this.setState({ loggedIn: false })
-  }
-  
-  handleLoginClick = () => {
-    this.setState({ loggedIn: true })
+  componentWillUnmount() {
+    IdleService.unRegisterIdleResets()
+    TokenService.clearCallbackBeforeExpiry()
   }
 
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
@@ -54,7 +46,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Header loginStatus={this.state.loggedIn} checkLoginStatus={() => this.checkLoginStatus} onLogoutClick={this.handleLogoutClick} />
+        <Header />
         <main className='App__main'>
           <Switch>
             <PublicOnlyRoute
@@ -75,14 +67,9 @@ class App extends Component {
               path={'/signup'}
               component={SignupPage}
             />
-            <Route
+            <PublicOnlyRoute
               path={'/login'}
-              render={() => <LoginPage loginStatus={this.state.loggedIn} onLoginClick={this.handleLoginClick} />}
-              // render={componentProps => (
-              //   TokenService.hasAuthToken()
-              //     ? <Redirect to={'/user'} />
-              //     : <LoginPage {...componentProps} loginStatus={this.state.loggedIn} handleLoginClick={() => this.handleLoginClick} />
-              // )}
+              component={LoginPage}
             />
             <PrivateRoute
               exact

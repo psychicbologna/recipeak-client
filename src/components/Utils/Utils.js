@@ -66,8 +66,23 @@ export function chooseDisplayUnit(ingredient, units) {
     }
   }
 
-  if (ingredient.amount == 1) {
+  if (ingredient.amount === 1) {
     return displayUnit.unit_single
   }
   else { return displayUnit.unit_plural };
+}
+
+export function PrepTimeDisplay(props) {
+  let content = '';
+  const { hours, minutes } = props
+
+  if (!hours && !minutes) {
+    content = 'No prep time entered.'
+  }
+  if (hours) { content += `${hours} Hours,` }
+  if (minutes) { content += `${minutes} Minutes` }
+
+  return (
+    <p className="RecipeForm__PrepTimeDisplay">{content}</p>
+  )
 }

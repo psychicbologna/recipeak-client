@@ -22,9 +22,8 @@ class LoginPage extends Component {
       <section className='LoginPage'>
         <LoginForm
           onLoginSuccess={this.handleLoginSuccess}
-          onLoginClick={this.props.onLoginClick}
-          loginStatus={this.props.loginStatus}
         />
+        <p>For a demo account, use username test, password Password123!</p>
       </section>
     )
   }

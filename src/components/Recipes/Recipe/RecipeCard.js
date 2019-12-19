@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './RecipeCard.css';
+import { PrepTimeDisplay } from '../../Utils/Utils';
 
 export default class RecipeCard extends Component {
 
   render() {
     const { recipe } = this.props
-    const { date_created, date_updated } = recipe;
+    const { prep_time_hours, prep_time_minutes, date_created, date_updated } = recipe;
     return (
       <section className='RecipeCard'>
         <header className='RecipeCard__header'>
@@ -15,7 +16,8 @@ export default class RecipeCard extends Component {
           </Link >
           <h4>by {recipe.author}</h4>
         </header>
-        <p>Prep Time: {recipe.prep_time}</p>
+        <h4>Prep Time:</h4>
+        <PrepTimeDisplay hours={prep_time_hours} minutes={prep_time_minutes} />
         <RecipeDate prepend='Created' date={date_created} />
         <RecipeDate prepend='Last Updated' date={date_updated} />
         {/* <p>Category: Recipe Category</p>
