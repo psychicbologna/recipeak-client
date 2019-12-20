@@ -76,19 +76,16 @@ export class RecipeFormContextProvider extends Component {
         [fieldName]: { value: value, touched: true }
       }
     }));
-    console.log(this.state.recipe[fieldName])
   }
 
   //Update fields of ingredient
   updateIngredientField = (fieldName, value) => {
-    console.log(fieldName, value);
     this.setState(prevState => ({
       currentIngredient: {
         ...prevState.currentIngredient,
         [fieldName]: { value: value, touched: true }
       }
     }))
-    console.log(this.state.currentIngredient[fieldName])
   }
 
   //Ingredient List manipulation
@@ -130,15 +127,9 @@ export class RecipeFormContextProvider extends Component {
 
   deleteIngredient = (event, id) => {
     const { ingredients } = this.state;
-    console.log('remove firing')
-    console.log(id)
-    console.log(ingredients);
-
     event.preventDefault();
 
     const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== id || ingredient.id !== id)
-
-    console.log(filteredIngredients);
 
     this.setState({ ingredientCount: filteredIngredients.length })
     this.setState({ ingredients: filteredIngredients })
@@ -154,7 +145,6 @@ export class RecipeFormContextProvider extends Component {
 
   handleSubmit = (event, type) => {
     event.preventDefault();
-    console.log(this.state);
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
 
     if (type === 'add') {
@@ -199,7 +189,7 @@ export class RecipeFormContextProvider extends Component {
   }
 
   setRecipe = recipe => {
-    const { name, author, prep_time, prep_time_hours, prep_time_minutes, servings, instructions } = recipe;
+    const { name, author, prep_time_hours, prep_time_minutes, servings, instructions } = recipe;
 
     this.setState(prevState => ({
       recipe: {

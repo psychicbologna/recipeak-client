@@ -1,5 +1,4 @@
 import React from 'react';
-import { format as formatDate } from 'date-fns';
 
 // export function FullName({ user }) {
 //   return `${user.first_name} ${user.last_name}`;
@@ -30,6 +29,15 @@ export function Button({ className, ...props }) {
 //     </span>
 //   )
 // }
+
+//TODO put me in utils!
+export function FormatName(firstName) {
+  if (!firstName.endsWith('s')) {
+    return `${firstName}'s`
+  } else {
+    return `${firstName}'`
+  }
+}
 
 export function Section({ className, list, ...props }) {
   const classes = [
@@ -193,24 +201,23 @@ export function PrepTimeFieldset(props) {
 
 function Option(props) {
   //Sets option field for unit
-  const { unit } = props;
-  const id = unit.id,
-    unit_data = unit.unit_data,
+  const { unit } = props
+  const unit_data = unit.unit_data,
     unit_set = unit.unit_set,
     unit_displayName = (unit_set === 'none') ? 'None' : unit_data.unit_plural.charAt(0).toUpperCase() + unit_data.unit_plural.slice(1);
 
   return (
-    <option key={id} value={unit_set}>{unit_displayName}</option>
+    <option value={unit_set}>{unit_displayName}</option>
   )
 }
 
 export function OptGroup(props) {
   //Sets option group for unit class.
   const { group, name } = props;
-  
+
   return (
     <optgroup label={name}>
-      {group.map(unit => <Option unit={unit} />)}
+      {group.map(unit => <Option unit={unit} key={unit.id} />)}
     </optgroup>
   )
 }

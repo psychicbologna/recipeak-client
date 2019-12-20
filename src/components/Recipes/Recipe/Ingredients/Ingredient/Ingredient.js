@@ -28,6 +28,7 @@ export default class Ingredient extends Component {
     const { ingredient, form } = this.props;
     const { converted } = this.state;
 
+    //TODO CRUD remainders for ingredient
     return (
       <li className="Ingredient" key={ingredient.id || ingredient.tempId}>
         <span className="Ingredient__display">
@@ -44,10 +45,4 @@ export default class Ingredient extends Component {
       </li>
     )
   }
-}
-
-function DeleteIngredient(props) {
-  return (
-    <button onClick={e => props.removeIngredient(e, props.removeId)}>Delete</button>
-  )
 }

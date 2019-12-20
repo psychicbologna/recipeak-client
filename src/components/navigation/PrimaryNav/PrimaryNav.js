@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './PrimaryNav.css';
 import '../navigation.css';
-import UserHomeContext, { nullUser } from '../../../contexts/UserHomeContext'
-import TokenService from '../../../services/token-service'
+import UserHomeContext from '../../../contexts/UserHomeContext'
 import { Link } from 'react-router-dom';
 
 export default class PrimaryNav extends Component {
@@ -10,7 +9,6 @@ export default class PrimaryNav extends Component {
   static contextType = UserHomeContext;
 
   render() {
-    console.log(this.context);
     const { loggedIn } = this.context;
     return (
       <ul className='Header__PrimaryNav'>

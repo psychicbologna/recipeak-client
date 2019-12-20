@@ -38,9 +38,9 @@ function ViewLink(props) {
 
 function DeleteLink(props) {
   //TODO handle delete function
-  const { recipeId, recipeName, onDeleteClick } = props;
+  const { onDeleteClick } = props;
   return (
-    <a onClick={onDeleteClick} className='RecipeCard__DeleteLink'>Delete</a>
+    <button type='button' onClick={onDeleteClick} className='RecipeCard__DeleteLink'>Delete</button>
   )
 }
 

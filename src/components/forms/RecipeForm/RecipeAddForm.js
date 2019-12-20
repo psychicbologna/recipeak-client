@@ -37,13 +37,7 @@ export default class RecipesAddForm extends Component {
       updatePrepTimeHours,
       updatePrepTimeMinutes,
       updateInstructions,
-      toggleModal,
-      ingredients,
-      currentIngredient,
-      addIngredient,
-      removeIngredient,
-      updateAmount,
-      updateIngText
+      toggleModal
     } = this.context;
 
     return (

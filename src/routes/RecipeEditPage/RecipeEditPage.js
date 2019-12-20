@@ -38,20 +38,27 @@ export default class RecipeEditPage extends Component {
     })
   }
 
+  //Moves to home after deleting successful.
+  handleDeleteSuccess = recipeId => {
+    const { history } = this.props
+    console.log('moving to home!')
+    history.push('/home');
+  }
+
   //Handles delete submit
   handleDeleteSubmit = (event, recipeId) => {
     event.preventDefault();
 
-    this.setState({ deleting: false })
-    this.handleDeleteSuccess()
+    RecipesApiService.deleteRecipe(recipeId)
+      .then(res => {
+        this.handleDeleteSuccess()
+      })
+      .catch(error => {
+        this.setState({ error: error })
+      })
   }
 
-  //Moves to home after deleting successful.
-  handleDeleteSuccess = recipeId => {
-    const { history } = this.props
-    console.log('Delete Firing')
-    history.push('/home');
-  }
+
 
   componentDidMount() {
     const recipeId = this.props.match.params.recipe_id;
@@ -92,8 +99,8 @@ export default class RecipeEditPage extends Component {
               recipeId={recipeId}
               recipeName={recipe.name.value}
               show={this.state.deleting}
-              submit={this.handleDeleteSubmit}
-              cancel={this.onDeleteCancel} />
+              onDeleteSubmit={this.handleDeleteSubmit}
+              onDeleteCancel={this.handleDeleteCancel} />
         }
       </section>
     )

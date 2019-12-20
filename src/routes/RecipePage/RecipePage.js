@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import RecipeContext from '../../contexts/RecipeContext';
 import RecipesApiService from '../../services/recipes-api-service';
-import Ingredient from '../../components/Recipes/Recipe/Ingredients/Ingredient/Ingredient';
 import { Section, PrepTimeDisplay } from '../../components/Utils/Utils';
 
 export default class RecipePage extends Component {

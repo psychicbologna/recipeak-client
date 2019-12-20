@@ -30,6 +30,7 @@ export default class IngredientList extends Component {
               return (
                 <Ingredient
                   ingredient={ingredient}
+                  key={ingredient.id}
                   form={true}
                 />
               );

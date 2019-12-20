@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UserHomeNav from '../../components/navigation/UserHomeNav/UserHomeNav';
 import UserHomeContext, {nullUser} from '../../contexts/UserHomeContext';
+import { FormatName } from '../../components/Utils/Utils'
 import RecipeCardList from '../../components/Recipes/RecipeCardList';
 import UserApiService from '../../services/user-api-service'
 
@@ -65,7 +66,7 @@ export default class UserHome extends Component {
     } else {
       return (
         <section className='UserHome'>
-          <h2>{user.first_name}'s Recipes</h2>
+          <h2>{FormatName(user.first_name)}'s Recipes</h2>
           <UserHomeNav username={user.username} />
           {
             !recipeList.length
@@ -80,11 +81,3 @@ export default class UserHome extends Component {
 
 
 
-//TODO put me in utils!
-function formatName(firstName) {
-  if (!firstName.endsWith('s')) {
-    return `${firstName}'s`
-  } else {
-    return `${firstName}'`
-  }
-}

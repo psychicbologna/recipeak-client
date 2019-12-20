@@ -17,7 +17,7 @@ export default class IngredientsFieldset extends Component {
         className='IngredientFieldset'
         disabled={disabled}
       >
-        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} />
+        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} editIngredient={editIngredient} />
         <fieldset className='RecipeForm__AddIngredient'>
           <legend>Add Ingredient</legend>
           <Input
@@ -44,7 +44,7 @@ export default class IngredientsFieldset extends Component {
 };
 
 function EnteredIngredients(props) {
-  const ingredients = props.ingredients;
+  const { ingredients, units } = props;
 
   if (!ingredients.length) {
     return <p>Enter an ingredient to get started. Recipes must be submitted with at least one ingredient.</p>
@@ -56,7 +56,8 @@ function EnteredIngredients(props) {
           {ingredients.map(ingredient => {
             return (
               <Ingredient
-                units={props.units}
+                key={ingredient.id}
+                units={units}
                 ingredient={ingredient}
                 form={true}
               />
