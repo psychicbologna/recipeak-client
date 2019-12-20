@@ -12,29 +12,11 @@ import RecipeAddPage from '../../routes/RecipeAddPage/RecipeAddPage';
 import RecipeEditPage from '../../routes/RecipeEditPage/RecipeEditPage';
 import NotFound from '../../routes/NotFound/NotFound';
 import UserHome from '../../routes/UserHome/UserHome';
-import TokenService from '../../services/token-service'
-import AuthApiService from '../../services/token-service';
-import IdleService from '../../services/idle-service';
+
 
 import './App.css';
 
 class App extends Component {
-
-  componentDidMount() {
-    IdleService.setIdleCallback(this.logoutFromIdle)
-
-    if (TokenService.hasAuthToken()) {
-      IdleService.registerIdleTimerResets()
-      TokenService.queueCallbackBeforeExpiry(() => {
-        AuthApiService.postRefreshToken()
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    IdleService.unRegisterIdleResets()
-    TokenService.clearCallbackBeforeExpiry()
-  }
 
   //https://reactjs.org/docs/react-component.html#static-getderivedstatefromerror
   static getDerivedStateFromError(error) {

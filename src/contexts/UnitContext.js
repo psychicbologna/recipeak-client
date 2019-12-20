@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import UnitApiService from '../services/unit-api-service'
 
 const UnitContext = React.createContext({
   units: [],
@@ -12,8 +13,20 @@ export default UnitContext;
 
 export class UnitContextProvider extends Component {
   state = {
-    units: [],
+    units: {},
     error: null,
+  }
+
+  componentDidMount() {
+    UnitApiService.getUnits()
+      .then(units => {
+        console.dir(units)
+        this.setUnits(units)
+      })
+      .catch(this.setState({
+        hasError: true,
+        error: { message: 'Unable to retrieve unit data.' }
+      }));
   }
 
   setError = error => {

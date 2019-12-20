@@ -4,24 +4,22 @@ class DeleteRecipeConfirm extends Component {
 
   static defaultProps = {
     show: false,
-    onClose: () => {},
-    onDeleteConfirm: () => {},
   }
 
   render() {
-    if(!this.props.show) {
+
+    const {recipeId, recipeName, show, submit, cancel } = this.props
+
+    if(!show) {
       return null;
     }
 
     return (
-      <section
-        className="DeleteRecipeConfirm"
-
-        >
-        <h2>Delete {this.props.recipeName}</h2>
+      <section className="DeleteRecipeConfirm">
+        <h3>Delete {recipeName}</h3>
         <p>Are you sure you want to delete this recipe?</p>
-        <button className='DeleteRecipeConfirm__button_yes'> {/*TODO onDeleteConfirm */}Yes</button>
-        <button className='DeleteRecipeConfirm__button_no' onClick={this.props.onClose}>No</button>
+        <button type='button' className='DeleteRecipeConfirm__button_confirm' onClick={event => submit(event, recipeId)}> Yes, Delete </button>
+        <button type='button' className='DeleteRecipeConfirm__button_close' onClick={event => cancel(event)}> Cancel </button>
       </section>
     )
   }

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import RecipesFormContext, { nullLiveInput, nullIngredient } from '../../../contexts/RecipesFormContext';
 import DeleteRecipeConfirm from '../../modals/DeleteRecipeConfirm';
-import IngredientsForm from './IngredientsForm/IngredientsForm';
+// import IngredientsFieldSet from './IngredientsFieldset/IngredientsFieldset';
 import '../forms.css'
+
+//TODO refactor with utils
 
 export default class RecipesAddForm extends Component {
   static defaultProps = {
@@ -73,14 +75,14 @@ export default class RecipesAddForm extends Component {
             inputType='number'
             max='59' />
         </fieldset>
-        <IngredientsForm
+        {/* <IngredientsFieldset
           ingredients={ingredients}
           currentIngredient={currentIngredient}
           addIngredient={addIngredient}
           removeIngredient={removeIngredient}
           updateAmount={updateAmount}
           updateIngText={updateIngText}
-        />
+        /> */}
         <TextArea updateField={updateInstructions} defaultValue='Instructions go here.' areaId='instructions' areaLabel='Instructions' />
         <button type='submit'>Submit</button>
         <DeleteRecipeConfirm recipeId={this.props.recipeId} show={this.context.deleteModalIsOpen} onClose={toggleModal} />

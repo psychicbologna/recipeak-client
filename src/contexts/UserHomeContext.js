@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TokenService from '../services/token-service';
+import AuthApiService from '../services/auth-api-service';
 import IdleService from '../services/idle-service';
 
 
@@ -25,11 +26,31 @@ const UserHomeContext = React.createContext({
 export default UserHomeContext
 
 export class UserHomeProvider extends Component {
+
+  constructor(props) {
+    super(props);
+    IdleService.setIdleCallback(this.logoutFromIdle)
+  }
+
   state = {
     user: nullUser,
     recipeList: [],
-    loggedIn: false,
+    loggedIn: TokenService.hasAuthToken(),
     error: null,
+  }
+
+  componentDidMount() {
+    if (TokenService.hasAuthToken()) {
+      IdleService.registerIdleTimerResets()
+      TokenService.queueCallbackBeforeExpiry(() => {
+        AuthApiService.postRefreshToken()
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    IdleService.unRegisterIdleResets()
+    TokenService.clearCallbackBeforeExpiry()
   }
 
   //Retrieves user data and their recipes.

@@ -26,7 +26,11 @@ const RecipesFormContext = React.createContext({
   recipe: nullRecipe,
   ingredientCount: 0,
   ingredients: [],
+
   currentIngredient: nullIngredient,
+  ingredientsAddList: [],
+  ingredientsEditList: [],
+  ingredientsDeleteList: [],
 
   setRecipe: () => { },
   setIngredients: () => { },
@@ -41,27 +45,26 @@ const RecipesFormContext = React.createContext({
   addRecipe: () => { },
   removeRecipe: () => { },
   updateRecipe: () => { },
+
   addIngredient: () => { },
-  removeIngredient: () => { },
-
-
+  editIngredient: () => { },
+  deleteIngredient: () => { },
 })
 
 export default RecipesFormContext;
 
 export class RecipesFormContextProvider extends Component {
   state = {
+    //Recipe presets.
     recipe: nullRecipe,
     ingredientCount: 0,
     ingredients: [],
+    //Track new ingredient
     currentIngredient: nullIngredient,
-  }
-
-  toggleLoading = () => {
-    console.log('ToggleLoading firing')
-    this.setState({
-      loading: !this.state.loading
-    })
+    //Track changes to all ingredients.
+    ingredientsAddList: [],
+    ingredientsEditList: [],
+    ingredientsDeleteList: [],
   }
 
   //Update fields of recipe.
@@ -72,10 +75,23 @@ export class RecipesFormContextProvider extends Component {
         [fieldName]: { value: value, touched: true }
       }
     }));
-    console.log(fieldName, value);
+    console.log(this.state.recipe[fieldName]);
   }
 
-  //Submit ingredient
+  //Update fields of ingredient
+  updateIngredientField = (fieldName, value) => {
+    this.setState(prevState => ({
+      ingredient: {
+        ...prevState.ingredient,
+        [fieldName]: { value: value, touched: true }
+      }
+    }))
+    console.log(this.state.currentIngredient[fieldName])
+  }
+
+  //Ingredient List manipulation
+
+  //Add
   addIngredient = (ev, ingredient) => {
     ev.preventDefault();
 
@@ -90,22 +106,37 @@ export class RecipesFormContextProvider extends Component {
       tempId: this.state.ingredientCount + 1
     }
 
-    let oldList = this.state.ingredients;
-    let newList;
+    let previewList = this.state.ingredients;
+    let addList = this.state.addIngredientsList;
+    let editList = this.state.editIngredientsList;
+    let deleteList = this.state.deleteIngredientsList;
 
-    //Start list if ingredient is first, add to start of array if next.
-    if (!oldList) {
+    let newList = [];
+
+    //Start list if ingredient is first, add to start of preview array if next.
+    if (!previewList) {
       newList = [newIngredient]
     } else {
-      newList = [...oldList, newIngredient]
+      newList = [...previewList, newIngredient]
     }
 
     this.setState({ ingredients: newList })
-    this.setState({ ingredientCount: this.state.ingredients.length + 1 })
+
+    //Same for addIngredientsList
+    if (!addList) {
+
+    }
+
+
+    this.setState({ igredientCount: this.state.ingredients.length + 1 })
     this.clearCurrentIngredient();
   }
 
-  removeIngredient = (event, id) => {
+  editIngredient() {
+
+  }
+
+  deleteIngredient = (event, id) => {
     const { ingredients } = this.state;
     console.log('remove firing')
     console.log(id)
@@ -113,7 +144,7 @@ export class RecipesFormContextProvider extends Component {
 
     event.preventDefault();
 
-    const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== id)
+    const filteredIngredients = ingredients.filter(ingredient => ingredient.tempId !== id || ingredient.id !== id)
 
     console.log(filteredIngredients);
 
@@ -131,22 +162,23 @@ export class RecipesFormContextProvider extends Component {
 
   handleSubmit = (event, type) => {
     event.preventDefault();
-    const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state;
+    console.log(this.state);
+    const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
 
     if (type === 'add') {
       console.log('handleSubmit firing for add');
-      console.log('Name: ', name);
-      console.log('Prep Time: ', `${prep_time_hours} hours ${prep_time_minutes} minutes`);
-      console.log('Servings: ', servings)
-      console.log('Instructions: ', instructions)
+      console.log('Name: ', name.value);
+      console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
+      console.log('Servings: ', servings.value)
+      console.log('Instructions: ', instructions.value)
     }
 
     if (type === 'edit') {
       console.log('handleSubmit firing for edit');
-      console.log('Name: ', name);
-      console.log('Prep Time: ', `${prep_time_hours} hours ${prep_time_minutes} minutes`);
-      console.log('Servings: ', servings)
-      console.log('Instructions: ', instructions)
+      console.log('Name: ', name.value);
+      console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
+      console.log('Servings: ', servings.value)
+      console.log('Instructions: ', instructions.value)
     }
     //TODO set up submit API on both ends. nullify form values too?
     this.clearForm();
@@ -207,18 +239,19 @@ export class RecipesFormContextProvider extends Component {
 
   render() {
     const value = {
+      //State of inputs
       recipe: this.state.recipe,
-      updateRecipeField: this.updateRecipeField,
-
       ingredientCount: this.state.ingredientCount,
       ingredients: this.state.ingredients,
       currentIngredient: this.state.currentIngredient,
-      updateInstructions: this.updateInstructions,
+      //Form fields
+      updateRecipeField: this.updateRecipeField,
+      updateIngredientField: this.updateIngredientField,
       //Form submit
-      handleSubmit: this.handleSubmit,
+      onSubmit: this.handleSubmit,
       //Form clear
       clearForm: this.clearForm,
-      //Recipe Edit Form
+      //Recipe Edit Preset
       setRecipe: this.setRecipe,
       setIngredients: this.setIngredients,
       clearRecipe: this.clearRecipe,

@@ -11,7 +11,7 @@ class LoginPage extends Component {
   }
 
   handleLoginSuccess = () => {
-    //Track history, move to '/home' on successful login
+    //After confirmed login success, track history, move to '/home'.
     const { location, history, } = this.props
     const destination = (location.state || {}).from || `/home`
     history.push(destination);

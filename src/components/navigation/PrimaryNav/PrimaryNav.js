@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './PrimaryNav.css';
 import '../navigation.css';
 import UserHomeContext, { nullUser } from '../../../contexts/UserHomeContext'
+import TokenService from '../../../services/token-service'
 import { Link } from 'react-router-dom';
 
 export default class PrimaryNav extends Component {

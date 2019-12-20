@@ -53,6 +53,7 @@ const AuthApiService = {
           : res.json()
       )
       .then(res => {
+        console.log('Refresh token response: ', res)
 
         TokenService.saveAuthToken(res.authToken)
         TokenService.queueCallbackBeforeExpiry(() => {
@@ -63,6 +64,7 @@ const AuthApiService = {
       .catch(err => {
         console.log('refresh token request error')
         console.error(err)
+        TokenService.clearAuthToken();
       })
   },
 }

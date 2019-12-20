@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
 import RecipesEditForm from '../../components/forms/RecipesForm/RecipeEditForm';
+import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
 import RecipeEditContext, { nullRecipe, nullIngredient } from '../../contexts/RecipesFormContext';
 
 
@@ -14,11 +15,43 @@ export default class RecipeEditPage extends Component {
   }
 
   state = {
-    loading: true,
-    error: ''
+    error: '',
+    deleting: false
   }
 
   static contextType = RecipeEditContext;
+
+  //Delete callbacks
+
+  //Handles click on delete button.
+  handleDeleteClick = recipeId => {
+    this.setState({
+      deleting: true
+    })
+  }
+
+  //Handles cancel delete.
+  handleDeleteCancel = event => {
+    event.preventDefault();
+    this.setState({
+      deleting: false
+    })
+  }
+
+  //Handles delete submit
+  handleDeleteSubmit = (event, recipeId) => {
+    event.preventDefault();
+
+    this.setState({ deleting: false })
+    this.handleDeleteSuccess()
+  }
+
+  //Moves to home after deleting successful.
+  handleDeleteSuccess = recipeId => {
+    const { history } = this.props
+    console.log('Delete Firing')
+    history.push('/home');
+  }
 
   componentDidMount() {
     const recipeId = this.props.match.params.recipe_id;
@@ -28,7 +61,6 @@ export default class RecipeEditPage extends Component {
         this.context.setIngredients(data.ingredients)
       })
       .catch(this.context.setError)
-      .then(this.setState({ loading: false }));
   }
 
   componentWillUnmount() {
@@ -40,31 +72,34 @@ export default class RecipeEditPage extends Component {
   }
 
   render() {
+    const recipeId = this.props.match.params.recipe_id
     const { recipe, ingredients } = this.context;
-    const { loading, error } = this.state;
+    const { deleting } = this.state;
 
-    if (loading) {
-      return (
-        <p>Loading your recipe...</p>
-      )
-    }
-    if (error) {
-      return (
-        <p>{error.error}</p>
-      )
-    } else {
-      return (
-        <section className={`RecipeEdit`}>
-          <h3>Edit {`'${recipe.name.value}'`}</h3>
-          <RecipesEditForm
-            recipe={recipe}
-            ingredients={ingredients}
-          />
-        </section>
-      )
-    }
+    return (
+      <section className={`RecipeEdit`}>
+        <h3>Edit {`'${recipe.name.value}'`}</h3>
+        <RecipesEditForm
+          recipe={recipe}
+          ingredients={ingredients}
+          onDeleteSuccess={this.handleDeleteSuccess}
+          deleting={deleting}
+        />
+        {
+          !deleting
+            ? <button onClick={() => this.handleDeleteClick()}>Delete Recipe</button>
+            : <DeleteRecipeConfirm
+              recipeId={recipeId}
+              recipeName={recipe.name.value}
+              show={this.state.deleting}
+              submit={this.handleDeleteSubmit}
+              cancel={this.onDeleteCancel} />
+        }
+      </section>
+    )
   }
 }
+
 //TODO delete button and confirmation modal
 //TODO validation for form entries
 //TODO a11y check
