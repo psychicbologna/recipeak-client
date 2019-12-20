@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RecipesAddForm from '../../components/forms/RecipesForm/RecipesAddForm';
+import RecipeAddForm from '../../components/forms/RecipeForm/RecipeAddForm';
 
 export default class RecipeAddPage extends Component {
 
@@ -7,7 +7,7 @@ export default class RecipeAddPage extends Component {
     return (
       <section className='RecipeAdd'>
         <h3>Add Recipe</h3>
-        <RecipesAddForm />
+        <RecipeAddForm />
       </section>
     )
   }

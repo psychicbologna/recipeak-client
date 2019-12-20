@@ -1,36 +1,35 @@
 import React from 'react';
 import { format as formatDate } from 'date-fns';
 
-export function FullName({ user }) {
-  return `${user.first_name} ${user.last_name}`;
-}
+// export function FullName({ user }) {
+//   return `${user.first_name} ${user.last_name}`;
+// }
 
-export function NiceDate({ date, format = 'Do MMMM YYYY' }) {
-  return formatDate(date, format)
-}
+// export function NiceDate({ date, format = 'Do MMMM YYYY' }) {
+//   return formatDate(date, format)
+// }
 
-export function Hyph() {
-  return <span className='Hyph'>{' - '}</span>
-}
+// export function Hyph() {
+//   return <span className='Hyph'>{' - '}</span>
+// }
 
 export function Button({ className, ...props }) {
   return <button className={['Button', className].join(' ')} {...props} />
 }
 
-export function Textarea({ className, ...props }) {
-  return (
-    <textarea className={['Textarea', className].join(' ')} {...props} />
-  )
-}
+// export function Textarea({ className, ...props }) {
+//   return (
+//     <textarea className={['Textarea', className].join(' ')} {...props} />
+//   )
+// }
 
-
-export function Required({ className, ...props }) {
-  return (
-    <span className={['Required', className].join(' ')} {...props}>
-      &#42;
-    </span>
-  )
-}
+// export function Required({ className, ...props }) {
+//   return (
+//     <span className={['Required', className].join(' ')} {...props}>
+//       &#42;
+//     </span>
+//   )
+// }
 
 export function Section({ className, list, ...props }) {
   const classes = [
@@ -43,18 +42,14 @@ export function Section({ className, list, ...props }) {
   )
 }
 
-//Selects proper display unit based on unit properties, defaults to '' otherwise.
 function DisplayPlural(unitData, amount) {
+  //Selects proper display unit based on unit properties, defaults to '' otherwise.
   let unit = '';
-
   if (unitData) {
-    if (amount === 1) {
-      unit = unitData.unit_single
-    } else {
-      unit = unitData.unit_plural
-    };
+    (amount === 1)
+      ? unit = unitData.unit_single
+      : unit = unitData.unit_plural
   };
-
   return unit;
 }
 
@@ -65,16 +60,16 @@ export function DisplayAmountWithUnit(ingredient, converted) {
   let amount = (!converted || ingredient.conversion === undefined) ? ingredient.amount : ingredient.conversion.amount;
   //Unit will display the proper form of unit, and also as the converted amount if set so and it exists.
   const unit = (!converted || ingredient.conversion === undefined)
-  ? DisplayPlural(ingredient.unit_data, amount)
-  : DisplayPlural(ingredient.conversion, amount)
+    ? DisplayPlural(ingredient.unit_data, amount)
+    : DisplayPlural(ingredient.conversion, amount)
 
   //If the ingredient amount is zero and set to none, display nothing, otherwise display 0.
   return (ingredient.unit_set === 'none' ? '' : `${amount} `) + `${unit}`
 }
 
-// Displays the prep time depending on its length:
-//'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
 export function PrepTimeDisplay(props) {
+  // Displays the prep time depending on its length:
+  //'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
   let content = '';
   const { hours, minutes } = props
 
@@ -106,7 +101,7 @@ export function Input(props) {
         name={inputName}
         id={inputId}
         defaultValue={defaultValue}
-        onChange={e => updateField(inputId, e.target.value)}
+        onChange={event => updateField(inputId, event.target.value)}
         disabled={disabled}
       />
     </>
@@ -131,8 +126,8 @@ export function TextArea(props) {
   )
 }
 
-//These fieldset utils set up fieldsets as needed for the add/edit recipe forms.
 export function BasicInfoFieldset(props) {
+  //These fieldset utils set up fieldsets as needed for the add/edit recipe forms.
   const { updateRecipeField, nameDefault, authorDefault, servingsDefault, disabled } = props;
 
   return (
@@ -193,5 +188,29 @@ export function PrepTimeFieldset(props) {
         max='59'
       />
     </fieldset>
+  )
+}
+
+function Option(props) {
+  //Sets option field for unit
+  const { unit } = props;
+  const id = unit.id,
+    unit_data = unit.unit_data,
+    unit_set = unit.unit_set,
+    unit_displayName = (unit_set === 'none') ? 'None' : unit_data.unit_plural.charAt(0).toUpperCase() + unit_data.unit_plural.slice(1);
+
+  return (
+    <option key={id} value={unit_set}>{unit_displayName}</option>
+  )
+}
+
+export function OptGroup(props) {
+  //Sets option group for unit class.
+  const { group, name } = props;
+  
+  return (
+    <optgroup label={name}>
+      {group.map(unit => <Option unit={unit} />)}
+    </optgroup>
   )
 }

@@ -11,18 +11,18 @@ import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { UserHomeProvider } from './contexts/UserHomeContext';
 import { RecipeProvider } from './contexts/RecipeContext';
-import { RecipesFormContextProvider } from './contexts/RecipesFormContext'
+import { RecipeFormContextProvider } from './contexts/RecipeFormContext'
 import { UnitContextProvider } from './contexts/UnitContext';
 
 ReactDOM.render(
   <BrowserRouter>
     <UserHomeProvider>
       <RecipeProvider>
-        <RecipesFormContextProvider>
+        <RecipeFormContextProvider>
           <UnitContextProvider>
           <App />
           </UnitContextProvider>
-        </RecipesFormContextProvider>
+        </RecipeFormContextProvider>
       </RecipeProvider>
     </UserHomeProvider>
   </BrowserRouter>,

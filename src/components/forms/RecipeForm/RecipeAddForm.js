@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RecipesFormContext, { nullLiveInput, nullIngredient } from '../../../contexts/RecipesFormContext';
+import RecipeFormContext, { nullLiveInput, nullIngredient } from '../../../contexts/RecipeFormContext';
 import DeleteRecipeConfirm from '../../modals/DeleteRecipeConfirm';
 // import IngredientsFieldSet from './IngredientsFieldset/IngredientsFieldset';
 import '../forms.css'
@@ -23,7 +23,7 @@ export default class RecipesAddForm extends Component {
     error: null,
   }
 
-  static contextType = RecipesFormContext;
+  static contextType = RecipeFormContext;
 
   componentWillUnmount() {
     this.context.clearForm();

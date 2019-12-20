@@ -1,34 +1,36 @@
 import React, { Component } from 'react';
+import RecipeFormContext from '../../../../contexts/RecipeFormContext';
 import UnitSelect from './UnitSelect';
 import Ingredient from '../../../Recipes/Recipe/Ingredients/Ingredient/Ingredient';
 import { Input } from '../../../Utils/Utils'
-import UnitContext from '../../../../contexts/UnitContext';
 
 export default class IngredientsFieldset extends Component {
 
-  static contextType = UnitContext;
+  static contextType = RecipeFormContext;
 
   render() {
-    const { ingredients, currentIngredient, addIngredient, removeIngredient, updateField, disabled } = this.props;
+    const { ingredients, currentIngredient, addIngredient, editIngredient, removeIngredient, updateIngredientField } = this.context;
+    const { disabled } = this.props;
+
     return (
       <fieldset
         className='IngredientFieldset'
         disabled={disabled}
       >
-        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} units={this.context.units} />
+        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} />
         <fieldset className='RecipeForm__AddIngredient'>
           <legend>Add Ingredient</legend>
           <Input
             defaultValue={currentIngredient.amount.value}
-            updateField={updateField}
+            updateField={updateIngredientField}
             inputId='amount'
             inputLabel='Amount'
             inputType='number'
           />
-          <UnitSelect units={this.context.units} />
+          <UnitSelect />
           <Input
             defaultValue={currentIngredient.ing_text.value}
-            updateField={updateField}
+            updateField={updateIngredientField}
             inputId='ing_text'
             inputLabel='Ingredient'
             inputType='text'
@@ -53,11 +55,11 @@ function EnteredIngredients(props) {
         <ul className='RecipeForm__ingredients-list'>
           {ingredients.map(ingredient => {
             return (
-                <Ingredient
-                  units={props.units}
-                  ingredient={ingredient}
-                  form={true}
-                  />
+              <Ingredient
+                units={props.units}
+                ingredient={ingredient}
+                form={true}
+              />
             );
           })}
         </ul>

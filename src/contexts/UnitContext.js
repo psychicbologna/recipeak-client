@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import UnitApiService from '../services/unit-api-service'
 
+export const nullUnits = {
+  base: [],
+  apprx: [],
+  us: [],
+  metric: []
+}
+
 const UnitContext = React.createContext({
-  units: [],
+  units: nullUnits,
   error: null,
-  setError: () => {},
-  clearError: () => {},
-  setUnits: () => {},
+  setError: () => { },
+  clearError: () => { },
+  setUnits: () => { },
 })
 
 export default UnitContext;
 
 export class UnitContextProvider extends Component {
   state = {
-    units: {},
+    units: nullUnits,
     error: null,
   }
 
-  componentDidMount() {
+  fetchUnits() {
+    console.log('getting units')
     UnitApiService.getUnits()
       .then(units => {
         console.dir(units)
         this.setUnits(units)
       })
-      .catch(this.setState({
-        hasError: true,
-        error: { message: 'Unable to retrieve unit data.' }
-      }));
+    // .catch(this.setState({
+    //   error: { message: 'Unable to retrieve unit data.' }
+    // }));
   }
 
   setError = error => {
@@ -43,7 +50,7 @@ export class UnitContextProvider extends Component {
   }
 
   clearUnits = () => {
-    this.setState({ units: []})
+    this.setState({ units: [] })
   }
 
   render() {
@@ -54,6 +61,7 @@ export class UnitContextProvider extends Component {
       setError: this.setError,
       clearError: this.clearError,
       clearUnits: this.clearUnits,
+      fetchUnits: this.fetchUnits
     };
 
     return (

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import RecipesFormContext, { nullRecipe, nullIngredient, } from '../../../contexts/RecipesFormContext';
+import RecipeFormContext, { nullRecipe, nullIngredient, } from '../../../contexts/RecipeFormContext';
 import IngredientsFieldset from './IngredientsFieldset/IngredientsFieldset';
 import '../forms.css'
 import { BasicInfoFieldset, PrepTimeFieldset, TextArea } from '../../Utils/Utils'
 
-export default class RecipesEditForm extends Component {
+export default class RecipeEditForm extends Component {
 
   static defaultProps = {
     recipe: nullRecipe,
@@ -26,7 +26,7 @@ export default class RecipesEditForm extends Component {
     deleting: this.props.deleting
   }
 
-  static contextType = RecipesFormContext;
+  static contextType = RecipeFormContext;
 
   componentWillUnmount() {
     this.context.clearForm();
@@ -35,11 +35,11 @@ export default class RecipesEditForm extends Component {
   render() {
     const {
       updateRecipeField,
-      updateIngredientField,
+      // updateIngredientField, //TODO moving these to context on IngredientFieldset page.
       onSubmit,
-      currentIngredient,
-      addIngredient,
-      removeIngredient,
+      // currentIngredient,
+      // addIngredient,
+      // removeIngredient,
     } = this.context;
 
     const {
@@ -62,15 +62,12 @@ export default class RecipesEditForm extends Component {
         <PrepTimeFieldset
           hoursDefault={recipe.prep_time_hours.value}
           minutesDefault={recipe.prep_time_minutes.value}
+          updateRecipeField={updateRecipeField}
           disabled={this.state.deleting}
         />
         <IngredientsFieldset
           ingredients={ingredients}
-          currentIngredient={currentIngredient}
-          addIngredient={addIngredient}
-          removeIngredient={removeIngredient}
-          updateField={updateIngredientField}
-          disbled={this.state.deleting}
+          disabled={this.state.deleting}
         />
         <TextArea
           updateField={updateRecipeField}

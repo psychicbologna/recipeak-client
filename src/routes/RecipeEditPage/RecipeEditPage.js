@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
-import RecipesEditForm from '../../components/forms/RecipesForm/RecipeEditForm';
+import RecipeEditForm from '../../components/forms/RecipeForm/RecipeEditForm';
 import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
-import RecipeEditContext, { nullRecipe, nullIngredient } from '../../contexts/RecipesFormContext';
+import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/RecipeFormContext';
 
 
 export default class RecipeEditPage extends Component {
@@ -19,7 +19,7 @@ export default class RecipeEditPage extends Component {
     deleting: false
   }
 
-  static contextType = RecipeEditContext;
+  static contextType = RecipeFormContext;
 
   //Delete callbacks
 
@@ -79,7 +79,7 @@ export default class RecipeEditPage extends Component {
     return (
       <section className={`RecipeEdit`}>
         <h3>Edit {`'${recipe.name.value}'`}</h3>
-        <RecipesEditForm
+        <RecipeEditForm
           recipe={recipe}
           ingredients={ingredients}
           onDeleteSuccess={this.handleDeleteSuccess}
@@ -87,7 +87,7 @@ export default class RecipeEditPage extends Component {
         />
         {
           !deleting
-            ? <button onClick={() => this.handleDeleteClick()}>Delete Recipe</button>
+            ? <button type='button' onClick={() => this.handleDeleteClick(recipe.id)}>Delete Recipe</button>
             : <DeleteRecipeConfirm
               recipeId={recipeId}
               recipeName={recipe.name.value}
