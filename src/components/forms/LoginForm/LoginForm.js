@@ -47,12 +47,11 @@ export default class LoginForm extends Component {
         <label htmlFor='LoginForm__username'>
           Username
             </label>
-        <Input
+        <input
           name='username'
-          id='LoginForm__username'>
-        </Input>
+          id='LoginForm__username' />
         <label htmlFor='LoginForm__password'>Password</label>
-        <Input
+        <input
           name='password'
           id='LoginForm__password' />
         <Button type='submit'>

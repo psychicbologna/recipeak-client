@@ -66,7 +66,7 @@ export default class UserHome extends Component {
     } else {
       return (
         <section className='UserHome'>
-          <h2>{FormatName(user.first_name)}'s Recipes</h2>
+          <h2>{FormatName(user.first_name)}  Recipes</h2>
           <UserHomeNav username={user.username} />
           {
             !recipeList.length

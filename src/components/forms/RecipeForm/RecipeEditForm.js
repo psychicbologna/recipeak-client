@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RecipeFormContext, { nullRecipe, nullIngredient, } from '../../../contexts/RecipeFormContext';
+import RecipeFormContext, { nullRecipe } from '../../../contexts/RecipeFormContext';
 import IngredientsFieldset from './IngredientsFieldset/IngredientsFieldset';
 import '../forms.css'
 import { BasicInfoFieldset, PrepTimeFieldset, TextArea } from '../../Utils/Utils'
@@ -8,21 +8,12 @@ export default class RecipeEditForm extends Component {
 
   static defaultProps = {
     recipe: nullRecipe,
-    ingredientCount: 0,
-    ingredients: [],
-    currentIngredient: nullIngredient,
-    deleteIngredientList: [],
-    addIngredientsList: [],
     deleting: false,
   }
 
   state = {
     recipe: this.props.recipe,
-    ingredientCount: this.props.ingredientCount,
-    ingredients: this.props.ingredients,
-    currentIngredient: this.props.currentIngredient,
-    addIngredientsList: this.props.addIngredientList,
-    deleteIngredientsList: this.props.deleteIngredientsList,
+    //Freezes inputs when 'delete' clicked.
     deleting: this.props.deleting
   }
 
@@ -33,19 +24,8 @@ export default class RecipeEditForm extends Component {
   }
 
   render() {
-    const {
-      updateRecipeField,
-      // updateIngredientField, //TODO moving these to context on IngredientFieldset page.
-      onSubmit,
-      // currentIngredient,
-      // addIngredient,
-      // removeIngredient,
-    } = this.context;
-
-    const {
-      recipe,
-      ingredients,
-    } = this.props;
+    const { updateRecipeField, onSubmit } = this.context;
+    const { recipe } = this.props;
 
     return (
       <form
@@ -66,7 +46,6 @@ export default class RecipeEditForm extends Component {
           disabled={this.state.deleting}
         />
         <IngredientsFieldset
-          ingredients={ingredients}
           disabled={this.state.deleting}
         />
         <TextArea

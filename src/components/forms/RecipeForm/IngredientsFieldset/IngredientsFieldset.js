@@ -9,15 +9,19 @@ export default class IngredientsFieldset extends Component {
   static contextType = RecipeFormContext;
 
   render() {
-    const { ingredients, currentIngredient, addIngredient, editIngredient, removeIngredient, updateIngredientField } = this.context;
+    const { ingredients, currentIngredient, handleAddIngredient, handleEditIngredient, handleDeleteIngredient, updateIngredientField } = this.context;
     const { disabled } = this.props;
 
+    //TODO button context based on edit/add
     return (
       <fieldset
         className='IngredientFieldset'
         disabled={disabled}
       >
-        <EnteredIngredients ingredients={ingredients} removeIngredient={removeIngredient} editIngredient={editIngredient} />
+        <EnteredIngredients
+          ingredients={ingredients}
+          onDeleteIngredient={handleDeleteIngredient}
+          onEditIngredient={handleEditIngredient} />
         <fieldset className='RecipeForm__AddIngredient'>
           <legend>Add Ingredient</legend>
           <Input
@@ -36,7 +40,12 @@ export default class IngredientsFieldset extends Component {
             inputType='text'
           />
           <button
-            onClick={e => addIngredient(e, currentIngredient)}>Add Ingredient</button>
+            onClick={event => handleAddIngredient(event, currentIngredient)}>Add Ingredient
+          </button>
+          <button
+          onClick={event => handleEditIngredient(event, currentIngredient)}>
+            Edit Ingredient
+          </button>
         </fieldset>
       </fieldset>
     )
