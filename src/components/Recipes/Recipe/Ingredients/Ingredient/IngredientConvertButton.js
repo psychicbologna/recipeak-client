@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Button} from '../../../../Utils/Utils'
 
 export default class IngredientConvertButton extends Component {
 
@@ -10,18 +11,18 @@ render() {
   const { convertUnitName, baseUnitName, toggleConvert, converted } = this.props;
 
   return (!converted
-    ? <button
+    ? <Button
       className="Ingredient__button convert-to"
       type='button'
       onClick={event => toggleConvert(event)}>
       Convert to {`${convertUnitName}`}
-    </button>
-    : <button
+    </Button>
+    : <Button
       className="Ingredient__button convert-back"
       type='button'
       onClick={event => toggleConvert(event)}>
       Convert back to {`${baseUnitName}`}
-    </button>
+    </Button>
   )
 }
 }

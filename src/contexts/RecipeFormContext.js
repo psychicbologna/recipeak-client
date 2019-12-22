@@ -38,6 +38,8 @@ const RecipeFormContext = React.createContext({
   ingredientsEditList: [],
   ingredientsDeleteList: [],
 
+  disableFieldsets: false,
+
   setRecipe: () => { },
   setIngredients: () => { },
   clearRecipe: () => { },
@@ -55,6 +57,8 @@ const RecipeFormContext = React.createContext({
   handleAddIngredient: () => { },
   handleEditIngredient: () => { },
   handleDeleteIngredient: () => { },
+
+  toggledisableFieldsets: () => { }
 })
 
 export default RecipeFormContext;
@@ -71,6 +75,8 @@ export class RecipeFormContextProvider extends Component {
     ingredientsAddList: [],
     ingredientsEditList: [],
     ingredientsDeleteList: [],
+    //Disables all fieldsets when true.
+    disableFieldsets: false
   }
 
   //Update fields of recipe other than ingredients.
@@ -173,7 +179,7 @@ export class RecipeFormContextProvider extends Component {
 
   //Add ingredient to preview list and queue for addition
   handleAddIngredient = (event, currentIngredient) => {
-
+    console.log('addIngredient firing!')
     const newIngredient = {
       amount: currentIngredient.amount.value,
       ing_text: currentIngredient.ing_text.value,
@@ -189,11 +195,12 @@ export class RecipeFormContextProvider extends Component {
 
       this.updateIngredientListWithAddition(newIngredient)
     }
+    console.log('Add List: ', this.state.ingredientsAddList);
   }
 
   //Add ingredient to preview list and queue for addition
   handleEditIngredient = (currentIngredient) => {
-
+    console.log('editIngredient firing!')
     const newIngredient = {
       id: currentIngredient.id,
       amount: currentIngredient.amount.value,
@@ -209,6 +216,7 @@ export class RecipeFormContextProvider extends Component {
 
       this.updateIngredientListWithAddition(newIngredient)
     }
+    console.log('Edit List: ', this.state.ingredientsEditList);
   }
 
   clearCurrentIngredient = () => {
@@ -290,6 +298,7 @@ export class RecipeFormContextProvider extends Component {
 
   deleteRecipe(recipeId) {
     RecipesApiService.deleteRecipe(recipeId)
+    .then(() => this.clearRecipe());
   }
 
   setIngredients = ingredients => {
@@ -302,9 +311,11 @@ export class RecipeFormContextProvider extends Component {
   }
 
   toggleDeleteModal = () => {
-    this.setState({
-      deleteModalIsOpen: !this.state.deleteModalIsOpen
-    });
+    this.setState({ deleteModalIsOpen: !this.state.deleteModalIsOpen });
+  }
+
+  toggledisableFieldsets = () => {
+    this.setState({ disableFieldsets: !this.state.disableFieldsets })
   }
 
   render() {
@@ -321,6 +332,7 @@ export class RecipeFormContextProvider extends Component {
       onSubmit: this.handleSubmit,
       //Form clear
       clearForm: this.clearForm,
+      disableFieldsets: this.state.disableFieldsets,
 
       setRecipe: this.setRecipe,
       addRecipe: this.addRecipe,
@@ -333,6 +345,7 @@ export class RecipeFormContextProvider extends Component {
       onDeleteIngredient: this.handleDeleteIngredient,
 
       clearRecipe: this.clearRecipe,
+      toggledisableFieldsets: this.toggledisableFieldsets,
     };
     return (
       <RecipeFormContext.Provider value={value}>

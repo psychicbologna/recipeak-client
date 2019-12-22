@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
 import RecipeEditForm from '../../components/forms/RecipeForm/RecipeEditForm';
 import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
+import { Button } from '../../components/Utils/Utils'
 import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/RecipeFormContext';
 
 
 export default class RecipeEditPage extends Component {
+  static contextType = RecipeFormContext;
+
   static defaultProps = {
     match: { params: {} },
     recipe: nullRecipe,
@@ -19,28 +22,24 @@ export default class RecipeEditPage extends Component {
     deleting: false
   }
 
-  static contextType = RecipeFormContext;
-
-  //Delete callbacks
-
   //Handles click on delete button.
   handleDeleteClick = recipeId => {
-    this.setState({
-      deleting: true
-    })
+    this.setState({ deleting: true })
+    console.log(this.context);
+    this.context.toggledisableFieldsets();
   }
 
   //Handles cancel delete.
   handleDeleteCancel = event => {
     event.preventDefault();
-    this.setState({
-      deleting: false
-    })
+    this.setState({ deleting: false })
+    this.context.toggledisableFieldsets();
   }
 
   //Moves to home after deleting successful.
   handleDeleteSuccess = recipeId => {
     const { history } = this.props
+    console.log(history);
     console.log('moving to home!')
     history.push('/home');
   }
@@ -51,14 +50,15 @@ export default class RecipeEditPage extends Component {
 
     RecipesApiService.deleteRecipe(recipeId)
       .then(res => {
+        console.log(res);
         this.handleDeleteSuccess()
       })
       .catch(error => {
         this.setState({ error: error })
+        this.setState({ deleting: false })
+        this.context.toggledisableFieldsets();
       })
   }
-
-
 
   componentDidMount() {
     const recipeId = this.props.match.params.recipe_id;
@@ -90,11 +90,11 @@ export default class RecipeEditPage extends Component {
           recipe={recipe}
           ingredients={ingredients}
           onDeleteSuccess={this.handleDeleteSuccess}
-          deleting={deleting}
+          disabled={deleting}
         />
         {
           !deleting
-            ? <button type='button' onClick={() => this.handleDeleteClick(recipe.id)}>Delete Recipe</button>
+            ? <Button type='button' onClick={() => this.handleDeleteClick(recipe.id)}>Delete Recipe</Button>
             : <DeleteRecipeConfirm
               recipeId={recipeId}
               recipeName={recipe.name.value}
@@ -107,6 +107,5 @@ export default class RecipeEditPage extends Component {
   }
 }
 
-//TODO delete button and confirmation modal
 //TODO validation for form entries
 //TODO a11y check
