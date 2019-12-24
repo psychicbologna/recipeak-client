@@ -13,16 +13,11 @@ export default class IngredientFieldset extends Component {
     disabled: false
   }
 
-  // componentDidMount() {
-  //   if (this.props.ingredient.id !== null) {
-
-  //   }
-  // }
-
   render() {
     const { currentIngredient, updateIngredientField, disableFieldsets } = this.context;
     const { editing, handleSubmit, onCancelClick } = this.props;
 
+    console.log(currentIngredient);
     //TODO button context based on edit/add
     //TODO toggle ingredient options (currently just set to 'true')
     return (
@@ -49,11 +44,11 @@ export default class IngredientFieldset extends Component {
           parentForm='RecipeForm'
         />
         <div className="Ingredient__Options">
-          <Button classname="Ingredient__Options__button" onClick={event => handleSubmit(event, currentIngredient)}>
+          <Button className="Ingredient__Options__button" onClick={event => handleSubmit(event, currentIngredient)}>
             Submit
             </Button>
           {editing
-            ? <Button classname="Ingredient__Options__button" onClick={() => onCancelClick()}>
+            ? <Button className="Ingredient__Options__button" onClick={() => onCancelClick()}>
               Cancel
           </Button>
             : null

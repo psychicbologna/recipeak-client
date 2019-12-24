@@ -23,10 +23,6 @@ export const nullIngredient = {
   unit_set: nullLiveInput,
   unit_single: nullLiveInput,
   unit_plural: nullLiveInput,
-  unit_data: {
-    unit_single: nullLiveInput,
-    unit_plural: nullLiveInput
-  }
 }
 
 const RecipeFormContext = React.createContext({
@@ -44,17 +40,19 @@ const RecipeFormContext = React.createContext({
   setRecipe: () => { },
   setIngredients: () => { },
   setCurrentIngredient: () => { },
-  clearRecipe: () => { },
-  clearIngredients: () => { },
 
   updateRecipeField: () => { },
   updateIngredientField: () => { },
-  handleSubmit: () => { },
+
+  clearRecipe: () => { },
+  clearIngredients: () => { },
+  clearCurrentIngredient: () => { },
   clearForm: () => { },
+  handleSubmit: () => { },
 
   addRecipe: () => { },
-  deleteRecipe: () => { },
   updateRecipe: () => { },
+  deleteRecipe: () => { },
 
   handleAddIngredient: () => { },
   handleEditIngredient: () => { },
@@ -83,22 +81,24 @@ export class RecipeFormContextProvider extends Component {
     disableSubmit: false
   }
 
+
+
   //Update fields of recipe other than ingredients.
   updateRecipeField = (fieldName, value) => {
     this.setState(prevState => ({
       recipe: {
         ...prevState.recipe,
-        [fieldName]: { value: value, touched: true }
+        [fieldName]: { value, touched: true }
       }
     }));
   }
 
-  //Update fields of ingredient
+  //Update fields of current ingredient
   updateIngredientField = (fieldName, value) => {
     this.setState(prevState => ({
       currentIngredient: {
         ...prevState.currentIngredient,
-        [fieldName]: { value: value, touched: true }
+        [fieldName]: { value, touched: true }
       }
     }))
   }
@@ -106,30 +106,35 @@ export class RecipeFormContextProvider extends Component {
   //Ingredient List manipulation. These do not affect database until the whole form is submitted.
 
   //Set current ingredient from list when edit is clicked.
-  setCurrentIngredient(ingredientId) {
+  setCurrentIngredient = ingredient => {
+    const { currentIngredient } = this.state;
+    let newCurrentIngredient = nullIngredient;
+    const newFields = Object.keys(ingredient);
+    const unitDataFields = Object.keys(ingredient.unit_data);
 
-    const ingredient = this.state.ingredients.map(ingredient => {
-      if (ingredient.id === ingredientId) {
-        return ingredient;
-      }
-      return null
-    })
+    let hasUnits = unitDataFields.includes('unit_single');
+    hasUnits = unitDataFields.includes('unit_plural')
 
-    console.log(ingredient);
+    //Convert key values to currentIngredient values.
+    for (let i = 0; i < newFields.length; i++) {
+      let field = newFields[i];
 
-    function toLiveInput(value) {
-      return {
-        value,
-        touched: false
+      if (field === 'id') {
+        newCurrentIngredient[field] = ingredient[field]
+      } else if (field === 'unit_data') {
+        if (ingredient[field] === 'custom' && hasUnits) {
+          newCurrentIngredient.unit_data = {
+            unit_single: ingredient.unit_data.unit_single,
+            unit_plural: ingredient.unit_data.unit_plural
+          }
+        }
+      } else {
+        newCurrentIngredient[field] = { value: ingredient[field], touched: false }
       }
     }
 
-    //Convert keys to live inputs.
-    const newCurrentIngredient = Object.keys(ingredient).map(field =>
-      newCurrentIngredient[field] = toLiveInput(ingredient[field])
-    )
-
     this.setState({ currentIngredient: newCurrentIngredient })
+    console.log(this.state.currentIngredient)
   }
 
   /**
@@ -211,13 +216,14 @@ export class RecipeFormContextProvider extends Component {
   //Add ingredient to preview list and queue for addition
   handleAddIngredient = (event, currentIngredient) => {
     console.log('addIngredient firing!')
+    //Create new ingredient
     const newIngredient = {
       amount: currentIngredient.amount.value,
       ing_text: currentIngredient.ing_text.value,
       unit_set: currentIngredient.unit_set.value
     }
 
-    //Add unit data if custom unit.
+    //Add unit data if custom unit and/or set if unit set.
     if (currentIngredient.unit_set === 'custom') {
       newIngredient.unit_data = {
         unit_singular: currentIngredient.unit_singular.value,
@@ -225,6 +231,8 @@ export class RecipeFormContextProvider extends Component {
       }
 
       this.updateIngredientListWithAddition(newIngredient)
+        .then(() => this.clearCurrentIngredient())
+        .catch((error) => console.log(error));
     }
     console.log('Add List: ', this.state.ingredientsAddList);
   }
@@ -356,26 +364,24 @@ export class RecipeFormContextProvider extends Component {
       ingredientCount: this.state.ingredientCount,
       ingredients: this.state.ingredients,
       currentIngredient: this.state.currentIngredient,
-      //Form fields
+      //State of fields
+      disableFieldsets: this.state.disableFieldsets,
+      //Tracking values
+      setRecipe: this.setRecipe,
+      setIngredients: this.setIngredients,
+      setCurrentIngredient: this.setCurrentIngredient,
       updateRecipeField: this.updateRecipeField,
       updateIngredientField: this.updateIngredientField,
-      //Form submit
-      onSubmit: this.handleSubmit,
-      //Form clear
+      clearRecipe: this.clearRecipe,
+      clearIngredients: this.clearIngredients,
+      clearCurrentIngredient: this.clearCurrentIngredient,
       clearForm: this.clearForm,
-      disableFieldsets: this.state.disableFieldsets,
+      onSubmit: this.handleSubmit,
 
-      setRecipe: this.setRecipe,
-      addRecipe: this.addRecipe,
-      updateRecipe: this.deleteRecipe,
-      deleteRecipe: this.deleteRecipe,
-
-      setIngredients: this.setIngredients,
       onAddIngredient: this.handleAddIngredient,
       onEditIngredient: this.handleEditIngredient,
       onDeleteIngredient: this.handleDeleteIngredient,
 
-      clearRecipe: this.clearRecipe,
       toggleDisableFieldsets: this.toggleDisableFieldsets,
     };
     return (

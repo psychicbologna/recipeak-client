@@ -220,13 +220,13 @@ export function PrepTimeFieldset(props) {
 
 function Option(props) {
   //Sets option field for unit
-  const { unit } = props
+  const { unit, selected } = props
   const unit_data = unit.unit_data,
     unit_set = unit.unit_set,
     unit_displayName = (unit_set === 'none') ? 'None' : unit_data.unit_plural.charAt(0).toUpperCase() + unit_data.unit_plural.slice(1);
 
   return (
-    <option value={unit_set}>{unit_displayName}</option>
+    <option value={unit_set} selected={selected}>{unit_displayName}</option>
   )
 }
 
@@ -236,7 +236,9 @@ export function OptGroup(props) {
 
   return (
     <optgroup label={name}>
-      {group.map(unit => <Option unit={unit} key={unit.id} />)}
+      {group.map(unit =>
+        <Option unit={unit} key={unit.id} />
+      )}
     </optgroup>
   )
 }

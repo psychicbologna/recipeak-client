@@ -57,15 +57,24 @@ export default class Ingredient extends Component {
     this.setState({ editing: !this.state.editing })
   }
 
+  handleDeleteIngredientClick = (event) => {
+    event.preventDefault();
+
+    console.log(this.props.ingredient.id);
+  }
+
   //Set currentIngredient in context
-  onEditIngredientClick = () => {
-    const { ingredient } = this.props.ingredient;
-    this.context.setCurrentIngredient(ingredient);
+  handleEditIngredientClick = (event) => {
+    //Freeze other ingredients on list
+    this.props.onSetEditingIngredient(this.props.ingredient.id);
+    //Preset an ingredient fieldset with ingredient values.
+    this.context.setCurrentIngredient(this.props.ingredient);
+    //Render the populated fieldset instead of ingredient.
     this.toggleEditing();
   }
 
   //Submit currentIngredient and close fieldset if successful.
-  onEditIngredientSubmit = (event, id) => {
+  handleEditIngredientSubmit = (event, id) => {
     event.preventDefault();
 
     this.context.submitCurrentIngredient()
@@ -101,8 +110,8 @@ export default class Ingredient extends Component {
           ? <IngredientOptionsBase
             editingIngredient={editing}
             ingredient={ingredient}
-            onDeleteIngredient={this.toggleEditing}
-            onEditIngredient={this.toggleEditing}
+            onDeleteIngredient={this.handleDeleteIngredientClick}
+            onEditIngredient={this.handleEditIngredientClick}
           />
           : null
         }

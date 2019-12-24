@@ -30,7 +30,7 @@ export default class RecipeEditForm extends Component {
 
   render() {
     const { ingredients, updateRecipeField, onSubmit, disableFieldsets } = this.context;
-    const { recipe, formName } = this.props;
+    const { recipe, formName, disabled } = this.props;
     const { addingIngredient } = this.state;
 
     return (
@@ -64,7 +64,10 @@ export default class RecipeEditForm extends Component {
           disabled={disableFieldsets}
         />
 
-        <Button type='submit' disabled={disableFieldsets}>
+        <Button
+        type='submit'
+        disabled={disableFieldsets || disabled}
+        >
           Submit Recipe
         </Button>
       </form >

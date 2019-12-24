@@ -5,7 +5,7 @@ import UnitContext, { nullUnits } from '../../../../contexts/UnitContext';
 export default class UnitSetSelect extends Component {
 
   static defaultProps = {
-    unitSet: 'none',
+    defaultValue: 'none',
     units: nullUnits
   }
 
@@ -16,15 +16,16 @@ export default class UnitSetSelect extends Component {
   }
 
   render() {
-    const { updateField, unitSet } = this.props;
+    const { updateField, defaultValue } = this.props;
     const { units } = this.context;
 
+    console.log(defaultValue)
     return (
       <select
         className='IngredientForm__unit_set'
         id='unit_set'
         name='unit_set'
-        defaultValue={unitSet}
+        value={defaultValue}
         onChange={event => updateField('unit_set', event.target.value)}
       >
         <OptGroup group={units.base} name='Base' />

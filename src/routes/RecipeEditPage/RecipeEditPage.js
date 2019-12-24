@@ -19,27 +19,25 @@ export default class RecipeEditPage extends Component {
 
   state = {
     error: '',
-    deleting: false
+    disable: false
   }
 
-  //Handles click on delete button.
-  handleDeleteClick = recipeId => {
-    this.setState({ deleting: true })
-    console.log(this.context);
+  //Handles click on delete, edit button.
+  handleClick = recipeId => {
+    this.setState({ disable: true })
     this.context.toggleDisableFieldsets();
   }
 
-  //Handles cancel delete.
-  handleDeleteCancel = event => {
+  //Handles cancel delete, edit.
+  handleCancel = event => {
     event.preventDefault();
-    this.setState({ deleting: false })
+    this.setState({ disable: false })
     this.context.toggleDisableFieldsets();
   }
 
   //Moves to home after deleting successful.
   handleDeleteSuccess = recipeId => {
     const { history } = this.props
-    console.log(history);
     console.log('moving to home!')
     history.push('/home');
   }
@@ -55,12 +53,13 @@ export default class RecipeEditPage extends Component {
       })
       .catch(error => {
         this.setState({ error: error })
-        this.setState({ deleting: false })
+        this.setState({ disable: false })
         this.context.toggleDisableFieldsets();
       })
   }
 
   componentDidMount() {
+    this.clearError();
     const recipeId = this.props.match.params.recipe_id;
     RecipesApiService.getRecipe(recipeId)
       .then(data => {
@@ -81,7 +80,7 @@ export default class RecipeEditPage extends Component {
   render() {
     const recipeId = this.props.match.params.recipe_id
     const { recipe, ingredients } = this.context;
-    const { deleting } = this.state;
+    const { disable } = this.state;
 
     return (
       <section className={`RecipeEdit`}>
@@ -90,18 +89,18 @@ export default class RecipeEditPage extends Component {
           recipe={recipe}
           ingredients={ingredients}
           onDeleteSuccess={this.handleDeleteSuccess}
-          disabled={deleting}
+          disabled={disable}
           formName='edit'
         />
         {
-          !deleting
-            ? <Button type='button' onClick={() => this.handleDeleteClick(recipe.id)}>Delete Recipe</Button>
+          !disable
+            ? <Button type='button' onClick={() => this.handleClick(recipe.id)}>Delete Recipe</Button>
             : <DeleteRecipeConfirm
               recipeId={recipeId}
               recipeName={recipe.name.value}
-              show={this.state.deleting}
+              show={this.state.disable}
               onDeleteSubmit={this.handleDeleteSubmit}
-              onDeleteCancel={this.handleDeleteCancel} />
+              onDeleteCancel={this.handleCancel} />
         }
       </section>
     )

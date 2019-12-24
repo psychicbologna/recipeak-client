@@ -18,13 +18,13 @@ export default class IngredientList extends Component {
     showOptions: this.props.showIngredientOptions,
     editingIngredient: ''
   }
-  
-  setEditingIngredient = ingredient => {
-    this.setState({editingIngredient: ingredient })
+
+  handleSetEditingIngredient = ingredient => {
+    this.setState({ editingIngredient: ingredient.id })
   }
 
   clearEditingIngredient = () => {
-    this.setState({editingIngredient: ''})
+    this.setState({ editingIngredient: '' })
   }
 
   toggleShowOptions = event => {
@@ -32,11 +32,11 @@ export default class IngredientList extends Component {
     this.setState({ showOptions: this.state.showOptions })
   }
 
-  handleEditIngredientClick = ingredient => {
-    this.context.setCurrentIngredient(ingredient);
-    this.toggleShowOptions();
-    this.setEditingIngredient(ingredient);
-  }
+  // handleEditIngredientClick = ingredient => {
+  //   this.context.setCurrentIngredient(ingredient);
+  //   this.toggleShowOptions();
+  //   this.setEditingIngredient(ingredient);
+  // }
 
   handleEditIngredientCancel = () => {
     this.context.clearCurrentIngredient();
@@ -46,7 +46,7 @@ export default class IngredientList extends Component {
 
   render() {
     const { ingredients } = this.props
-    const { showOptions } = this.state
+    const { showOptions, editingIngredient } = this.state
 
     return (
       !ingredients.length
@@ -58,7 +58,7 @@ export default class IngredientList extends Component {
 
         : <section className="RecipeForm__ingredients-preview">
           <h3>Ingredients</h3>
-          <IngredientListOptions />
+          {showOptions && <IngredientListOptions />}
           <ul className='RecipeForm__ingredients-list'>
             {ingredients.map(ingredient => {
               return (
@@ -66,11 +66,13 @@ export default class IngredientList extends Component {
                   ingredient={ingredient}
                   key={ingredient.id}
                   showOptions={showOptions}
+                  editingIngredient={editingIngredient}
+                  onSetEditingIngredient={this.handleSetEditingIngredient}
                 />
               );
             })}
           </ul>
-          <IngredientListOptions />
+          {showOptions && <IngredientListOptions />}
         </section>
     )
   }
@@ -79,7 +81,7 @@ export default class IngredientList extends Component {
 function IngredientListOptions(props) {
   return (
     <div className="IngredientList__options">
-      <p>Options buttons go here.</p>
+      <p>Add Ingredient</p>
     </div>
   )
 }

@@ -9,11 +9,13 @@ export default class UnitSelect extends Component {
 
   render() {
     const { currentIngredient, updateIngredientField } = this.context;
+    console.log('UnitSelect unitSet:', currentIngredient.unit_set)
+
     return (
       <section>
         <label>Unit From Set</label>
         <UnitSetSelect
-          unitSet={currentIngredient.unit_set}
+          defaultValue={currentIngredient.unit_set.value}
           updateField={updateIngredientField}
         />
         {
