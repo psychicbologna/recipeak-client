@@ -4,6 +4,7 @@ import UserHomeContext, {nullUser} from '../../contexts/UserHomeContext';
 import { FormatName } from '../../components/Utils/Utils'
 import RecipeCardList from '../../components/Recipes/RecipeCardList';
 import UserApiService from '../../services/user-api-service'
+import './UserHome.css'
 
 export default class UserHome extends Component {
 
@@ -66,7 +67,7 @@ export default class UserHome extends Component {
     } else {
       return (
         <section className='UserHome'>
-          <h2>{FormatName(user.first_name)}  Recipes</h2>
+          <h2 className='UserHome__UserTitle'>{FormatName(user.first_name)}  Recipes</h2>
           <UserHomeNav username={user.username} />
           {
             !recipeList.length

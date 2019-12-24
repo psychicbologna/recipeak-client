@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { PrepTimeDisplay, Button } from '../../Utils/Utils';
 import './RecipeCard.css';
-import { PrepTimeDisplay } from '../../Utils/Utils';
+
 
 export default class RecipeCard extends Component {
 
@@ -20,8 +21,6 @@ export default class RecipeCard extends Component {
         <PrepTimeDisplay hours={prep_time_hours} minutes={prep_time_minutes} />
         <RecipeDate prepend='Created' date={date_created} />
         <RecipeDate prepend='Last Updated' date={date_updated} />
-        {/* <p>Category: Recipe Category</p>
-        <p>Rating: Recipe Rating</p> */}
         <RecipeCardFooter recipe={recipe} />
       </section>
 
@@ -32,7 +31,7 @@ export default class RecipeCard extends Component {
 function ViewLink(props) {
   const { recipeId } = props;
   return (
-    <Link to={`/recipes/${recipeId}`} className='RecipeCard__ViewLink'>View</Link >
+    <Link to={`/recipes/${recipeId}`} className='RecipeCard__ViewLink Button'>View</Link >
   )
 }
 
@@ -40,14 +39,14 @@ function DeleteLink(props) {
   //TODO handle delete function
   const { onDeleteClick } = props;
   return (
-    <button type='button' onClick={onDeleteClick} className='RecipeCard__DeleteLink'>Delete</button>
+    <Button type='button' onClick={onDeleteClick} className='RecipeCard__DeleteLink'>Delete</Button>
   )
 }
 
 function EditLink(props) {
   const { recipeId } = props;
   return (
-    <Link to={`/recipes/${recipeId}/edit`} className='RecipeCard__EditLink'>Edit</Link>
+    <Link to={`/recipes/${recipeId}/edit`} className='RecipeCard__EditLink Button'>Edit</Link>
   )
 }
 

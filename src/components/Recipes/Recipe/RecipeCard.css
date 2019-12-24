@@ -1,14 +1,19 @@
 .RecipeCard {
   border: 1px solid;
-  border-color: var(--accent-color-1);
-  margin: 0 1rem 1rem 1rem;
+  border-color: var(--dark-gray);
 }
 
-.RecipeCard header {
+.RecipeCard__header {
   margin: 1rem 0;
   background-color: var(--light-gray);
 }
 
-.RecipeCard footer {
+.RecipeCard__footer {
+  background-color: var(--light-gray);
+}
+
+.RecipeCard__footer_menu {
+  list-style-type: none;
+  display: flex;
   background-color: var(--light-gray);
 }

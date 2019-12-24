@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import './PrimaryNav.css';
-import '../navigation.css';
 import UserHomeContext from '../../../contexts/UserHomeContext'
 import { Link } from 'react-router-dom';
 

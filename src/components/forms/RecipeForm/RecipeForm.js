@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullRecipe } from '../../../contexts/RecipeFormContext';
-import IngredientsFieldset from './IngredientsFieldset/IngredientsFieldset';
-import '../forms.css'
-import { BasicInfoFieldset, PrepTimeFieldset, TextArea } from '../../Utils/Utils'
-
-//TODO ensure all fieldsets are disabled when deleting is true.
+import IngredientsList from '../../Recipes/Recipe/Ingredients/IngredientsList';
+import IngredientFieldset from './IngredientFieldset/IngredientFieldset';
+import '../forms.css';
+import './RecipeForm.css';
+import { BasicInfoFieldset, PrepTimeFieldset, TextArea, Button } from '../../Utils/Utils'
 
 export default class RecipeEditForm extends Component {
 
   static defaultProps = {
     recipe: nullRecipe,
+    formName: 'edit'
   }
 
   state = {
     recipe: this.props.recipe,
+    addingIngredient: false
   }
 
   static contextType = RecipeFormContext;
@@ -22,13 +24,18 @@ export default class RecipeEditForm extends Component {
     this.context.clearForm();
   }
 
+  handleAddingIngredient = ingredientId => {
+
+  }
+
   render() {
-    const { updateRecipeField, onSubmit, disableFieldsets } = this.context;
-    const { recipe } = this.props;
+    const { ingredients, updateRecipeField, onSubmit, disableFieldsets } = this.context;
+    const { recipe, formName } = this.props;
+    const { addingIngredient } = this.state;
 
     return (
       <form
-        className='NewRecipeForm'
+        className={`Form RecipeForm RecipeForm__${formName}`}
         onSubmit={event => onSubmit(event, 'edit')}
       >
         <BasicInfoFieldset
@@ -44,7 +51,11 @@ export default class RecipeEditForm extends Component {
           updateRecipeField={updateRecipeField}
           disabled={disableFieldsets}
         />
-        <IngredientsFieldset />
+        <IngredientsList
+          ingredients={ingredients}
+          showIngredientOptions={true}
+        />
+        {addingIngredient ? < IngredientFieldset method='add' /> : null}
         <TextArea
           updateField={updateRecipeField}
           defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}
@@ -53,9 +64,9 @@ export default class RecipeEditForm extends Component {
           disabled={disableFieldsets}
         />
 
-        <button type='submit' disabled={disableFieldsets}>
-          Submit
-        </button>
+        <Button type='submit' disabled={disableFieldsets}>
+          Submit Recipe
+        </Button>
       </form >
     )
   }

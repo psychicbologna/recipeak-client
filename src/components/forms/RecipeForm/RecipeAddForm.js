@@ -60,14 +60,18 @@ export default class RecipesAddForm extends Component {
             inputId='prep_time_hours'
             inputLabel='Hours'
             inputType='number'
-            max='59' />
+            max='59'
+            parentForm='RecipeAddForm'
+            />
           <Input
             updateField={updatePrepTimeMinutes}
             defaultValue={null}
             inputId='prep_time_minutes'
             inputLabel='Minutes'
             inputType='number'
-            max='59' />
+            max='59'
+            parentForm='RecipeAddForm'
+            />
         </fieldset>
         {/* <IngredientsFieldset
           ingredients={ingredients}
@@ -114,9 +118,29 @@ function BasicInfoFieldset(props) {
   return (
     <fieldset className='RecipesForm__basic-info'>
       <legend>Basic Info</legend>
-      <Input updateField={updateName} defaultValue={nameDefault} inputId='name' inputType='text' inputLabel='Recipe Name' />
-      <Input updateField={updateAuthor} defaultValue={authorDefault} inputId='author' inputType='text' inputLabel='Author' />
-      <Input updateField={updateServings} defaultValue={servingsDefault} inputId='servings' inputType='number' inputLabel='Servings' />
+      <Input
+        updateField={updateName} defaultValue={nameDefault}
+        inputId='name'
+        inputType='text'
+        inputLabel='Recipe Name'
+        parentForm='RecipeAddForm'
+        />
+      <Input
+        updateField={updateAuthor}
+        defaultValue={authorDefault}
+        inputId='author'
+        inputType='text'
+        inputLabel='Author'
+        parentForm='RecipeAddForm'
+        />
+      <Input
+      updateField={updateServings}
+      defaultValue={servingsDefault}
+      inputId='servings'
+      inputType='number'
+      inputLabel='Servings'
+      parentForm='RecipeAddForm'
+      />
     </fieldset>
   )
 }

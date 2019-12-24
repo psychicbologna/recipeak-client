@@ -1,37 +1,102 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Alert {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding-left: 3rem;
 }
 
-.App-link {
-  color: #09d3ac;
+.Alert__p {
+  position: relative;
+  min-height: 3rem;
+  padding: 1rem 1rem 1rem 5rem;
+  display: flex;
+  width: 320px;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.Alert__p::before {
+  content: '';
+  position: absolute;
+  height: 3rem;
+  width: 3rem;
+  background: url(../../assets/svg/alert.svg) no-repeat center;
+  background-size: 3rem 3rem;
+  left: 1rem;
+}
+
+.Button,
+.Input__input,
+.Input__label__description {
+  font-size: 1.15em;
+  line-height: 1.2;
 }
 
 .Button {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  color: var(--off-black);
+  background-color: var(--accent-color-1);
+  transition: background-color 0.5s;
   border: 0;
-  border-radius: 0.25rem;
-  background: #1E88E5;
-  color: white;
-  font-family: system-ui, sans-serif;
-  font-size: 1rem;
-  line-height: 1.2;
+  border-radius: 0;
+  font-family: var(--base-family), 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   white-space: nowrap;
   text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  margin: 0.25rem;
   cursor: pointer;
+  text-align: center;
+}
+
+.Button:hover {
+  background-color: var(--accent-color-2);
+  text-decoration: underline;
+  transition: background-color 0.5s;
+}
+
+.Button:visited {
+  color: var(--off-black);
+}
+
+.App__main {
+  margin: 0 1em;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.Form {
+  display: flex;
+  flex-flow: column;
+}
+
+.Fieldset {
+  padding: 1em;
+}
+
+.Input__input {
+  border: 2px solid var(--dark-gray);
+  border-radius: 0;
+  background-color: var(--off-white);
+}
+
+.Input__input:focus {
+  border: 2px solid var(--accent-color-1);
+  outline: none;
+}
+
+.Input__input:disabled {
+  background-color: var(--light-gray);
+}
+
+.Input__label {
+  border: 0;
+}
+
+.Input__label__description {
+  border: 0;
 }

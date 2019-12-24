@@ -41,27 +41,28 @@ export default class SignupForm extends Component {
         <div role='alert'>
           {error && <p className='error__p'>{error}</p>}
         </div>
-        <label htmlFor='SignUpForm__first_name'>First Name</label>
         <Input
-          name='first_name'
-          id='SignUpForm__first_name'>
+          inputId='first_name'
+          inputLabel='First Name'
+          parentForm='SignUpForm'>
         </Input>
-        <label htmlFor='SignUpForm__last_name'>Last Name</label>
         <Input
-          name='last_name'
-          id='SignUpForm__last_name'>
+          inputId='last_name'
+          inputLabel='Last Name'
+          parentForm='SignUpForm'>
         </Input>
-        <label htmlFor='SignUpForm__username'>Username</label>
         <Input
-          name='username'
-          id='SignUpForm__username'>
+          inputId='username'
+          inputLabel='Username'
+          parentForm='SignUpForm'>
         </Input>
-        <label htmlFor='password'>Password</label>
         <Input
-          name='password'
-          id='SignUpForm__password'>
+          inputId='password'
+          inputLabel='Password'
+          parentForm='SignUpForm'
+          type='password'
+          >
         </Input>
-        {/*TODO Reenter password input */}
 
         <Button type='submit'>
           Sign Up!

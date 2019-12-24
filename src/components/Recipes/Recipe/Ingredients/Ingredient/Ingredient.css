@@ -1,6 +1,37 @@
 .Ingredient {
   display: flex;
   flex-flow: column;
-  border: 1px solid;
   padding: .5em 0;
+}
+
+li.Ingredient__editing {
+  border: 1px dotted;
+  margin-bottom: .25em;
+}
+
+li.Ingredient__editing:last-child {
+  margin-bottom: 0;
+}
+
+li.Ingredient__listing {
+
+}
+
+.Ingredient__display {
+  padding: 1rem;
+}
+
+.Ingredient__display::before {
+  content: '-';
+}
+
+.Ingredient__Options {
+  display: flex;
+  justify-content: flex-start;
+  background-color: var(--light-gray);
+  margin-bottom: 1rem;
+}
+
+.Ingredient__Options__button {
+  margin-left: 1rem;
 }

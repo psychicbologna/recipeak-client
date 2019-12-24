@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
-import RecipeEditForm from '../../components/forms/RecipeForm/RecipeEditForm';
+import RecipeForm from '../../components/forms/RecipeForm/RecipeForm';
 import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
 import { Button } from '../../components/Utils/Utils'
 import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/RecipeFormContext';
@@ -26,14 +26,14 @@ export default class RecipeEditPage extends Component {
   handleDeleteClick = recipeId => {
     this.setState({ deleting: true })
     console.log(this.context);
-    this.context.toggledisableFieldsets();
+    this.context.toggleDisableFieldsets();
   }
 
   //Handles cancel delete.
   handleDeleteCancel = event => {
     event.preventDefault();
     this.setState({ deleting: false })
-    this.context.toggledisableFieldsets();
+    this.context.toggleDisableFieldsets();
   }
 
   //Moves to home after deleting successful.
@@ -56,7 +56,7 @@ export default class RecipeEditPage extends Component {
       .catch(error => {
         this.setState({ error: error })
         this.setState({ deleting: false })
-        this.context.toggledisableFieldsets();
+        this.context.toggleDisableFieldsets();
       })
   }
 
@@ -86,11 +86,12 @@ export default class RecipeEditPage extends Component {
     return (
       <section className={`RecipeEdit`}>
         <h3>Edit {`'${recipe.name.value}'`}</h3>
-        <RecipeEditForm
+        <RecipeForm
           recipe={recipe}
           ingredients={ingredients}
           onDeleteSuccess={this.handleDeleteSuccess}
           disabled={deleting}
+          formName='edit'
         />
         {
           !deleting

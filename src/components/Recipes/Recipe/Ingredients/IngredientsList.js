@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import RecipeFormContext from '../../../../contexts/RecipeFormContext';
 import Ingredient from './Ingredient/Ingredient';
 
-//TODO conversion button in ingredients options.
-//TODO render dummy list?
+//TODO conversion button in ingredients options sets all to one class or another.
+//TODO editing one ingredient removes the option to edit others; showeedit enough?
 
 export default class IngredientList extends Component {
 
@@ -11,18 +12,36 @@ export default class IngredientList extends Component {
     showIngredientOptions: false
   }
 
+  static contextType = RecipeFormContext;
+
   state = {
-    showOptions: this.props.showIngredientOptions
+    showOptions: this.props.showIngredientOptions,
+    editingIngredient: ''
   }
-  // renderDummyList(n) {
-  //   for (let i; i <= n; i++) {
-  //     return <li className="Ingredient__dummy"></li>
-  //   }
-  // }
+  
+  setEditingIngredient = ingredient => {
+    this.setState({editingIngredient: ingredient })
+  }
+
+  clearEditingIngredient = () => {
+    this.setState({editingIngredient: ''})
+  }
 
   toggleShowOptions = event => {
     event.preventDefault();
     this.setState({ showOptions: this.state.showOptions })
+  }
+
+  handleEditIngredientClick = ingredient => {
+    this.context.setCurrentIngredient(ingredient);
+    this.toggleShowOptions();
+    this.setEditingIngredient(ingredient);
+  }
+
+  handleEditIngredientCancel = () => {
+    this.context.clearCurrentIngredient();
+    this.toggleShowOptions();
+    this.clearEditingIngredient();
   }
 
   render() {
@@ -34,6 +53,7 @@ export default class IngredientList extends Component {
         ? <section className="RecipeForm__ingredients-preview">
           <h4>A recipe is nothing without ingredients!</h4>
           <p>Enter an ingredient on the add form below to get started. Recipes must be submitted with at least one ingredient.</p>
+          <p>NOTE: Changes made to this list won't save until the entire recipe is submitted.</p>
         </section>
 
         : <section className="RecipeForm__ingredients-preview">
