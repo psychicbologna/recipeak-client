@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullLiveInput, nullIngredient } from '../../../contexts/RecipeFormContext';
 import DeleteRecipeConfirm from '../../modals/DeleteRecipeConfirm';
-// import IngredientsFieldSet from './IngredientsFieldset/IngredientsFieldset';
-import '../forms.css'
 
 //TODO refactor with utils
 

@@ -30,7 +30,6 @@ export function Button({ className, ...props }) {
 //   )
 // }
 
-//TODO put me in utils!
 export function FormatName(firstName) {
   if (!firstName.endsWith('s')) {
     return `${firstName}'s`
@@ -79,19 +78,22 @@ export function PrepTimeDisplay(props) {
   // Displays the prep time depending on its length:
   //'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
   let content = '';
-  const { hours, minutes } = props
+  let { hours, minutes } = props
+
+  hours = parseInt(hours)
+  minutes= parseInt(minutes)
 
   if (!hours && !minutes) {
     content = 'No prep time entered.'
   }
-  if (hours) { content += `${hours} Hours` }
-  if (minutes) {
-    if (hours) { content += `, ` }
-    content += `${minutes} Minutes`
+  if (!!hours) {content += `${hours} Hour${(hours > 1 || hours < -1) ? 's' : ''}`}
+  if (!!minutes) {
+    if (!!hours) { content += `, ` }
+    content += `${minutes} Minute${(minutes > 1 || minutes < -1) ? 's' : ''}`
   }
 
   return (
-    <p className="RecipeForm__PrepTimeDisplay">{content}</p>
+    <output className="RecipeForm__output">{content}</output>
   )
 }
 
@@ -195,25 +197,27 @@ export function PrepTimeFieldset(props) {
       className='Fieldset RecipesForm__prep-time'
       disabled={disabled}>
       <legend>Prep Time</legend>
+      <div className="Fieldset__input-row-fix">
+        <Input
+          updateField={updateRecipeField}
+          defaultValue={!hoursDefault ? null : hoursDefault}
+          inputId='prep_time_hours'
+          inputLabel='Hours'
+          inputType='number'
+          max='59'
+          parentForm='RecipeForm'
+        />
+        <Input
+          updateField={updateRecipeField}
+          defaultValue={!minutesDefault ? null : minutesDefault}
+          inputId='prep_time_minutes'
+          inputLabel='Minutes'
+          inputType='number'
+          max='59'
+          parentForm='RecipeForm'
+        />
+      </div>
       <PrepTimeDisplay hours={hoursDefault} minutes={minutesDefault} />
-      <Input
-        updateField={updateRecipeField}
-        defaultValue={!hoursDefault ? null : hoursDefault}
-        inputId='prep_time_hours'
-        inputLabel='Hours'
-        inputType='number'
-        max='59'
-        parentForm='RecipeForm'
-      />
-      <Input
-        updateField={updateRecipeField}
-        defaultValue={!minutesDefault ? null : minutesDefault}
-        inputId='prep_time_minutes'
-        inputLabel='Minutes'
-        inputType='number'
-        max='59'
-        parentForm='RecipeForm'
-      />
     </fieldset>
   )
 }

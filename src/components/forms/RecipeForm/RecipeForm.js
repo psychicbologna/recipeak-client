@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import RecipeFormContext, { nullRecipe } from '../../../contexts/RecipeFormContext';
 import IngredientsList from '../../Recipes/Recipe/Ingredients/IngredientsList';
 import IngredientFieldset from './IngredientFieldset/IngredientFieldset';
-import '../forms.css';
 import './RecipeForm.css';
 import { BasicInfoFieldset, PrepTimeFieldset, TextArea, Button } from '../../Utils/Utils'
 
@@ -15,7 +14,6 @@ export default class RecipeEditForm extends Component {
 
   state = {
     recipe: this.props.recipe,
-    addingIngredient: false
   }
 
   static contextType = RecipeFormContext;
@@ -24,14 +22,25 @@ export default class RecipeEditForm extends Component {
     this.context.clearForm();
   }
 
-  handleAddingIngredient = ingredientId => {
+  handleAddIngredientSubmit = (event) => {
+    event.preventDefault();
+    const { currentIngredient, onAddIngredient } = this.context
 
+    onAddIngredient(currentIngredient);
   }
+
+  // handleEditIngredientSubmit = (event, ingredient) => {
+  //   event.preventDefault();
+  //   const { currentIngredient, onEditIngredient } = this.context
+
+  //   onEditIngredient(currentIngredient);
+  // }
+
+  handle
 
   render() {
     const { ingredients, updateRecipeField, onSubmit, disableFieldsets } = this.context;
     const { recipe, formName, disabled } = this.props;
-    const { addingIngredient } = this.state;
 
     return (
       <form
@@ -55,7 +64,10 @@ export default class RecipeEditForm extends Component {
           ingredients={ingredients}
           showIngredientOptions={true}
         />
-        {addingIngredient ? < IngredientFieldset method='add' /> : null}
+        <IngredientFieldset
+          method='add'
+          handleSubmit={this.handleAddIngredientSubmit}
+        />
         <TextArea
           updateField={updateRecipeField}
           defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}
@@ -65,8 +77,8 @@ export default class RecipeEditForm extends Component {
         />
 
         <Button
-        type='submit'
-        disabled={disableFieldsets || disabled}
+          type='submit'
+          disabled={disableFieldsets || disabled}
         >
           Submit Recipe
         </Button>

@@ -9,26 +9,30 @@ export default class UnitSelect extends Component {
 
   render() {
     const { currentIngredient, updateIngredientField } = this.context;
-    console.log('UnitSelect unitSet:', currentIngredient.unit_set)
+    const unit_set = currentIngredient.unit_set.value;
 
     return (
-      <section>
-        <label>Unit From Set</label>
-        <UnitSetSelect
-          defaultValue={currentIngredient.unit_set.value}
-          updateField={updateIngredientField}
-        />
+      <>
+        <label className="UnitSelect__label">
+          <span className="UnitSetSelect__label__description">Unit From Set</span>
+          <UnitSetSelect
+            defaultValue={!!unit_set ? unit_set : 'none'}
+            updateField={updateIngredientField}
+          />
+        </label>
         {
           currentIngredient.unit_set.value === 'custom'
-          ? <CustomUnitFieldSet
-          single={currentIngredient.unit_single.value}
-          plural={currentIngredient.unit_plural.value}
-          amount={currentIngredient.amount}
-          updateField={updateIngredientField}
-          />
-          : null
+            ? <div className="Fieldset__input-row-fix">
+              <CustomUnitFieldSet
+                single={currentIngredient.unit_single.value}
+                plural={currentIngredient.unit_plural.value}
+                amount={currentIngredient.amount}
+                updateField={updateIngredientField}
+              />
+            </div>
+            : null
         }
-      </section>
+      </>
     )
   }
 };

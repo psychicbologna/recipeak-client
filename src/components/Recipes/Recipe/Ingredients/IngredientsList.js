@@ -16,15 +16,16 @@ export default class IngredientList extends Component {
 
   state = {
     showOptions: this.props.showIngredientOptions,
-    editingIngredient: ''
+    editingId: ''
   }
 
-  handleSetEditingIngredient = ingredient => {
-    this.setState({ editingIngredient: ingredient.id })
+  handleSetEditingId = ingredientId => {
+    this.setState({ editingId: ingredientId })
   }
 
-  clearEditingIngredient = () => {
-    this.setState({ editingIngredient: '' })
+  handleClearEditingId = () => {
+    console.log('firing')
+    this.setState({ editingId: '' })
   }
 
   toggleShowOptions = event => {
@@ -32,21 +33,16 @@ export default class IngredientList extends Component {
     this.setState({ showOptions: this.state.showOptions })
   }
 
-  // handleEditIngredientClick = ingredient => {
-  //   this.context.setCurrentIngredient(ingredient);
-  //   this.toggleShowOptions();
-  //   this.setEditingIngredient(ingredient);
-  // }
-
-  handleEditIngredientCancel = () => {
-    this.context.clearCurrentIngredient();
-    this.toggleShowOptions();
-    this.clearEditingIngredient();
+  //TODO
+  handleEditIngredientSubmit = () => {
+    // this.context.clearCurrentIngredient();
+    // this.toggleShowOptions();
+    // this.clearEditingId();
   }
 
   render() {
     const { ingredients } = this.props
-    const { showOptions, editingIngredient } = this.state
+    const { showOptions, editingId } = this.state
 
     return (
       !ingredients.length
@@ -66,8 +62,9 @@ export default class IngredientList extends Component {
                   ingredient={ingredient}
                   key={ingredient.id}
                   showOptions={showOptions}
-                  editingIngredient={editingIngredient}
-                  onSetEditingIngredient={this.handleSetEditingIngredient}
+                  editingId={editingId}
+                  onSetEditingId={this.handleSetEditingId}
+                  onClearEditingId={this.handleClearEditingId}
                 />
               );
             })}

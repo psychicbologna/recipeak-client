@@ -3,7 +3,7 @@ import { Button } from '../../../../Utils/Utils'
 export default class IngredientOptionsConvert extends Component {
 
   render() {
-    const {editingIngredient, onDeleteIngredient, onEditIngredient} = this.props
+    const {disabled, editingIngredient, onDeleteIngredient, onEditIngredient} = this.props
 
     return (
       <div className="Ingredient__Options IngredientOptionsBase">
@@ -11,7 +11,7 @@ export default class IngredientOptionsConvert extends Component {
           className="Ingredient__Options__button delete"
           type='button'
           onClick={event => onDeleteIngredient(event)}
-          disabled={!!editingIngredient}
+          disabled={!!editingIngredient || disabled}
         >
           Delete
           </Button>
@@ -19,7 +19,7 @@ export default class IngredientOptionsConvert extends Component {
           className="Ingredient__Options__button edit"
           type='button'
           onClick={event => onEditIngredient(event)}
-          disabled={!!editingIngredient}
+          disabled={!!editingIngredient || disabled}
         >
           Edit
           </Button>

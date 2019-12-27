@@ -26,7 +26,9 @@
 
 .Button,
 .Input__input,
-.Input__label__description {
+.UnitSetSelect__select,
+.Input__label__description,
+.UnitSetSelect__label__description {
   font-size: 1.15em;
   line-height: 1.2;
 }
@@ -49,12 +51,20 @@
   text-decoration: none;
   cursor: pointer;
   text-align: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Button:disabled, .Button:hover:disabled {
+  text-decoration: none;
+  background-color: var(--dark-gray);
+  color: var(--off-white);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .Button:hover {
   background-color: var(--accent-color-2);
   text-decoration: underline;
-  transition: background-color 0.5s;
+  transition: background-color 0.3s;
 }
 
 .Button:visited {
@@ -75,7 +85,20 @@ a:hover {
 }
 
 .Fieldset {
-  padding: 1em;
+  display: grid;
+}
+
+.Fieldset legend {
+  font-size: 1.25em;
+  background: var(--light-gray);
+  color: var(--accent-color-3);
+  width: 100%;
+}
+
+.Fieldset__Ingredient {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
 }
 
 .Input__input {
@@ -84,19 +107,51 @@ a:hover {
   background-color: var(--off-white);
 }
 
-.Input__input:focus {
+.Input__input[type='number'] {
+  width: 2rem;
+}
+
+.Input__input:focus, .UnitSetSelect__select:focus {
   border: 2px solid var(--accent-color-1);
   outline: none;
 }
 
-.Input__input:disabled {
+.Input__input:disabled,
+.UnitSetSelect__select:disabled {
   background-color: var(--light-gray);
 }
 
-.Input__label {
+.Input__label,
+.UnitSetSelect__label,
+.Input__label__description,
+.UnitSetSelect__label__description {
   border: 0;
 }
 
-.Input__label__description {
-  border: 0;
+.Input__label,
+.UnitSetSelect__label {
+  display: flex;
+  flex-flow: column;
+}
+
+.UnitSetSelect__select {
+  display: block;
+  border: 2px solid var(--dark-gray);
+}
+
+.UnitSetSelect__label {
+  display: flex;
+  flex-flow: column;
+}
+
+.disabled {
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.Fieldset__input-row-fix {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }

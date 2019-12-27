@@ -24,16 +24,17 @@ export class UnitContextProvider extends Component {
     error: null,
   }
 
-  fetchUnits() {
-    console.log('getting units')
-    UnitApiService.getUnits()
-      .then(units => {
-        console.dir(units)
-        this.setUnits(units)
-      })
-    // .catch(this.setState({
-    //   error: { message: 'Unable to retrieve unit data.' }
-    // }));
+  fetchUnits = () => {
+    if (this.state.units === nullUnits) {
+      UnitApiService.getUnits()
+        .then(units => {
+          this.setUnits(units)
+          return units
+        })
+        .catch(() => this.setError({
+          error: { message: 'Unable to retrieve unit data.' }
+        }));
+    }
   }
 
   setError = error => {

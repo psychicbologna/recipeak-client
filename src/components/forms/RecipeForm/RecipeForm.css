@@ -1,7 +1,18 @@
-.RecipeForm {
+/* .RecipeForm {
 
 }
 
 .RecipeForm__edit {
   
+} */
+
+.RecipesForm__prep-time {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+}
+
+.RecipeForm__output {
+  text-align: center;
+  padding: .5rem;
+  border: 1px dotted var(--dark-gray)
 }

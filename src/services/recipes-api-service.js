@@ -31,7 +31,7 @@ const RecipesApiService = {
   },
 
   //TODO test endpoint in api, remove when sure it's working
-  addRecipe(recipe, ingredients) {
+  addRecipe(recipe, ingredientsAddList) {
     return fetch(`${config.API_ENDPOINT}/recipes/add`, {
       method: 'POST',
       headers: {
@@ -40,7 +40,7 @@ const RecipesApiService = {
       },
       body: JSON.stringify({
         recipe,
-        ingredients
+        ingredientsAddList
       })
     })
       .then(res =>
@@ -67,8 +67,7 @@ const RecipesApiService = {
   },
 
   //TODO test endpoint in api, remove when sure it's working
-
-  updateRecipe(recipeId, newRecipeFields) {
+  updateRecipe(recipeId, newRecipeFields, ingredientsAddList, ingredientsEditList, ingredientsDeleteList) {
     return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
       method: 'PATCH',
       headers: {
@@ -76,7 +75,10 @@ const RecipesApiService = {
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
       body: JSON.stringify({
         recipeId,
-        newRecipeFields
+        newRecipeFields,
+        ingredientsAddList,
+        ingredientsEditList,
+        ingredientsDeleteList
       })
       }
     })
@@ -86,6 +88,26 @@ const RecipesApiService = {
           : res.json()
       )
   },
+
+    //TODO test endpoint in api, remove when sure it's working
+    getConversion(amount, unit_set) {
+      return fetch(`${config.API_ENDPOINT}/conversion`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${TokenService.getAuthToken()}`,
+        body: JSON.stringify({
+          amount,
+          unit_set
+        })
+        }
+      })
+        .then(res =>
+          (!res.ok)
+            ? res.json().then(e => Promise.reject(e))
+            : res.json()
+        )
+    },
 
   getRecipeIngredients(recipeId) {
     return fetch(`${config.API_ENDPOINT}/recipes/${recipeId}/ingredients/`, {

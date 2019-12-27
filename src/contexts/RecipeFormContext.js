@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../services/recipes-api-service';
+import UnitApiService from '../services/unit-api-service';
+import ConversionService from '../services/conversion-api-service';
 import uuidv1 from 'uuid/v1';
 
 export const nullLiveInput = {
@@ -54,9 +56,9 @@ const RecipeFormContext = React.createContext({
   updateRecipe: () => { },
   deleteRecipe: () => { },
 
-  handleAddIngredient: () => { },
-  handleEditIngredient: () => { },
-  handleDeleteIngredient: () => { },
+  onAddIngredient: () => { },
+  onEditIngredient: () => { },
+  onDeleteIngredient: () => { },
 
   toggleDisableFieldsets: () => { }
 })
@@ -134,32 +136,31 @@ export class RecipeFormContextProvider extends Component {
     }
 
     this.setState({ currentIngredient: newCurrentIngredient })
-    console.log(this.state.currentIngredient)
+    console.log(currentIngredient)
   }
 
   /**
   * @param {Object} newIngredient The new ingredient grabbed from 'currentIngredient' in state. 
   */
-  updateIngredientListsWithAddition(newIngredient) {
+  updateIngredientListsWithAddition(ingredient) {
 
+    console.log('firing with: ', ingredient);
+    console.log('ingredientsAddList: ', this.state.ingredientsAddList)
     const displayList = this.state.ingredients;
     let newDisplayList = displayList.slice();
 
-    //Flag with temporary id, this allows new ingredients to mingle with old on the display.
-    newIngredient.id = `temp-${uuidv1()}`
-
     //Add to list.
-    newDisplayList = [...displayList, newIngredient]
+    newDisplayList = [...displayList, ingredient]
+
+    console.log('New Display: ', newDisplayList)
 
     //Overwrite displayed list
     this.setState({ ingredients: newDisplayList, })
 
-    //Remove temporary id from data before placing on add list to ensure database generates id.
-    delete newIngredient.id;
-
     this.setState({
-      ingredientsAddList: [...this.state.ingredientsAddList, newIngredient],
+      ingredientsAddList: [...this.state.ingredientsAddList, ingredient],
     })
+    console.log(this.state.ingredientsAddList);
     this.clearCurrentIngredient();
   }
 
@@ -196,6 +197,8 @@ export class RecipeFormContextProvider extends Component {
         //Remove any previous edits on this ingredient from queue if they exist to prevent unnecessary list bulk.
         const filteredEditList = this.state.ingredientsEditList.filter(ingredient => ingredient.id === ingredientEdited.id);
         this.setState({ ingredientsEditList: [...filteredEditList, ingredientEdited] })
+        console.log(this.context.ingredientsEditList);
+
         this.clearCurrentIngredient();
       }
     }
@@ -214,13 +217,15 @@ export class RecipeFormContextProvider extends Component {
 
 
   //Add ingredient to preview list and queue for addition
-  handleAddIngredient = (event, currentIngredient) => {
-    console.log('addIngredient firing!')
+  handleAddIngredient = (currentIngredient) => {
     //Create new ingredient
     const newIngredient = {
-      amount: currentIngredient.amount.value,
+      //Flag with temporary id, this allows new ingredients to mingle with old on the display.
+      id: `temp-${uuidv1()}`,
+      //TODO move this parse and other logic to form validation?
+      amount: parseFloat(currentIngredient.amount.value),
+      unit_set: currentIngredient.unit_set.value,
       ing_text: currentIngredient.ing_text.value,
-      unit_set: currentIngredient.unit_set.value
     }
 
     //Add unit data if custom unit and/or set if unit set.
@@ -229,12 +234,33 @@ export class RecipeFormContextProvider extends Component {
         unit_singular: currentIngredient.unit_singular.value,
         unit_plural: currentIngredient.unit_plural.value
       }
+      this.updateIngredientListsWithAddition(newIngredient);
+      this.clearCurrentIngredient();
+    } else {
+      //Fetch unit set data and add to ingredient.
+      UnitApiService.getUnitData(currentIngredient.unit_set.value)
+        .then(unitData => {
+          console.log(unitData);
+          newIngredient.unit_data = {
+            class: unitData.class,
+            unit_plural: unitData.unit_plural,
+            unit_single: unitData.unit_single
+          };
 
-      this.updateIngredientListWithAddition(newIngredient)
-        .then(() => this.clearCurrentIngredient())
-        .catch((error) => console.log(error));
+          if (unitData.class === 'Metric' || unitData.class === 'US') {
+            ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
+              .then(conversion => {
+                console.log('Conversion: ', conversion)
+                newIngredient.conversion = conversion;
+                this.updateIngredientListsWithAddition(newIngredient);
+                this.clearCurrentIngredient();
+              })
+          } else {
+            this.updateIngredientListsWithAddition(newIngredient);
+            this.clearCurrentIngredient();
+          }
+        })
     }
-    console.log('Add List: ', this.state.ingredientsAddList);
   }
 
   //Add ingredient to preview list and queue for addition
@@ -262,7 +288,7 @@ export class RecipeFormContextProvider extends Component {
     this.setState({ currentIngredient: nullIngredient })
     document.getElementById('ing_text').value = null;
     document.getElementById('amount').value = null;
-    document.getElementById('unit_set_select').value = 'none';
+    document.getElementById('unit_set').value = 'none';
   }
 
   handleSubmit = (event, type) => {
@@ -366,6 +392,10 @@ export class RecipeFormContextProvider extends Component {
       currentIngredient: this.state.currentIngredient,
       //State of fields
       disableFieldsets: this.state.disableFieldsets,
+      //Ingredient lists
+      ingredientsAddList: this.state.ingredientsAddList,
+      ingredientsEditList: this.state.ingredientsEditList,
+      ingredientsDeleteList: this.state.ingredientsDeleteList,
       //Tracking values
       setRecipe: this.setRecipe,
       setIngredients: this.setIngredients,

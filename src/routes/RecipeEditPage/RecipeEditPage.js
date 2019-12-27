@@ -22,7 +22,7 @@ export default class RecipeEditPage extends Component {
     disable: false
   }
 
-  //Handles click on delete, edit button.
+  //Handles click on any button that freezes the form [delete, ingredient edit]
   handleClick = recipeId => {
     this.setState({ disable: true })
     this.context.toggleDisableFieldsets();
@@ -47,6 +47,22 @@ export default class RecipeEditPage extends Component {
     event.preventDefault();
 
     RecipesApiService.deleteRecipe(recipeId)
+      .then(res => {
+        console.log(res);
+        this.handleDeleteSuccess()
+      })
+      .catch(error => {
+        this.setState({ error: error })
+        this.setState({ disable: false })
+        this.context.toggleDisableFieldsets();
+      })
+  }
+
+  //Handles edit submit
+  handleEditSubmit = (event, recipeId) => {
+    event.preventDefault();
+
+    RecipesApiService.editRecipe(recipeId)
       .then(res => {
         console.log(res);
         this.handleDeleteSuccess()
@@ -84,7 +100,7 @@ export default class RecipeEditPage extends Component {
 
     return (
       <section className={`RecipeEdit`}>
-        <h3>Edit {`'${recipe.name.value}'`}</h3>
+        <h2>Edit {`'${recipe.name.value}'`}</h2>
         <RecipeForm
           recipe={recipe}
           ingredients={ingredients}

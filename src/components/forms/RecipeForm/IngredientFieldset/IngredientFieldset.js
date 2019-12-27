@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullIngredient } from '../../../../contexts/RecipeFormContext';
 import UnitSelect from './UnitSelect';
-import { Input, Button } from '../../../Utils/Utils'
+import { Input, Button } from '../../../Utils/Utils';
 
 export default class IngredientFieldset extends Component {
 
@@ -16,25 +16,25 @@ export default class IngredientFieldset extends Component {
   render() {
     const { currentIngredient, updateIngredientField, disableFieldsets } = this.context;
     const { editing, handleSubmit, onCancelClick } = this.props;
+    const title = editing ? `Editing Ingredient` : 'Add Ingredient'
 
-    console.log(currentIngredient);
-    //TODO button context based on edit/add
-    //TODO toggle ingredient options (currently just set to 'true')
     return (
       <fieldset
-        className='Fieldset RecipeForm__Ingredient'
+        className='Fieldset Fieldset__Ingredient'
         disabled={disableFieldsets}
       >
-        <legend>{editing ? `Editing: ${currentIngredient.ing_text.value}` : 'Add Ingredient'}</legend>
-        <Input
-          defaultValue={currentIngredient.amount.value}
-          updateField={updateIngredientField}
-          inputId='amount'
-          inputLabel='Amount'
-          inputType='number'
-          parentForm='RecipeForm'
-        />
-        <UnitSelect />
+        <legend>{title}</legend>
+        <div className='Fieldset__input-row-fix'>
+          <Input
+            defaultValue={currentIngredient.amount.value}
+            updateField={updateIngredientField}
+            inputId='amount'
+            inputLabel='Amount'
+            inputType='number'
+            parentForm='RecipeForm'
+          />
+          <UnitSelect />
+        </div>
         <Input
           defaultValue={currentIngredient.ing_text.value}
           updateField={updateIngredientField}

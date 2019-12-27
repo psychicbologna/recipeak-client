@@ -57,16 +57,16 @@ export default class Ingredient extends Component {
     this.setState({ editing: !this.state.editing })
   }
 
-  handleDeleteIngredientClick = (event) => {
+  handleDeleteClick = (event) => {
     event.preventDefault();
 
     console.log(this.props.ingredient.id);
   }
 
   //Set currentIngredient in context
-  handleEditIngredientClick = (event) => {
+  handleEditClick = (event) => {
     //Freeze other ingredients on list
-    this.props.onSetEditingIngredient(this.props.ingredient.id);
+    this.props.onSetEditingId(this.props.ingredient.id);
     //Preset an ingredient fieldset with ingredient values.
     this.context.setCurrentIngredient(this.props.ingredient);
     //Render the populated fieldset instead of ingredient.
@@ -74,7 +74,7 @@ export default class Ingredient extends Component {
   }
 
   //Submit currentIngredient and close fieldset if successful.
-  handleEditIngredientSubmit = (event, id) => {
+  handleEditSubmit = (event, id) => {
     event.preventDefault();
 
     this.context.submitCurrentIngredient()
@@ -85,14 +85,15 @@ export default class Ingredient extends Component {
   //Abort editing an ingredient and close fieldset.
   handleCancelClick = () => {
     this.context.clearCurrentIngredient();
+    this.props.onClearEditingId();
     this.toggleEditing();
   }
 
   render() {
-    const { ingredient } = this.props;
+    const { ingredient, editingId } = this.props;
     const { converted, editing, showOptions } = this.state;
 
-    const className = `Ingredient Ingredient__${showOptions ? 'editing' : 'listing'}`
+    const className = `Ingredient Ingredient__${showOptions ? 'editing' : 'listing'} ${!!editingId && editingId !== ingredient.id && 'disabled'}`
 
     return (
       <li className={className} key={ingredient.id}>
@@ -102,26 +103,25 @@ export default class Ingredient extends Component {
           </span>
           : <IngredientFieldSet
             editing={true}
-            onCancelClick={this.toggleEditing}
+            onCancelClick={this.handleCancelClick}
             ingredient={ingredient}
           />
         }
-        {showOptions && !editing
-          ? <IngredientOptionsBase
-            editingIngredient={editing}
-            ingredient={ingredient}
-            onDeleteIngredient={this.handleDeleteIngredientClick}
-            onEditIngredient={this.handleEditIngredientClick}
-          />
-          : null
-        }
-        {showOptions && !editing && ingredient.hasOwnProperty('conversion')
-          ? <IngredientOptionsConvert
+        {(showOptions && !editing && ingredient.hasOwnProperty('conversion')) &&
+          <IngredientOptionsConvert
             ingredient={ingredient}
             converted={converted}
             toggleConvert={this.toggleConvert}
           />
-          : null
+        }
+        {(showOptions && !editing) &&
+          <IngredientOptionsBase
+            editingIngredient={editing}
+            ingredient={ingredient}
+            onDeleteIngredient={this.handleDeleteClick}
+            onEditIngredient={this.handleEditClick}
+            disabled={!!editingId && editingId !== ingredient.id}
+          />
         }
       </li>
     )
