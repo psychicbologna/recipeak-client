@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import RecipeAddForm from '../../components/forms/RecipeForm/RecipeAddForm';
+import RecipeForm from '../../components/forms/RecipeForm/RecipeForm';
 
+
+//TODO configure state and callbacks by adding necessary elements from edit
 export default class RecipeAddPage extends Component {
 
   render() {
     return (
       <section className='RecipeAdd'>
         <h3>Add Recipe</h3>
-        <RecipeAddForm />
+        <RecipeForm
+          // disabled={disable}
+          formName='add'
+        />
       </section>
     )
   }

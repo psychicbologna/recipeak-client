@@ -4,6 +4,7 @@ import UnitApiService from '../../../../services/unit-api-service';
 import UnitSelect from './UnitSelect';
 import { IngredientEditUnitOutput, Input, Button } from '../../../Utils/Utils';
 
+// The fieldset that is use for editing or adding an ingredient.
 export default class IngredientFieldset extends Component {
 
   static contextType = RecipeFormContext;
@@ -21,7 +22,7 @@ export default class IngredientFieldset extends Component {
 
   state = {
     currentIngredient: {
-      id: { value: this.props.ingredient.id, touched: false },
+      id: this.props.ingredient.id,
       amount: { value: this.props.ingredient.amount, touched: false },
       ing_text: { value: this.props.ingredient.ing_text, touched: false },
       unit_set: { value: this.props.ingredient.unit_set, touched: false },
@@ -30,16 +31,11 @@ export default class IngredientFieldset extends Component {
     }
   }
 
-
-  // componentWillMount() {
-  //   this.setCurrentIngredient(this.props.ingredient)
-  // }
-
   componentWillUnmount() {
     this.clearCurrentIngredient();
   }
 
-  //Update fields of current ingredient
+  //Update fields of current ingredient in the recipe form context.
   updateIngredientField = (fieldName, value) => {
     if (fieldName === 'unit_set') {
       if (value === 'custom') {
@@ -72,8 +68,7 @@ export default class IngredientFieldset extends Component {
     }))
   }
 
-  //Ingredient List manipulation. These do not affect database until the whole form is submitted.
-
+  //Ingredient List manipulations. These are stored in state and do not affect database until the whole form is submitted.
   getUnitData = unit_set => {
     return UnitApiService.getUnitData(unit_set)
       .then(unitData => {
@@ -124,6 +119,7 @@ export default class IngredientFieldset extends Component {
       }
     }
 
+    //Retrieve unit data and attach to new ingredient before making its state.
     const unitData = this.setUnitData(ingredient, newFields);
 
     return unitData.then(unitData => {
@@ -135,15 +131,24 @@ export default class IngredientFieldset extends Component {
 
   }
 
+  //Submits the ingredient.
+  onSubmitClick = (event, currentIngredient) => {
+    event.preventDefault();
+    this.props.onSubmit(currentIngredient)
+    this.clearCurrentIngredient();
+  }
+
+  //Clears the inputs when clear button is clicked.
   onClearClick = (event) => {
     event.preventDefault();
     this.clearCurrentIngredient();
   }
 
+  //Clears the inputs.
   clearCurrentIngredient = () => {
     this.setState({
       currentIngredient: {
-        id: { value: this.props.ingredient.id, touched: false },
+        id: this.props.ingredient.id,
         amount: { value: this.props.ingredient.amount, touched: false },
         ing_text: { value: this.props.ingredient.ing_text, touched: false },
         unit_set: { value: this.props.ingredient.unit_set, touched: false },
@@ -158,7 +163,7 @@ export default class IngredientFieldset extends Component {
 
   render() {
     const { currentIngredient } = this.state;
-    const { isAdding, handleSubmit, onCancelClick, disableFieldsets } = this.props;
+    const { isAdding, onCancelClick, disableFieldsets } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
 
     return (
@@ -205,7 +210,7 @@ export default class IngredientFieldset extends Component {
             </output>
           }
           <div className="Ingredient__Options">
-            <Button className="Ingredient__Options__button" type='button' onClick={event => handleSubmit(event, currentIngredient)}>
+            <Button className="Ingredient__Options__button" type='button' onClick={event => this.onSubmitClick(event, currentIngredient)}>
               Submit
             </Button>
             {isAdding

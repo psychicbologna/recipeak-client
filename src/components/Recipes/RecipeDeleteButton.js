@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RecipesApiService from '../../services/recipes-api-service';
 
+//Displays the button and handles state of delete modal.
 export default class RecipeEditPage extends Component {
   static defaultProps = {
     recipeId: null,

@@ -24,11 +24,9 @@ export default class RecipeEditForm extends Component {
     this.context.clearForm();
   }
 
-  handleAddIngredientSubmit = (event, newIngredient) => {
-    event.preventDefault();
+  handleAddIngredientSubmit = (newIngredient) => {
     const { onAddIngredient } = this.context
-
-    onAddIngredient(newIngredient);
+    onAddIngredient(newIngredient)
   }
 
   toggleDisableAddIngredient = () => {
@@ -75,7 +73,7 @@ export default class RecipeEditForm extends Component {
 
         <IngredientFieldset
           isAdding={true}
-          handleSubmit={this.handleAddIngredientSubmit}
+          onSubmit={this.handleAddIngredientSubmit}
           disabled={disableFieldsets}
         />
         <TextArea

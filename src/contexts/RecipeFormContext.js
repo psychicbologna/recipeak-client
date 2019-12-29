@@ -60,6 +60,8 @@ const RecipeFormContext = React.createContext({
 
 export default RecipeFormContext;
 
+// Controls and collects all the changes made to a recipe and its ingredients, as well as some features of its display.
+
 export class RecipeFormContextProvider extends Component {
   state = {
     //Recipe presets.
@@ -75,8 +77,6 @@ export class RecipeFormContextProvider extends Component {
     //Prevents submit when true.
     disableSubmit: false
   }
-
-
 
   //Update fields of recipe other than ingredients.
   updateRecipeField = (fieldName, value) => {
@@ -104,48 +104,44 @@ export class RecipeFormContextProvider extends Component {
     })
   }
 
-
-  //TODO if the list fails, retrieve initial list from database as fallback?
-  //TODO ensure the id for newly added ingredients is removed in a filter function when the form is submitted.
-
-
   /**
   * @param {Object} ingredientEdited The new ingredient grabbed from 'currentIngredient' in state. 
   */
-  updateIngredientListsWithEdit(event, ingredientEdited) {
-    event.preventDefault();
+  // updateIngredientListsWithEdit(event, ingredientEdited) {
+  //   event.preventDefault();
 
-    const displayList = this.state.ingredients;
-    let newDisplayList = displayList.slice();
+  //   const displayList = this.state.ingredients;
+  //   let newDisplayList = displayList.slice();
 
-    const ingredientIndex = displayList.map((ingredient, index) => {
-      if (ingredient.id === ingredientEdited.id) {
-        return index
-      } else {
-        return null;
-      }
-    })
+  //   const ingredientIndex = displayList.map((ingredient, index) => {
+  //     if (ingredient.id === ingredientEdited.id) {
+  //       return index
+  //     } else {
+  //       return null;
+  //     }
+  //   })
 
-    if (!ingredientIndex.length) {
-      console.log(`The ingredient you're trying to edit doesn't exist.`)
-    } else if (ingredientIndex.length > 1) {
-      console.log(`Something went wrong updating the list, please refresh and try again.`)
-    } else {
-      const findIndex = ingredientIndex[0];
-      {
-        newDisplayList[ingredientIndex[findIndex]] = ingredientEdited;
-        this.setState({ ingredients: newDisplayList })
+  //   if (!ingredientIndex.length) {
+  //     console.log(`The ingredient you're trying to edit doesn't exist.`)
+  //   } else if (ingredientIndex.length > 1) {
+  //     console.log(`Something went wrong updating the list, please refresh and try again.`)
+  //   } else {
+  //     const findIndex = ingredientIndex[0];
+  //     {
+  //       newDisplayList[ingredientIndex[findIndex]] = ingredientEdited;
+  //       this.setState({ ingredients: newDisplayList })
 
-        //Remove any previous edits on this ingredient from queue if they exist to prevent unnecessary list bulk.
-        const filteredEditList = this.state.ingredientsEditList.filter(ingredient => ingredient.id === ingredientEdited.id);
-        this.setState({ ingredientsEditList: [...filteredEditList, ingredientEdited] })
+  //       //Remove any previous edits on this ingredient from queue if they exist to prevent unnecessary list bulk.
+  //       const filteredEditList = this.state.ingredientsEditList.filter(ingredient => ingredient.id === ingredientEdited.id);
+  //       this.setState({ ingredientsEditList: [...filteredEditList, ingredientEdited] })
 
-        this.clearCurrentIngredient();
-      }
-    }
-  }
+  //       this.clearCurrentIngredient();
+  //     }
+  //   }
+  // }
   //Syncs the lists on a delete.
   updateIngredientsListsWithDeletion = id => {
+    //Generates copies of all change lists in state.
     const displayList = this.state.ingredients;
     const addList = [...this.state.ingredientsAddList];
     const editList = [...this.state.ingredientsEditList];
@@ -185,6 +181,7 @@ export class RecipeFormContextProvider extends Component {
         unit_plural: ingredient.unit_plural.value
       }
       this.updateIngredientListsWithAddition(newIngredient);
+      return;
     } else {
       //Fetch unit set data and add to ingredient.
       UnitApiService.getUnitData(ingredient.unit_set.value)
@@ -194,15 +191,17 @@ export class RecipeFormContextProvider extends Component {
             unit_plural: unitData.unit_plural,
             unit_single: unitData.unit_single
           };
-
+          //Generates and attaches conversion
           if (unitData.class === 'Metric' || unitData.class === 'US') {
             ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
               .then(conversion => {
                 newIngredient.conversion = conversion;
                 this.updateIngredientListsWithAddition(newIngredient);
+                return;
               })
           } else {
             this.updateIngredientListsWithAddition(newIngredient);
+            return;
           }
         })
     }
@@ -227,22 +226,77 @@ export class RecipeFormContextProvider extends Component {
   }
 
   //Add ingredient to preview list and queue for addition
-  handleEditIngredient = (currentIngredient) => {
+  handleEditIngredient = (editedIngredient) => {
     const newIngredient = {
-      id: currentIngredient.id,
-      amount: currentIngredient.amount.value,
-      ing_text: currentIngredient.ing_text.value,
-      unit_set: currentIngredient.unit_set.value,
+      id: editedIngredient.id,
+      amount: editedIngredient.amount.value,
+      ing_text: editedIngredient.ing_text.value,
+      unit_set: editedIngredient.unit_set.value,
     }
+    console.log(editedIngredient);
 
-    if (currentIngredient.unit_set === 'custom') {
+    if (editedIngredient.unit_set === 'custom') {
       newIngredient.unit_data = {
-        unit_singular: currentIngredient.unit_singular.value,
-        unit_plural: currentIngredient.unit_plural.value
+        unit_single: editedIngredient.unit_single.value,
+        unit_plural: editedIngredient.unit_plural.value
       }
-
-      this.context.updateIngredientListWithAddition(newIngredient)
     }
+
+    //Add unit data if custom unit and/or set if unit set.
+    if (newIngredient.unit_set === 'custom') {
+      newIngredient.unit_data = {
+        unit_singular: editedIngredient.unit_singular.value,
+        unit_plural: editedIngredient.unit_plural.value
+      };
+    } else {
+      //Fetch unit set data and add to ingredient, as well as conversion.
+      UnitApiService.getUnitData(newIngredient.unit_set)
+        .then(unitData => {
+          newIngredient.class = unitData.class;
+          newIngredient.unit_plural = unitData.unit_plural;
+          newIngredient.unit_single = unitData.unit_single;
+          //Generates and attaches conversion
+          if (unitData.class === 'Metric' || unitData.class === 'US') {
+            ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
+              .then(conversion => {
+                newIngredient.conversion = conversion;
+              })
+          }
+        })
+    }
+
+    console.log('New Ingredient: ', newIngredient);
+
+    //Copy lists
+    const displayList = this.state.ingredients;
+    const addList = [...this.state.ingredientsAddList];
+    const editList = [...this.state.ingredientsEditList];
+
+    const index = displayList.findIndex(i => {
+      return i.id === editedIngredient.id
+    })
+
+    displayList[index] = newIngredient;
+
+    this.setState({ ingredients: displayList })
+
+    console.log('State after adding: ', this.state.ingredients[index])
+
+    const indexAddList = addList.findIndex(i => {
+      return i.id === editedIngredient.id
+    })
+
+    displayList[indexAddList] = newIngredient;
+
+    this.setState({ ingredientsAddList: addList })
+
+    const indexEditList = editList.findIndex(i => {
+      return i.id === editedIngredient.id
+    })
+
+    displayList[indexEditList] = newIngredient;
+
+    return this.setState({ ingredientsEditList: editList })
   }
 
   handleDeleteIngredient = (ingredientId) => {
@@ -250,11 +304,13 @@ export class RecipeFormContextProvider extends Component {
   }
 
 
+  //Submits the recipe and its ingredients.
   handleSubmit = (event, type) => {
     event.preventDefault();
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
 
+    //Pulls temporary id from new ingredients.
     const add = this.filterIngredientsAddList(ingredientsAddList);
 
     if (type === 'add') {
@@ -266,6 +322,8 @@ export class RecipeFormContextProvider extends Component {
       console.log('Ingredients added: ', add);
       console.log('Ingredients edited: ', ingredientsEditList);
       console.log('Ingredients deleted: ', ingredientsDeleteList);
+      this.addRecipe(ingredientsAddList, ingredientsEditList, ingredientsDeleteList)
+
     }
 
     if (type === 'edit') {
@@ -278,13 +336,25 @@ export class RecipeFormContextProvider extends Component {
       console.log('Ingredients add list: ', ingredientsAddList);
       console.log('Ingredients edited: ', ingredientsEditList);
       console.log('Ingredients deleted: ', ingredientsDeleteList);
+      this.editRecipe(ingredientsAddList, ingredientsEditList, ingredientsDeleteList)
 
     }
-    //TODO set up submit API on both ends. nullify form values too?
+    //TODO set up submit API on both ends. should reload form values with true recipe after submission.
     this.clearForm();
     this.render();
   }
 
+  addRecipe() {
+    //TODO send recipe and all ingredient lists, flush current recipe form, load recipe view page. OnSuccess handler should prevent premature flush.
+    console.log('addRecipe firing!')
+  }
+
+  updateRecipe() {
+    //TODO send recipe and all ingredient lists, flush current recipe form and load recipe view page. OnSuccess handler should prevent premature flush.
+    console.log('updateRecipe firing!')
+  }
+
+  //Flushes all of the form's state, including all ingredients.
   clearForm = () => {
     this.setState({
       recipe: nullRecipe,
@@ -325,11 +395,8 @@ export class RecipeFormContextProvider extends Component {
     }));
   };
 
-  updateRecipe() {
-    //TODO
-    console.log('updateRecipe firing!')
-  }
-
+  //Deletes the current recipe.
+  //TODO should send you to home as well. OnSuccess handler.
   deleteRecipe(recipeId) {
     RecipesApiService.deleteRecipe(recipeId)
       .then(() => this.clearRecipe());
@@ -339,13 +406,10 @@ export class RecipeFormContextProvider extends Component {
     this.setState({ ingredients })
   }
 
+  //Flushes all recipe data, but not ingredients.
   clearRecipe = () => {
     this.setRecipe(nullRecipe)
     this.setIngredients([])
-  }
-
-  toggleDeleteModal = () => {
-    this.setState({ deleteModalIsOpen: !this.state.deleteModalIsOpen });
   }
 
   toggleDisableFieldsets = () => {

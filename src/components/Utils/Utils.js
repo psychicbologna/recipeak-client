@@ -105,6 +105,7 @@ export function PrepTimeDisplay(props) {
 }
 
 /**
+ * Generates an input with appropriate props.
  * 
  * @param {string} defaultValue The default value of the input.
  * @param {string} parentForm Name of the parent form component for child input.

@@ -18,6 +18,8 @@ const UnitContext = React.createContext({
 
 export default UnitContext;
 
+// For use in any context where a complete list of available units is necessary, primarily the unit select component.
+// Could be used in a tooltip component that lists all the units.
 export class UnitContextProvider extends Component {
   state = {
     units: nullUnits,

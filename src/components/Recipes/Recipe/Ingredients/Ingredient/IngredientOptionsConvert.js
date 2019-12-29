@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from '../../../../Utils/Utils'
 
+//The conversion options menu for an ingredient. Includes a button that toggles to a converted view.
 export default class IngredientOptionsConvert extends Component {
 
   componentDidMount() {

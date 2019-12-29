@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import RecipeFormContext from '../../../../contexts/RecipeFormContext';
 import Ingredient from './Ingredient/Ingredient';
 
-//TODO conversion button in ingredients options sets all to one class or another.
-//TODO editing one ingredient removes the option to edit others; showeedit enough?
-
+// Lists the set of ingredients for the recipe. It loads changes to ingredients when they are made, and
+// also prevents changes when necessary by isolating or disabling options on ingredients.
 export default class IngredientList extends Component {
 
   static defaultProps = {
     ingredients: [],
     showIngredientOptions: false,
-    allowIngredientEdits: true
   }
 
   static contextType = RecipeFormContext;
@@ -20,10 +18,12 @@ export default class IngredientList extends Component {
     editingId: ''
   }
 
+  //If set, disables editing on other ingredients. This prevents potential loss of data in inputs and ensures tidier user interaction.
   handleSetEditingId = ingredientId => {
     this.setState({ editingId: ingredientId })
   }
 
+  //Clears a set editing id, allowing you to edit other forms again.
   handleClearEditingId = () => {
     this.setState({ editingId: '' })
   }
@@ -40,7 +40,7 @@ export default class IngredientList extends Component {
   }
 
   render() {
-    const { ingredients, allowIngredientEdits } = this.props
+    const { ingredients } = this.props
     const { showOptions, editingId } = this.state
 
     return (
@@ -61,7 +61,6 @@ export default class IngredientList extends Component {
                   key={ingredient.id}
                   showOptions={showOptions}
                   editingId={editingId}
-                  allowIngredientEdits={allowIngredientEdits}
                   onSetEditingId={this.handleSetEditingId}
                   onClearEditingId={this.handleClearEditingId}
                 />
