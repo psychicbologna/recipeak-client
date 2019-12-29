@@ -1,5 +1,4 @@
 import React from 'react';
-import UnitApiService from '../../services/unit-api-service';
 
 // export function FullName({ user }) {
 //   return `${user.first_name} ${user.last_name}`;

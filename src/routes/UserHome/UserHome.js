@@ -52,8 +52,6 @@ export default class UserHome extends Component {
   render() {
     const { recipeList, user } = this.state;
 
-    console.log(this.state);
-
     if (user === nullUser && !recipeList.length) {
       return (
         <div className='loading'>

@@ -25,7 +25,6 @@ export default class IngredientList extends Component {
   }
 
   handleClearEditingId = () => {
-    console.log('firing')
     this.setState({ editingId: '' })
   }
 

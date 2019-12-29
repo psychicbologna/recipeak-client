@@ -82,7 +82,6 @@ export default class Ingredient extends Component {
     const unitData = this.setUnitData(ingredient, unitDataFields);
 
     return unitData.then(unitData => {
-      console.log(unitData);
       newCurrentIngredient.unit_single = unitData.unit_single;
       newCurrentIngredient.unit_plural = unitData.unit_plural;
       this.setState({ currentIngredient: newCurrentIngredient })
@@ -93,7 +92,6 @@ export default class Ingredient extends Component {
 
 
   clearCurrentIngredient = () => {
-    console.log(this.state.currentIngredient);
     this.setState({
       currentIngredient: nullIngredient
     })

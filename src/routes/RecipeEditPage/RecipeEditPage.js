@@ -38,7 +38,6 @@ export default class RecipeEditPage extends Component {
   //Moves to home after deleting successful.
   handleDeleteSuccess = recipeId => {
     const { history } = this.props
-    console.log('moving to home!')
     history.push('/home');
   }
 
@@ -48,7 +47,6 @@ export default class RecipeEditPage extends Component {
 
     RecipesApiService.deleteRecipe(recipeId)
       .then(res => {
-        console.log(res);
         this.handleDeleteSuccess()
       })
       .catch(error => {
@@ -64,7 +62,6 @@ export default class RecipeEditPage extends Component {
 
     RecipesApiService.editRecipe(recipeId)
       .then(res => {
-        console.log(res);
         this.handleDeleteSuccess()
       })
       .catch(error => {

@@ -121,6 +121,8 @@ export class RecipeFormContextProvider extends Component {
     const ingredientIndex = displayList.map((ingredient, index) => {
       if (ingredient.id === ingredientEdited.id) {
         return index
+      } else {
+        return null;
       }
     })
 
@@ -137,7 +139,6 @@ export class RecipeFormContextProvider extends Component {
         //Remove any previous edits on this ingredient from queue if they exist to prevent unnecessary list bulk.
         const filteredEditList = this.state.ingredientsEditList.filter(ingredient => ingredient.id === ingredientEdited.id);
         this.setState({ ingredientsEditList: [...filteredEditList, ingredientEdited] })
-        console.log(this.context.ingredientsEditList);
 
         this.clearCurrentIngredient();
       }
@@ -188,7 +189,6 @@ export class RecipeFormContextProvider extends Component {
       //Fetch unit set data and add to ingredient.
       UnitApiService.getUnitData(ingredient.unit_set.value)
         .then(unitData => {
-          console.log(unitData);
           newIngredient.unit_data = {
             class: unitData.class,
             unit_plural: unitData.unit_plural,
@@ -198,7 +198,6 @@ export class RecipeFormContextProvider extends Component {
           if (unitData.class === 'Metric' || unitData.class === 'US') {
             ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
               .then(conversion => {
-                console.log('Conversion: ', conversion)
                 newIngredient.conversion = conversion;
                 this.updateIngredientListsWithAddition(newIngredient);
               })
@@ -229,7 +228,6 @@ export class RecipeFormContextProvider extends Component {
 
   //Add ingredient to preview list and queue for addition
   handleEditIngredient = (currentIngredient) => {
-    console.log('editIngredient firing!')
     const newIngredient = {
       id: currentIngredient.id,
       amount: currentIngredient.amount.value,
@@ -245,7 +243,6 @@ export class RecipeFormContextProvider extends Component {
 
       this.context.updateIngredientListWithAddition(newIngredient)
     }
-    console.log('Edit List: ', this.state.ingredientsEditList);
   }
 
   handleDeleteIngredient = (ingredientId) => {
@@ -256,7 +253,7 @@ export class RecipeFormContextProvider extends Component {
   handleSubmit = (event, type) => {
     event.preventDefault();
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
-    const { ingredients, ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
+    const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
 
     const add = this.filterIngredientsAddList(ingredientsAddList);
 
@@ -329,6 +326,7 @@ export class RecipeFormContextProvider extends Component {
   };
 
   updateRecipe() {
+    //TODO
     console.log('updateRecipe firing!')
   }
 

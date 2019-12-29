@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import RecipeFormContext, { nullIngredient } from '../../../../contexts/RecipeFormContext';
 import UnitApiService from '../../../../services/unit-api-service';
 import UnitSelect from './UnitSelect';
-import ConversionService from '../../../../services/conversion-api-service';
 import { IngredientEditUnitOutput, Input, Button } from '../../../Utils/Utils';
 
 export default class IngredientFieldset extends Component {
@@ -76,7 +75,6 @@ export default class IngredientFieldset extends Component {
   //Ingredient List manipulation. These do not affect database until the whole form is submitted.
 
   getUnitData = unit_set => {
-    console.log(unit_set);
     return UnitApiService.getUnitData(unit_set)
       .then(unitData => {
         const unit_single = unitData.unit_single;
@@ -112,7 +110,6 @@ export default class IngredientFieldset extends Component {
 
     let newCurrentIngredient = { ...nullIngredient };
     const newFields = Object.keys(ingredient);
-    console.log(ingredient);
 
     //Convert key values to currentIngredient values.
     for (let i = 0; i < newFields.length; i++) {
@@ -130,7 +127,6 @@ export default class IngredientFieldset extends Component {
     const unitData = this.setUnitData(ingredient, newFields);
 
     return unitData.then(unitData => {
-      console.log(unitData);
       newCurrentIngredient.unit_single = unitData.unit_single;
       newCurrentIngredient.unit_plural = unitData.unit_plural;
       this.setState({ currentIngredient: newCurrentIngredient })

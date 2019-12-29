@@ -40,7 +40,6 @@ const AuthApiService = {
       })
   },
   postRefreshToken() {
-    console.log('firing')
     return fetch(`${config.API_ENDPOINT}/auth/refresh`, {
       method: 'POST',
       headers: {
