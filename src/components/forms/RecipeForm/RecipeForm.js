@@ -24,11 +24,11 @@ export default class RecipeEditForm extends Component {
     this.context.clearForm();
   }
 
-  handleAddIngredientSubmit = (event) => {
+  handleAddIngredientSubmit = (event, newIngredient) => {
     event.preventDefault();
-    const { currentIngredient, onAddIngredient } = this.context
+    const { onAddIngredient } = this.context
 
-    onAddIngredient(currentIngredient);
+    onAddIngredient(newIngredient);
   }
 
   toggleDisableAddIngredient = () => {

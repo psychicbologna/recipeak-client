@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullIngredient } from '../../../../contexts/RecipeFormContext';
-import UnitSelect from './UnitSelect';
 import UnitApiService from '../../../../services/unit-api-service';
+import UnitSelect from './UnitSelect';
 import ConversionService from '../../../../services/conversion-api-service';
 import { IngredientEditUnitOutput, Input, Button } from '../../../Utils/Utils';
 
@@ -11,14 +11,30 @@ export default class IngredientFieldset extends Component {
 
   static defaultProps = {
     ingredient: nullIngredient,
+    unit_data: {
+      unit_single: '',
+      unit_plural: '',
+    },
     disabled: false,
     isAdding: false,
     allowIngredientEdits: true
   }
 
   state = {
-    currentIngredient: nullIngredient,
+    currentIngredient: {
+      id: { value: this.props.ingredient.id, touched: false },
+      amount: { value: this.props.ingredient.amount, touched: false },
+      ing_text: { value: this.props.ingredient.ing_text, touched: false },
+      unit_set: { value: this.props.ingredient.unit_set, touched: false },
+      unit_single: this.props.unit_data.unit_single,
+      unit_plural: this.props.unit_data.unit_plural,
+    }
   }
+
+
+  // componentWillMount() {
+  //   this.setCurrentIngredient(this.props.ingredient)
+  // }
 
   componentWillUnmount() {
     this.clearCurrentIngredient();
@@ -57,7 +73,10 @@ export default class IngredientFieldset extends Component {
     }))
   }
 
+  //Ingredient List manipulation. These do not affect database until the whole form is submitted.
+
   getUnitData = unit_set => {
+    console.log(unit_set);
     return UnitApiService.getUnitData(unit_set)
       .then(unitData => {
         const unit_single = unitData.unit_single;
@@ -66,8 +85,8 @@ export default class IngredientFieldset extends Component {
       });
   }
 
-  setUnitData = (ingredient, unitDataFields) => {
-    let hasUnits = unitDataFields.includes('unit_single') && unitDataFields.includes('unit_plural')
+  setUnitData = (ingredient, unitFields) => {
+    let hasUnits = unitFields.includes('unit_single') && unitFields.includes('unit_plural')
     let unitData = {
       unit_single: '',
       unit_plural: ''
@@ -88,10 +107,62 @@ export default class IngredientFieldset extends Component {
     }
   }
 
+  //Set current ingredient from list when edit is clicked.
+  setCurrentIngredient = (ingredient) => {
+
+    let newCurrentIngredient = { ...nullIngredient };
+    const newFields = Object.keys(ingredient);
+    console.log(ingredient);
+
+    //Convert key values to currentIngredient values.
+    for (let i = 0; i < newFields.length; i++) {
+      let field = newFields[i];
+
+      if (field === 'id') {
+        newCurrentIngredient[field] = ingredient[field]
+      } else if (field === 'unit_data') {
+        continue;
+      } else {
+        newCurrentIngredient[field] = { value: ingredient[field], touched: false }
+      }
+    }
+
+    const unitData = this.setUnitData(ingredient, newFields);
+
+    return unitData.then(unitData => {
+      console.log(unitData);
+      newCurrentIngredient.unit_single = unitData.unit_single;
+      newCurrentIngredient.unit_plural = unitData.unit_plural;
+      this.setState({ currentIngredient: newCurrentIngredient })
+      return newCurrentIngredient;
+    });
+
+  }
+
+  onClearClick = (event) => {
+    event.preventDefault();
+    this.clearCurrentIngredient();
+  }
+
+  clearCurrentIngredient = () => {
+    this.setState({
+      currentIngredient: {
+        id: { value: this.props.ingredient.id, touched: false },
+        amount: { value: this.props.ingredient.amount, touched: false },
+        ing_text: { value: this.props.ingredient.ing_text, touched: false },
+        unit_set: { value: this.props.ingredient.unit_set, touched: false },
+        unit_single: this.props.unit_data.unit_single,
+        unit_plural: this.props.unit_data.unit_plural,
+      }
+    })
+    document.getElementById('ing_text').value = null;
+    document.getElementById('amount').value = null;
+    document.getElementById('unit_set').value = 'none';
+  }
+
   render() {
     const { currentIngredient } = this.state;
-    const { disableFieldsets } = this.context;
-    const { isAdding, allowIngredientEdits, handleSubmit, onCancelClick, onCloseClick } = this.props;
+    const { isAdding, handleSubmit, onCancelClick, disableFieldsets } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
 
     return (
@@ -100,12 +171,12 @@ export default class IngredientFieldset extends Component {
           <output className='Ingredient__display'>
             {(!currentIngredient.amount.value && currentIngredient.unit_set.value === 'none' && !currentIngredient.ing_text.value)
               ? `A preview of your ingredient will display here.`
-              : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
+              : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_set.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
           </output>
         }
         <fieldset
           className='Fieldset Fieldset__Ingredient'
-          disabled={disableFieldsets || (isAdding && !!currentIngredient.id) || (!isAdding && !allowIngredientEdits)}
+          disabled={disableFieldsets}
         >
           <legend>{title}</legend>
           <div className='Fieldset__input-row-fix'>
@@ -118,7 +189,7 @@ export default class IngredientFieldset extends Component {
               parentForm='RecipeForm'
             />
             <UnitSelect
-              currentIngredient={this.state.currentIngredient}
+              currentIngredient={currentIngredient}
               updateIngredientField={this.updateIngredientField}
             />
           </div>
@@ -130,21 +201,20 @@ export default class IngredientFieldset extends Component {
             inputType='text'
             parentForm='RecipeForm'
           />
-          {(isAdding && !currentIngredient.id)
-            ? <output className='Ingredient__display'>
+          {isAdding
+            && <output className='Ingredient__display'>
               {(!currentIngredient.amount.value && currentIngredient.unit_set.value === 'none' && !currentIngredient.ing_text.value)
                 ? `A preview of your new ingredient will display here.`
-                : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
+                : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_set.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
             </output>
-            : <p>This form is disabled while you edit an ingredient.</p>
           }
           <div className="Ingredient__Options">
             <Button className="Ingredient__Options__button" type='button' onClick={event => handleSubmit(event, currentIngredient)}>
               Submit
             </Button>
             {isAdding
-              ? <Button className="Ingredient__Options__button" onClick={() => onCloseClick()}>
-                Close
+              ? <Button className="Ingredient__Options__button" onClick={event => this.onClearClick(event)}>
+                Clear
               </Button>
               : <Button className="Ingredient__Options__button" onClick={() => onCancelClick()}>
                 Cancel

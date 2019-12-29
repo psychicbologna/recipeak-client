@@ -104,15 +104,13 @@ export default class Ingredient extends Component {
 
   handleDeleteClick = (event) => {
     event.preventDefault();
-
-    console.log(this.props.ingredient.id);
+    this.context.onDeleteIngredient(this.props.ingredient.id)
   }
 
   handleEditClick = (event) => {
     //Freeze other ingredients on list
     this.props.onSetEditingId(this.props.ingredient.id);
-    //Render the populated fieldset instead of ingredient.
-    this.toggleEditing()
+    return this.toggleEditing()
   }
 
   //Submit currentIngredient and close fieldset if successful.
@@ -146,6 +144,7 @@ export default class Ingredient extends Component {
             editing={true}
             onCancelClick={this.handleCancelClick}
             ingredient={ingredient}
+            unit_data={ingredient.unit_data}
           />
         }
         {(showOptions && !editing && ingredient.hasOwnProperty('conversion')) &&
