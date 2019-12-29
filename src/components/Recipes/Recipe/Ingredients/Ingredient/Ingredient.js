@@ -35,7 +35,8 @@ export default class Ingredient extends Component {
       conversion: nullConversion,
       converted: false,
       editing: false,
-      showOptions: this.props.showOptions
+      showOptions: this.props.showOptions,
+      currentIngredient: nullIngredient
     }
   }
 
@@ -58,22 +59,60 @@ export default class Ingredient extends Component {
     this.setState({ editing: !this.state.editing })
   }
 
+  //Set current ingredient from list when edit is clicked.
+  setCurrentIngredient = (ingredient) => {
+
+    let newCurrentIngredient = { ...nullIngredient };
+    const newFields = Object.keys(ingredient);
+    const unitDataFields = Object.keys(ingredient.unit_data);
+
+    //Convert key values to currentIngredient values.
+    for (let i = 0; i < newFields.length; i++) {
+      let field = newFields[i];
+
+      if (field === 'id') {
+        newCurrentIngredient[field] = ingredient[field]
+      } else if (field === 'unit_data') {
+        continue;
+      } else {
+        newCurrentIngredient[field] = { value: ingredient[field], touched: false }
+      }
+    }
+
+    const unitData = this.setUnitData(ingredient, unitDataFields);
+
+    return unitData.then(unitData => {
+      console.log(unitData);
+      newCurrentIngredient.unit_single = unitData.unit_single;
+      newCurrentIngredient.unit_plural = unitData.unit_plural;
+      this.setState({ currentIngredient: newCurrentIngredient })
+      return newCurrentIngredient;
+    });
+
+  }
+
+
+  clearCurrentIngredient = () => {
+    console.log(this.state.currentIngredient);
+    this.setState({
+      currentIngredient: nullIngredient
+    })
+    document.getElementById('ing_text').value = null;
+    document.getElementById('amount').value = null;
+    document.getElementById('unit_set').value = 'none';
+  }
+
   handleDeleteClick = (event) => {
     event.preventDefault();
 
     console.log(this.props.ingredient.id);
   }
 
-  //Set currentIngredient in context
   handleEditClick = (event) => {
     //Freeze other ingredients on list
     this.props.onSetEditingId(this.props.ingredient.id);
-    //Set currentIngredient
-    const setIngredient = this.context.setCurrentIngredient(this.props.ingredient)
-    return setIngredient.then(() => {
-        //Render the populated fieldset instead of ingredient.
-        return this.toggleEditing()
-      });
+    //Render the populated fieldset instead of ingredient.
+    this.toggleEditing()
   }
 
   //Submit currentIngredient and close fieldset if successful.

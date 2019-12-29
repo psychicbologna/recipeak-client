@@ -8,7 +8,7 @@ export default class UnitSelect extends Component {
   static contextType = RecipeFormContext;
 
   render() {
-    const { currentIngredient, updateIngredientField } = this.context;
+    const { currentIngredient, updateIngredientField } = this.props;
     const unit_set = currentIngredient.unit_set.value;
 
     return (
