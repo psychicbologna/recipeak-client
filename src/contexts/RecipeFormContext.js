@@ -20,9 +20,9 @@ export const nullRecipe = {
 
 export const nullIngredient = {
   id: '',
-  amount: nullLiveInput,
-  ing_text: nullLiveInput,
-  unit_set: {value: 'none', touched: false},
+  amount: '',
+  ing_text: '',
+  unit_set: 'none',
   unit_single: '',
   unit_plural: '',
 }
@@ -32,7 +32,6 @@ const RecipeFormContext = React.createContext({
   ingredientCount: 0,
   ingredients: [],
 
-  currentIngredient: nullIngredient,
   ingredientsAddList: [],
   ingredientsEditList: [],
   ingredientsDeleteList: [],
@@ -41,14 +40,10 @@ const RecipeFormContext = React.createContext({
 
   setRecipe: () => { },
   setIngredients: () => { },
-  setCurrentIngredient: () => { },
-
   updateRecipeField: () => { },
-  updateIngredientField: () => { },
 
   clearRecipe: () => { },
   clearIngredients: () => { },
-  clearCurrentIngredient: () => { },
   clearForm: () => { },
   handleSubmit: () => { },
 
@@ -93,105 +88,6 @@ export class RecipeFormContextProvider extends Component {
         [fieldName]: { value, touched: true }
       }
     }));
-  }
-
-  //Update fields of current ingredient
-  updateIngredientField = (fieldName, value) => {
-    if (fieldName === 'unit_set') {
-      if (value === 'custom') {
-        return this.setState(prevState => ({
-          currentIngredient: {
-            ...prevState.currentIngredient,
-            unit_single: '',
-            unit_plural: ''
-          }
-        }))
-      } else {
-        return this.getUnitData(value)
-          .then(unitDataFromSet => {
-            return this.setState(prevState => ({
-              currentIngredient: {
-                ...prevState.currentIngredient,
-                unit_set: { value, touched: true },
-                unit_single: unitDataFromSet.unit_single,
-                unit_plural: unitDataFromSet.unit_plural
-              }
-            }))
-          })
-      }
-    }
-
-    this.setState(prevState => ({
-      currentIngredient: {
-        ...prevState.currentIngredient,
-        [fieldName]: { value, touched: true }
-      }
-    }))
-  }
-
-  //Ingredient List manipulation. These do not affect database until the whole form is submitted.
-
-  getUnitData = unit_set => {
-    return UnitApiService.getUnitData(unit_set)
-      .then(unitData => {
-        const unit_single = unitData.unit_single;
-        const unit_plural = unitData.unit_plural;
-        return { unit_single, unit_plural }
-      });
-  }
-
-  setUnitData = (ingredient, unitDataFields) => {
-    let hasUnits = unitDataFields.includes('unit_single') && unitDataFields.includes('unit_plural')
-    let unitData = {
-      unit_single: '',
-      unit_plural: ''
-    };
-
-    if (ingredient.unit_set === 'custom' && hasUnits) {
-      //TODO must submit both single and plural unit, validate!
-      unitData.unit_single = ingredient.unit_data.unit_single;
-      unitData.unit_plural = ingredient.unit_data.unit_plural;
-      return unitData;
-    } else if (ingredient.unit_set === 'custom' && !hasUnits) {
-      return unitData;
-    } else {
-      return this.getUnitData(ingredient.unit_set)
-        .then(unitDataFromSet => {
-          return unitDataFromSet;
-        })
-    }
-  }
-
-  //Set current ingredient from list when edit is clicked.
-  setCurrentIngredient = (ingredient) => {
-
-    let newCurrentIngredient = { ...nullIngredient };
-    const newFields = Object.keys(ingredient);
-    const unitDataFields = Object.keys(ingredient.unit_data);
-
-    //Convert key values to currentIngredient values.
-    for (let i = 0; i < newFields.length; i++) {
-      let field = newFields[i];
-
-      if (field === 'id') {
-        newCurrentIngredient[field] = ingredient[field]
-      } else if (field === 'unit_data') {
-        continue;
-      } else {
-        newCurrentIngredient[field] = { value: ingredient[field], touched: false }
-      }
-    }
-
-    const unitData = this.setUnitData(ingredient, unitDataFields);
-
-    return unitData.then(unitData => {
-      console.log(unitData);
-      newCurrentIngredient.unit_single = unitData.unit_single;
-      newCurrentIngredient.unit_plural = unitData.unit_plural;
-      this.setState({ currentIngredient: newCurrentIngredient })
-      return newCurrentIngredient;
-    });
-
   }
 
   /**
@@ -262,7 +158,6 @@ export class RecipeFormContextProvider extends Component {
 
   }
 
-
   //Add ingredient to preview list and queue for addition
   handleAddIngredient = (currentIngredient) => {
     //Create new ingredient
@@ -303,7 +198,7 @@ export class RecipeFormContextProvider extends Component {
                 this.clearCurrentIngredient();
               })
           } else {
-            this.updateIngredientListsWithAddition(newIngredient);
+            this.context.updateIngredientListsWithAddition(newIngredient);
             this.clearCurrentIngredient();
             console.log(this.state.ingredientsAddList)
           }
@@ -311,38 +206,6 @@ export class RecipeFormContextProvider extends Component {
     }
   }
 
-  //Add ingredient to preview list and queue for addition
-  handleEditIngredient = (currentIngredient) => {
-    console.log('editIngredient firing!')
-    const newIngredient = {
-      id: currentIngredient.id,
-      amount: currentIngredient.amount.value,
-      ing_text: currentIngredient.ing_text.value,
-      unit_set: currentIngredient.unit_set.value,
-    }
-
-    if (currentIngredient.unit_set === 'custom') {
-      newIngredient.unit_data = {
-        unit_singular: currentIngredient.unit_singular.value,
-        unit_plural: currentIngredient.unit_plural.value
-      }
-
-      this.updateIngredientListWithAddition(newIngredient)
-    }
-    console.log('Edit List: ', this.state.ingredientsEditList);
-  }
-
-  clearCurrentIngredient = () => {
-    console.log('clearCurrentIngredient firing')
-    console.log(this.state.currentIngredient);
-    console.log('null? ...', nullIngredient)
-    this.setState({
-      currentIngredient: nullIngredient
-    })
-    document.getElementById('ing_text').value = null;
-    document.getElementById('amount').value = null;
-    document.getElementById('unit_set').value = 'none';
-  }
 
   //Prep data for submission
 

@@ -51,6 +51,7 @@ export function Section({ className, list, ...props }) {
 }
 
 function DisplayPlural(unitData, amount) {
+  console.log(unitData.unit_single)
   //Selects proper display unit based on unit properties, defaults to '' otherwise.
   let unit = '';
   if (unitData) {
@@ -76,9 +77,10 @@ export function DisplayAmountWithUnit(ingredient, converted) {
 }
 
 //Generate output for currentIngredient.
-export function IngredientEditUnitOutput(amount, unit_plural, unit_single) {
-  const unit = DisplayPlural({ unit_plural, unit_single}, amount);
-  return `${!!amount ? amount : '...'} ${!!unit ? unit : '...'}`
+export function IngredientEditUnitOutput(amount, unit_set, unit_plural, unit_single) {
+  const unit = DisplayPlural({ unit_plural, unit_single}, parseFloat(amount));
+  return (unit_set === 'none' ? '' : `${amount} `) + `${unit}`
+  // return `${!!amount ? amount : '...'} ${!!unit ? unit : '...'}`
 }
 
 export function PrepTimeDisplay(props) {
