@@ -60,8 +60,7 @@ export default class Ingredient extends Component {
 
   handleDeleteClick = (event) => {
     event.preventDefault();
-
-    console.log(this.props.ingredient.id);
+    this.context.onDeleteIngredient(this.props.ingredient.id)
   }
 
   //Set currentIngredient in context

@@ -51,7 +51,6 @@ export function Section({ className, list, ...props }) {
 }
 
 function DisplayPlural(unitData, amount) {
-  console.log(unitData.unit_single)
   //Selects proper display unit based on unit properties, defaults to '' otherwise.
   let unit = '';
   if (unitData) {
