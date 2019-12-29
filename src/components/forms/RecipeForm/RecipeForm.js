@@ -64,10 +64,10 @@ export default class RecipeEditForm extends Component {
           ingredients={ingredients}
           showIngredientOptions={true}
         />
-        <IngredientFieldset
+        {/* <IngredientFieldset
           method='add'
           handleSubmit={this.handleAddIngredientSubmit}
-        />
+        /> */}
         <TextArea
           updateField={updateRecipeField}
           defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}

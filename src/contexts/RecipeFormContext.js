@@ -23,8 +23,8 @@ export const nullIngredient = {
   amount: nullLiveInput,
   ing_text: nullLiveInput,
   unit_set: nullLiveInput,
-  unit_single: nullLiveInput,
-  unit_plural: nullLiveInput,
+  unit_single: '',
+  unit_plural: '',
 }
 
 const RecipeFormContext = React.createContext({
@@ -107,15 +107,44 @@ export class RecipeFormContextProvider extends Component {
 
   //Ingredient List manipulation. These do not affect database until the whole form is submitted.
 
+  getUnitData = unit_set => {
+    return UnitApiService.getUnitData(unit_set)
+      .then(unitData => {
+        const unit_single = unitData.unit_single;
+        const unit_plural = unitData.unit_plural;
+        return { unit_single, unit_plural }
+      });
+  }
+
+  setUnitData = (ingredient, unitDataFields) => {
+    let hasUnits = unitDataFields.includes('unit_single') && unitDataFields.includes('unit_plural')
+    let unitData = {
+      unit_single: '',
+      unit_plural: ''
+    };
+
+    if (ingredient.unit_set === 'custom' && hasUnits) {
+      //TODO must submit both single and plural unit, validate!
+      unitData.unit_single = ingredient.unit_data.unit_single;
+      unitData.unit_plural = ingredient.unit_data.unit_plural;
+      return unitData;
+    } else if (ingredient.unit_set === 'custom' && !hasUnits) {
+      return unitData;
+    } else {
+      return this.getUnitData(ingredient.unit_set)
+        .then(unitDataFromSet => {
+          console.log(unitDataFromSet);
+          return unitDataFromSet;
+        })
+    }
+  }
+
   //Set current ingredient from list when edit is clicked.
-  setCurrentIngredient = ingredient => {
-    const { currentIngredient } = this.state;
+  setCurrentIngredient = (ingredient) => {
+
     let newCurrentIngredient = nullIngredient;
     const newFields = Object.keys(ingredient);
     const unitDataFields = Object.keys(ingredient.unit_data);
-
-    let hasUnits = unitDataFields.includes('unit_single');
-    hasUnits = unitDataFields.includes('unit_plural')
 
     //Convert key values to currentIngredient values.
     for (let i = 0; i < newFields.length; i++) {
@@ -124,43 +153,38 @@ export class RecipeFormContextProvider extends Component {
       if (field === 'id') {
         newCurrentIngredient[field] = ingredient[field]
       } else if (field === 'unit_data') {
-        if (ingredient[field] === 'custom' && hasUnits) {
-          newCurrentIngredient.unit_data = {
-            unit_single: ingredient.unit_data.unit_single,
-            unit_plural: ingredient.unit_data.unit_plural
-          }
-        }
+        continue;
       } else {
         newCurrentIngredient[field] = { value: ingredient[field], touched: false }
       }
     }
 
-    this.setState({ currentIngredient: newCurrentIngredient })
-    console.log(currentIngredient)
+    const unitData = this.setUnitData(ingredient, unitDataFields);
+
+    return unitData.then(unitData => {
+      console.log(unitData);
+      newCurrentIngredient.unit_single = unitData.unit_single;
+      newCurrentIngredient.unit_plural = unitData.unit_plural;
+      this.setState({ currentIngredient: newCurrentIngredient })
+      return newCurrentIngredient;
+    });
+
   }
 
   /**
   * @param {Object} newIngredient The new ingredient grabbed from 'currentIngredient' in state. 
   */
   updateIngredientListsWithAddition(ingredient) {
-
-    console.log('firing with: ', ingredient);
-    console.log('ingredientsAddList: ', this.state.ingredientsAddList)
     const displayList = this.state.ingredients;
     let newDisplayList = displayList.slice();
-
+    ingredient.added = true;
     //Add to list.
     newDisplayList = [...displayList, ingredient]
-
-    console.log('New Display: ', newDisplayList)
-
-    //Overwrite displayed list
+    //Overwrite displayed list and add list with new value.
     this.setState({ ingredients: newDisplayList, })
-
     this.setState({
       ingredientsAddList: [...this.state.ingredientsAddList, ingredient],
     })
-    console.log(this.state.ingredientsAddList);
     this.clearCurrentIngredient();
   }
 
@@ -258,6 +282,7 @@ export class RecipeFormContextProvider extends Component {
           } else {
             this.updateIngredientListsWithAddition(newIngredient);
             this.clearCurrentIngredient();
+            console.log(this.state.ingredientsAddList)
           }
         })
     }
@@ -285,10 +310,29 @@ export class RecipeFormContextProvider extends Component {
   }
 
   clearCurrentIngredient = () => {
+    console.log('clearCurrentIngredient firing')
     this.setState({ currentIngredient: nullIngredient })
+    console.log(this.state.currentIngredient);
     document.getElementById('ing_text').value = null;
     document.getElementById('amount').value = null;
     document.getElementById('unit_set').value = 'none';
+  }
+
+  //Prep data for submission
+
+  filterIngredientsAddList = ingredients => {
+    return ingredients.map(ingredient => {
+      const newIngredient = {
+        amount: ingredient.amount,
+        unit_set: ingredient.unit_set,
+        ing_text: ingredient.ing_text
+      };
+
+      if (ingredient.unit_set === 'custom') {
+        newIngredient.unit_data = ingredient.unit_data;
+      }
+      return newIngredient;
+    })
   }
 
   handleSubmit = (event, type) => {
@@ -296,12 +340,17 @@ export class RecipeFormContextProvider extends Component {
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredients, ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
 
+    const add = this.filterIngredientsAddList(ingredientsAddList);
+
     if (type === 'add') {
       console.log('handleSubmit firing for add');
       console.log('Name: ', name.value);
       console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
       console.log('Servings: ', servings.value)
       console.log('Instructions: ', instructions.value)
+      console.log('Ingredients added: ', add);
+      console.log('Ingredients edited: ', ingredientsEditList);
+      console.log('Ingredients deleted: ', ingredientsDeleteList);
     }
 
     if (type === 'edit') {
@@ -310,13 +359,15 @@ export class RecipeFormContextProvider extends Component {
       console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
       console.log('Servings: ', servings.value)
       console.log('Instructions: ', instructions.value)
-      console.log('Ingredients added: ', ingredientsAddList);
+      console.log('Ingredients added: ', add);
+      console.log('Ingredients add list: ', ingredientsAddList);
       console.log('Ingredients edited: ', ingredientsEditList);
       console.log('Ingredients deleted: ', ingredientsDeleteList);
 
     }
     //TODO set up submit API on both ends. nullify form values too?
     this.clearForm();
+    this.render();
   }
 
   clearForm = () => {
@@ -324,6 +375,9 @@ export class RecipeFormContextProvider extends Component {
       recipe: nullRecipe,
       ingredientCount: 0,
       ingredients: [],
+      ingredientsAddList: [],
+      ingredientsDeleteList: [],
+      ingredientsEditList: [],
       currentIngredient: nullIngredient,
     })
   }

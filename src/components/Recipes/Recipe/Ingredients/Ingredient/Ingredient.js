@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import IngredientOptionsBase from './IngredientOptionsBase';
 import IngredientFieldSet from '../../../../forms/RecipeForm/IngredientFieldset/IngredientFieldset'
 import IngredientOptionsConvert from './IngredientOptionsConvert';
-import { DisplayAmountWithUnit, Button } from '../../../../Utils/Utils';
+import { DisplayAmountWithUnit } from '../../../../Utils/Utils';
 import RecipeFormContext, { nullIngredient } from '../../../../../contexts/RecipeFormContext';
 import './Ingredient.css'
 
@@ -67,10 +67,14 @@ export default class Ingredient extends Component {
   handleEditClick = (event) => {
     //Freeze other ingredients on list
     this.props.onSetEditingId(this.props.ingredient.id);
-    //Preset an ingredient fieldset with ingredient values.
-    this.context.setCurrentIngredient(this.props.ingredient);
-    //Render the populated fieldset instead of ingredient.
-    this.toggleEditing();
+
+    const set = this.context.setCurrentIngredient(this.props.ingredient)
+      
+    return set.then(hup => {
+        console.log(hup)
+        //Render the populated fieldset instead of ingredient.
+        return this.toggleEditing()
+      });
   }
 
   //Submit currentIngredient and close fieldset if successful.

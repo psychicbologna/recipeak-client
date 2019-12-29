@@ -1,4 +1,5 @@
 import React from 'react';
+import UnitApiService from '../../services/unit-api-service';
 
 // export function FullName({ user }) {
 //   return `${user.first_name} ${user.last_name}`;
@@ -74,6 +75,25 @@ export function DisplayAmountWithUnit(ingredient, converted) {
   return (ingredient.unit_set === 'none' ? '' : `${amount} `) + `${unit}`
 }
 
+//Fetches the current unit data for currentIngredient.
+// export function fetchCurrentUnitData(ingredient) {
+//   if (ingredient.unit_set.value === 'custom') {
+//     return ingredient.unit_data;
+//   } else {
+//     return UnitApiService.getUnitData(ingredient.unit_set.value)
+//       .then(unitData => {
+//         console.log(unitData)
+//         return unitData
+//       })
+//   }
+// }
+
+//Generate output for currentIngredient.
+export function IngredientEditUnitOutput(amount, unit_plural, unit_single) {
+  const unit = DisplayPlural({ unit_plural, unit_single}, amount);
+  return `${amount} ${unit}`
+}
+
 export function PrepTimeDisplay(props) {
   // Displays the prep time depending on its length:
   //'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
@@ -81,12 +101,12 @@ export function PrepTimeDisplay(props) {
   let { hours, minutes } = props
 
   hours = parseInt(hours)
-  minutes= parseInt(minutes)
+  minutes = parseInt(minutes)
 
   if (!hours && !minutes) {
     content = 'No prep time entered.'
   }
-  if (!!hours) {content += `${hours} Hour${(hours > 1 || hours < -1) ? 's' : ''}`}
+  if (!!hours) { content += `${hours} Hour${(hours > 1 || hours < -1) ? 's' : ''}` }
   if (!!minutes) {
     if (!!hours) { content += `, ` }
     content += `${minutes} Minute${(minutes > 1 || minutes < -1) ? 's' : ''}`
