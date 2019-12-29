@@ -9,11 +9,13 @@ export default class RecipeEditForm extends Component {
 
   static defaultProps = {
     recipe: nullRecipe,
-    formName: 'edit'
+    formName: 'edit',
   }
 
   state = {
     recipe: this.props.recipe,
+    allowIngredientEdits: true,
+    showAddIngredientFieldset: false
   }
 
   static contextType = RecipeFormContext;
@@ -29,6 +31,10 @@ export default class RecipeEditForm extends Component {
     onAddIngredient(currentIngredient);
   }
 
+  toggleDisableAddIngredient = () => {
+    this.setState({ allowAddIngredient: !this.state.allowAddIngredient })
+  }
+
   // handleEditIngredientSubmit = (event, ingredient) => {
   //   event.preventDefault();
   //   const { currentIngredient, onEditIngredient } = this.context
@@ -39,8 +45,9 @@ export default class RecipeEditForm extends Component {
   handle
 
   render() {
+    const { allowIngredientEdits } = this.state;
     const { ingredients, updateRecipeField, onSubmit, disableFieldsets } = this.context;
-    const { recipe, formName, disabled } = this.props;
+    const { recipe, formName } = this.props;
 
     return (
       <form
@@ -61,13 +68,16 @@ export default class RecipeEditForm extends Component {
           disabled={disableFieldsets}
         />
         <IngredientsList
+          allowIngredientEdits={allowIngredientEdits}
           ingredients={ingredients}
           showIngredientOptions={true}
         />
-        {/* <IngredientFieldset
-          method='add'
+
+        <IngredientFieldset
+          isAdding={true}
           handleSubmit={this.handleAddIngredientSubmit}
-        /> */}
+          disabled={disableFieldsets}
+        />
         <TextArea
           updateField={updateRecipeField}
           defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}
@@ -78,7 +88,7 @@ export default class RecipeEditForm extends Component {
 
         <Button
           type='submit'
-          disabled={disableFieldsets || disabled}
+          disabled={disableFieldsets}
         >
           Submit Recipe
         </Button>

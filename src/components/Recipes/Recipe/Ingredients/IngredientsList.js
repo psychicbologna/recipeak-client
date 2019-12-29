@@ -9,7 +9,8 @@ export default class IngredientList extends Component {
 
   static defaultProps = {
     ingredients: [],
-    showIngredientOptions: false
+    showIngredientOptions: false,
+    allowIngredientEdits: true
   }
 
   static contextType = RecipeFormContext;
@@ -33,15 +34,14 @@ export default class IngredientList extends Component {
     this.setState({ showOptions: this.state.showOptions })
   }
 
-  //TODO
   handleEditIngredientSubmit = () => {
-    // this.context.clearCurrentIngredient();
-    // this.toggleShowOptions();
-    // this.clearEditingId();
+    this.context.clearCurrentIngredient();
+    this.toggleShowOptions();
+    this.clearEditingId();
   }
 
   render() {
-    const { ingredients } = this.props
+    const { ingredients, allowIngredientEdits } = this.props
     const { showOptions, editingId } = this.state
 
     return (
@@ -54,7 +54,6 @@ export default class IngredientList extends Component {
 
         : <section className="RecipeForm__ingredients-preview">
           <h3>Ingredients</h3>
-          {showOptions && <IngredientListOptions />}
           <ul className='RecipeForm__ingredients-list'>
             {ingredients.map(ingredient => {
               return (
@@ -63,22 +62,14 @@ export default class IngredientList extends Component {
                   key={ingredient.id}
                   showOptions={showOptions}
                   editingId={editingId}
+                  allowIngredientEdits={allowIngredientEdits}
                   onSetEditingId={this.handleSetEditingId}
                   onClearEditingId={this.handleClearEditingId}
                 />
               );
             })}
           </ul>
-          {showOptions && <IngredientListOptions />}
         </section>
     )
   }
-}
-
-function IngredientListOptions(props) {
-  return (
-    <div className="IngredientList__options">
-      <p>Add Ingredient</p>
-    </div>
-  )
 }

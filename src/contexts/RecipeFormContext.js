@@ -22,7 +22,7 @@ export const nullIngredient = {
   id: '',
   amount: nullLiveInput,
   ing_text: nullLiveInput,
-  unit_set: nullLiveInput,
+  unit_set: {value: 'none', touched: false},
   unit_single: '',
   unit_plural: '',
 }
@@ -97,6 +97,30 @@ export class RecipeFormContextProvider extends Component {
 
   //Update fields of current ingredient
   updateIngredientField = (fieldName, value) => {
+    if (fieldName === 'unit_set') {
+      if (value === 'custom') {
+        return this.setState(prevState => ({
+          currentIngredient: {
+            ...prevState.currentIngredient,
+            unit_single: '',
+            unit_plural: ''
+          }
+        }))
+      } else {
+        return this.getUnitData(value)
+          .then(unitDataFromSet => {
+            return this.setState(prevState => ({
+              currentIngredient: {
+                ...prevState.currentIngredient,
+                unit_set: { value, touched: true },
+                unit_single: unitDataFromSet.unit_single,
+                unit_plural: unitDataFromSet.unit_plural
+              }
+            }))
+          })
+      }
+    }
+
     this.setState(prevState => ({
       currentIngredient: {
         ...prevState.currentIngredient,
@@ -133,7 +157,6 @@ export class RecipeFormContextProvider extends Component {
     } else {
       return this.getUnitData(ingredient.unit_set)
         .then(unitDataFromSet => {
-          console.log(unitDataFromSet);
           return unitDataFromSet;
         })
     }
@@ -142,7 +165,7 @@ export class RecipeFormContextProvider extends Component {
   //Set current ingredient from list when edit is clicked.
   setCurrentIngredient = (ingredient) => {
 
-    let newCurrentIngredient = nullIngredient;
+    let newCurrentIngredient = { ...nullIngredient };
     const newFields = Object.keys(ingredient);
     const unitDataFields = Object.keys(ingredient.unit_data);
 
@@ -311,8 +334,11 @@ export class RecipeFormContextProvider extends Component {
 
   clearCurrentIngredient = () => {
     console.log('clearCurrentIngredient firing')
-    this.setState({ currentIngredient: nullIngredient })
     console.log(this.state.currentIngredient);
+    console.log('null? ...', nullIngredient)
+    this.setState({
+      currentIngredient: nullIngredient
+    })
     document.getElementById('ing_text').value = null;
     document.getElementById('amount').value = null;
     document.getElementById('unit_set').value = 'none';

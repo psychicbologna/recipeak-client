@@ -9,31 +9,39 @@ export default class IngredientFieldset extends Component {
 
   static defaultProps = {
     ingredient: nullIngredient,
-    editing: false,
-    disabled: false
+    disabled: false,
+    isAdding: false,
+    allowIngredientEdits: true
   }
 
   state = {
     currentIngredient: this.context.currentIngredient,
+    newIngredient: nullIngredient,
     unit_single: this.context.currentIngredient.unit_single,
     unit_plural: this.context.currentIngredient.unit_plural
   }
 
+  componentWillUnmount() {
+    this.context.clearCurrentIngredient();
+  }
+
   render() {
     const { currentIngredient, updateIngredientField, disableFieldsets } = this.context;
-    const { editing, method, handleSubmit, onCancelClick } = this.props;
-    const title = editing ? `Editing Ingredient` : 'Add Ingredient'
-
-    console.log(currentIngredient.unit_plural, currentIngredient.unit_single)
+    const { isAdding, allowIngredientEdits, handleSubmit, onCancelClick, onCloseClick } = this.props;
+    const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
 
     return (
       <>
-        <output className='Ingredient__display'>
-          {`${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
-        </output>
+        {!isAdding &&
+          <output className='Ingredient__display'>
+            {(!currentIngredient.amount.value && currentIngredient.unit_set.value === 'none' && !currentIngredient.ing_text.value)
+              ? `A preview of your ingredient will display here.`
+              : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
+          </output>
+        }
         <fieldset
           className='Fieldset Fieldset__Ingredient'
-          disabled={disableFieldsets && method === 'add'}
+          disabled={disableFieldsets || (isAdding && !!currentIngredient.id) || (!isAdding && !allowIngredientEdits)}
         >
           <legend>{title}</legend>
           <div className='Fieldset__input-row-fix'>
@@ -55,15 +63,25 @@ export default class IngredientFieldset extends Component {
             inputType='text'
             parentForm='RecipeForm'
           />
+          {(isAdding && !currentIngredient.id)
+            ? <output className='Ingredient__display'>
+              {(!currentIngredient.amount.value && currentIngredient.unit_set.value === 'none' && !currentIngredient.ing_text.value)
+                ? `A preview of your new ingredient will display here.`
+                : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
+            </output>
+            : <p>This form is disabled while you edit an ingredient.</p>
+          }
           <div className="Ingredient__Options">
-            <Button className="Ingredient__Options__button" onClick={event => handleSubmit(event, currentIngredient)}>
+            <Button className="Ingredient__Options__button" type='button' onClick={event => handleSubmit(event, currentIngredient)}>
               Submit
             </Button>
-            {editing
-              ? <Button className="Ingredient__Options__button" onClick={() => onCancelClick()}>
+            {isAdding
+              ? <Button className="Ingredient__Options__button" onClick={() => onCloseClick()}>
+                Close
+              </Button>
+              : <Button className="Ingredient__Options__button" onClick={() => onCancelClick()}>
                 Cancel
-          </Button>
-              : null
+                </Button>
             }
           </div>
         </fieldset>

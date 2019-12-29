@@ -24,7 +24,8 @@ export default class Ingredient extends Component {
     conversion: nullConversion,
     amount: '',
     name: '',
-    showOptions: false
+    showOptions: false,
+    allowIngredientEdits: true
   }
 
   constructor(props) {
@@ -67,11 +68,9 @@ export default class Ingredient extends Component {
   handleEditClick = (event) => {
     //Freeze other ingredients on list
     this.props.onSetEditingId(this.props.ingredient.id);
-
-    const set = this.context.setCurrentIngredient(this.props.ingredient)
-      
-    return set.then(hup => {
-        console.log(hup)
+    //Set currentIngredient
+    const setIngredient = this.context.setCurrentIngredient(this.props.ingredient)
+    return setIngredient.then(() => {
         //Render the populated fieldset instead of ingredient.
         return this.toggleEditing()
       });
@@ -88,13 +87,12 @@ export default class Ingredient extends Component {
 
   //Abort editing an ingredient and close fieldset.
   handleCancelClick = () => {
-    this.context.clearCurrentIngredient();
     this.props.onClearEditingId();
     this.toggleEditing();
   }
 
   render() {
-    const { ingredient, editingId } = this.props;
+    const { ingredient, editingId, allowIngredientEdits } = this.props;
     const { converted, editing, showOptions } = this.state;
 
     const className = `Ingredient Ingredient__${showOptions ? 'editing' : 'listing'} ${!!editingId && editingId !== ingredient.id && 'disabled'}`
@@ -124,7 +122,7 @@ export default class Ingredient extends Component {
             ingredient={ingredient}
             onDeleteIngredient={this.handleDeleteClick}
             onEditIngredient={this.handleEditClick}
-            disabled={!!editingId && editingId !== ingredient.id}
+            disabled={(!!editingId && editingId !== ingredient.id) || !allowIngredientEdits}
           />
         }
       </li>

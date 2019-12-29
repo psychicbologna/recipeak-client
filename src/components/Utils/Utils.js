@@ -75,23 +75,10 @@ export function DisplayAmountWithUnit(ingredient, converted) {
   return (ingredient.unit_set === 'none' ? '' : `${amount} `) + `${unit}`
 }
 
-//Fetches the current unit data for currentIngredient.
-// export function fetchCurrentUnitData(ingredient) {
-//   if (ingredient.unit_set.value === 'custom') {
-//     return ingredient.unit_data;
-//   } else {
-//     return UnitApiService.getUnitData(ingredient.unit_set.value)
-//       .then(unitData => {
-//         console.log(unitData)
-//         return unitData
-//       })
-//   }
-// }
-
 //Generate output for currentIngredient.
 export function IngredientEditUnitOutput(amount, unit_plural, unit_single) {
   const unit = DisplayPlural({ unit_plural, unit_single}, amount);
-  return `${amount} ${unit}`
+  return `${!!amount ? amount : '...'} ${!!unit ? unit : '...'}`
 }
 
 export function PrepTimeDisplay(props) {
