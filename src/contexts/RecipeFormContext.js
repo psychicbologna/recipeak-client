@@ -224,6 +224,28 @@ export class RecipeFormContextProvider extends Component {
     })
   }
 
+    //Add ingredient to preview list and queue for addition
+    handleEditIngredient = (currentIngredient) => {
+      console.log('editIngredient firing!')
+      const newIngredient = {
+        id: currentIngredient.id,
+        amount: currentIngredient.amount.value,
+        ing_text: currentIngredient.ing_text.value,
+        unit_set: currentIngredient.unit_set.value,
+      }
+  
+      if (currentIngredient.unit_set === 'custom') {
+        newIngredient.unit_data = {
+          unit_singular: currentIngredient.unit_singular.value,
+          unit_plural: currentIngredient.unit_plural.value
+        }
+  
+        this.context.updateIngredientListWithAddition(newIngredient)
+      }
+      console.log('Edit List: ', this.state.ingredientsEditList);
+    }
+
+
   handleSubmit = (event, type) => {
     event.preventDefault();
     const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;

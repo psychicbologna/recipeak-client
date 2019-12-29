@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullIngredient } from '../../../../contexts/RecipeFormContext';
 import UnitApiService from '../../../../services/unit-api-service';
-import ConversionService from '../../../../services/conversion-api-service';
-import uuidv1 from 'uuid/v1';
 import UnitSelect from './UnitSelect';
 import { IngredientEditUnitOutput, Input, Button } from '../../../Utils/Utils';
 
@@ -141,53 +139,30 @@ export default class IngredientFieldset extends Component {
 
   }
 
+  onClearClick = (event) => {
+    event.preventDefault();
+    this.clearCurrentIngredient();
+  }
+
   clearCurrentIngredient = () => {
-    console.log('clearCurrentIngredient firing')
-    console.log(this.state.currentIngredient);
-    console.log('null? ...', nullIngredient)
     this.setState({
-      currentIngredient: nullIngredient
+      currentIngredient: {
+        id: { value: this.props.ingredient.id, touched: false },
+        amount: { value: this.props.ingredient.amount, touched: false },
+        ing_text: { value: this.props.ingredient.ing_text, touched: false },
+        unit_set: { value: this.props.ingredient.unit_set, touched: false },
+        unit_single: this.props.unit_data.unit_single,
+        unit_plural: this.props.unit_data.unit_plural,
+      }
     })
     document.getElementById('ing_text').value = null;
     document.getElementById('amount').value = null;
     document.getElementById('unit_set').value = 'none';
   }
 
-  onEditClick = () => {
-    //Set currentIngredient
-    const setIngredient = this.setCurrentIngredient(this.props.ingredient)
-    return setIngredient.then(() => {
-      //Render the populated fieldset instead of ingredient.
-      this.props.onEditClick()
-    });
-  }
-
-  //Add ingredient to preview list and queue for addition
-  handleEditIngredient = (currentIngredient) => {
-    console.log('editIngredient firing!')
-    const newIngredient = {
-      id: currentIngredient.id,
-      amount: currentIngredient.amount.value,
-      ing_text: currentIngredient.ing_text.value,
-      unit_set: currentIngredient.unit_set.value,
-    }
-
-    if (currentIngredient.unit_set === 'custom') {
-      newIngredient.unit_data = {
-        unit_singular: currentIngredient.unit_singular.value,
-        unit_plural: currentIngredient.unit_plural.value
-      }
-
-      this.context.updateIngredientListWithAddition(newIngredient)
-    }
-    console.log('Edit List: ', this.state.ingredientsEditList);
-  }
-
-
-
   render() {
     const { currentIngredient } = this.state;
-    const { isAdding, allowIngredientEdits, handleSubmit, onCancelClick, onCloseClick, disableFieldsets } = this.props;
+    const { isAdding, handleSubmit, onCancelClick, disableFieldsets } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
 
     return (
@@ -201,7 +176,7 @@ export default class IngredientFieldset extends Component {
         }
         <fieldset
           className='Fieldset Fieldset__Ingredient'
-          disabled={disableFieldsets || (isAdding && !!currentIngredient.id) || (!isAdding && !allowIngredientEdits)}
+          disabled={disableFieldsets}
         >
           <legend>{title}</legend>
           <div className='Fieldset__input-row-fix'>
@@ -226,21 +201,20 @@ export default class IngredientFieldset extends Component {
             inputType='text'
             parentForm='RecipeForm'
           />
-          {(isAdding && !currentIngredient.id)
-            ? <output className='Ingredient__display'>
+          {isAdding
+            && <output className='Ingredient__display'>
               {(!currentIngredient.amount.value && currentIngredient.unit_set.value === 'none' && !currentIngredient.ing_text.value)
                 ? `A preview of your new ingredient will display here.`
-                : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
+                : `${IngredientEditUnitOutput(currentIngredient.amount.value, currentIngredient.unit_set.value, currentIngredient.unit_plural, currentIngredient.unit_single)} ${currentIngredient.ing_text.value}`}
             </output>
-            : <p>This form is disabled while you edit an ingredient.</p>
           }
           <div className="Ingredient__Options">
             <Button className="Ingredient__Options__button" type='button' onClick={event => handleSubmit(event, currentIngredient)}>
               Submit
             </Button>
             {isAdding
-              ? <Button className="Ingredient__Options__button" onClick={() => onCloseClick()}>
-                Close
+              ? <Button className="Ingredient__Options__button" onClick={event => this.onClearClick(event)}>
+                Clear
               </Button>
               : <Button className="Ingredient__Options__button" onClick={() => onCancelClick()}>
                 Cancel
