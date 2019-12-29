@@ -305,15 +305,14 @@ export class RecipeFormContextProvider extends Component {
 
 
   //Submits the recipe and its ingredients.
-  handleSubmit = (event, type) => {
-    event.preventDefault();
-    const { name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
+  handleSubmit = () => {
+    const { id, name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
 
     //Pulls temporary id from new ingredients.
     const add = this.filterIngredientsAddList(ingredientsAddList);
 
-    if (type === 'add') {
+    if (!id) {
       console.log('handleSubmit firing for add');
       console.log('Name: ', name.value);
       console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
@@ -326,7 +325,7 @@ export class RecipeFormContextProvider extends Component {
 
     }
 
-    if (type === 'edit') {
+    if (!!id) {
       console.log('handleSubmit firing for edit');
       console.log('Name: ', name.value);
       console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);

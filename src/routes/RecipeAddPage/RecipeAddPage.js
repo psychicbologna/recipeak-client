@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import RecipesApiService from '../../services/recipes-api-service';
 import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
 import { Button } from '../../components/Utils/Utils'
 import RecipeForm from '../../components/forms/RecipeForm/RecipeForm';
@@ -8,6 +7,8 @@ import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/Re
 
 
 //TODO configure state and callbacks by adding necessary elements from edit
+//TODO ingredient preview is simililarly broken.
+
 export default class RecipeAddPage extends Component {
 
   static contextType = RecipeFormContext;
@@ -58,11 +59,12 @@ export default class RecipeAddPage extends Component {
     this.handleDeleteSuccess()
   }
 
-  //TODO Handles add submit
-  handleAddSubmit = (event, recipeId) => {
+  //TODO Handles add submit. After context finishes, reroutes the page.
+  handleAddSubmit = (event) => {
     event.preventDefault();
+
     console.log('AddSubmit firing!')
-    RecipesApiService.addRecipe()
+    this.props.onSubmit()
       .then(res => {
         this.handleAddSuccess()
       })
