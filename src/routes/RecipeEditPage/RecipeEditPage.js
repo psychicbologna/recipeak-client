@@ -41,6 +41,12 @@ export default class RecipeEditPage extends Component {
     history.push('/home');
   }
 
+  //Moves to recipe after submit successful.
+  handleEditSuccess = recipeId => {
+    const { history } = this.props
+    history.push(`/recipes/${recipeId}`);
+  }
+
   //Handles delete submit
   handleDeleteSubmit = (event, recipeId) => {
     event.preventDefault();
@@ -56,13 +62,13 @@ export default class RecipeEditPage extends Component {
       })
   }
 
-  //Handles edit submit
+  //TODO Handles edit submit
   handleEditSubmit = (event, recipeId) => {
     event.preventDefault();
 
     RecipesApiService.editRecipe(recipeId)
       .then(res => {
-        this.handleDeleteSuccess()
+        this.handleEditSuccess()
       })
       .catch(error => {
         this.setState({ error: error })

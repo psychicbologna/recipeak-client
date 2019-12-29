@@ -37,6 +37,10 @@ export default class LoginForm extends Component {
 
   }
 
+  componentDidMount() {
+    this.setState({ error: null })
+  }
+
   render() {
     const { error } = this.state;
     return (
@@ -55,7 +59,8 @@ export default class LoginForm extends Component {
         <Button type='submit'>
           Login
         </Button>
-        {error && <div className='Alert' role='alert'> <p className='Alert__p'>{error}</p></div>
+        {!!error
+          && <div className='Alert' role='alert'> <p className='Alert__p'>{error}</p></div>
         }
       </form>
     )

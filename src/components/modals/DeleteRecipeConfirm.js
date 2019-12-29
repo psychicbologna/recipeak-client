@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Button } from '../Utils/Utils'
 import './DeleteRecipeConfirm.css'
 
+//TODO check if modal works with add form.
+
+// Handles deletion confirmaton
 class DeleteRecipeConfirm extends Component {
 
   static defaultProps = {
