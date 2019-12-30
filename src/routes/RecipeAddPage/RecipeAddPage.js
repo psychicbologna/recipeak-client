@@ -60,13 +60,12 @@ export default class RecipeAddPage extends Component {
   }
 
   //TODO Handles add submit. After context finishes, reroutes the page.
-  handleAddSubmit = (event) => {
+  handleAddSubmit = event => {
     event.preventDefault();
-
-    console.log('AddSubmit firing!')
-    this.props.onSubmit()
+    this.context.onFormSubmit()
       .then(res => {
-        this.handleAddSuccess()
+        console.log(res.id);
+        this.handleAddSuccess(res.id)
       })
       .catch(error => {
         this.setState({ error: error })
@@ -98,6 +97,7 @@ export default class RecipeAddPage extends Component {
           recipe={recipe}
           ingredients={ingredients}
           disabled={disable}
+          onSubmit={this.handleAddSubmit}
           formName='add'
         />
         {

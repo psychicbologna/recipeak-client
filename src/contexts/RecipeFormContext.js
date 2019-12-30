@@ -45,7 +45,7 @@ const RecipeFormContext = React.createContext({
   clearRecipe: () => { },
   clearIngredients: () => { },
   clearForm: () => { },
-  handleSubmit: () => { },
+  onFormSubmit: () => { },
 
   addRecipe: () => { },
   updateRecipe: () => { },
@@ -305,50 +305,45 @@ export class RecipeFormContextProvider extends Component {
 
 
   //Submits the recipe and its ingredients.
-  handleSubmit = () => {
-    const { id, name, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
+  handleFormSubmit = () => {
+    const { id, name, author, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
 
+    //Set up recipe for post
+    const newRecipe = {
+      name: name.value,
+      author: author.value,
+      prep_time_hours: prep_time_hours.value,
+      prep_time_minutes: prep_time_minutes.value,
+      servings: servings.value,
+      instructions: instructions.value,
+      ingredientsAddList: [...ingredientsAddList],
+      ingredientsEditList: [...ingredientsEditList],
+      ingredientsDeleteList: [...ingredientsDeleteList]
+    }
+
     //Pulls temporary id from new ingredients.
-    const add = this.filterIngredientsAddList(ingredientsAddList);
+    newRecipe.ingredientsAddList = this.filterIngredientsAddList(newRecipe.ingredientsAddList);
 
     if (!id) {
-      console.log('handleSubmit firing for add');
-      console.log('Name: ', name.value);
-      console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
-      console.log('Servings: ', servings.value)
-      console.log('Instructions: ', instructions.value)
-      console.log('Ingredients added: ', add);
-      console.log('Ingredients edited: ', ingredientsEditList);
-      console.log('Ingredients deleted: ', ingredientsDeleteList);
-      this.addRecipe(ingredientsAddList, ingredientsEditList, ingredientsDeleteList)
-
+      delete newRecipe.ingredientsEditList;
+      delete newRecipe.ingredientsDeleteList;
+      return this.addRecipe(newRecipe)
+        .then(id => {
+          return id;
+        })
+    } else if (!!id) {
+      newRecipe.id = id;
+      return this.editRecipe(newRecipe)
     }
-
-    if (!!id) {
-      console.log('handleSubmit firing for edit');
-      console.log('Name: ', name.value);
-      console.log('Prep Time: ', `${prep_time_hours.value} hours ${prep_time_minutes.value} minutes`);
-      console.log('Servings: ', servings.value)
-      console.log('Instructions: ', instructions.value)
-      console.log('Ingredients added: ', add);
-      console.log('Ingredients add list: ', ingredientsAddList);
-      console.log('Ingredients edited: ', ingredientsEditList);
-      console.log('Ingredients deleted: ', ingredientsDeleteList);
-      this.editRecipe(ingredientsAddList, ingredientsEditList, ingredientsDeleteList)
-
-    }
-    //TODO set up submit API on both ends. should reload form values with true recipe after submission.
-    this.clearForm();
-    this.render();
   }
 
-  addRecipe() {
-    //TODO send recipe and all ingredient lists, flush current recipe form, load recipe view page. OnSuccess handler should prevent premature flush.
-    console.log('addRecipe firing!')
+  addRecipe = async recipe => {
+    const id = await RecipesApiService.postRecipe(recipe)
+    return Promise.resolve(id)
   }
 
-  updateRecipe() {
+  updateRecipe = recipe => {
     //TODO send recipe and all ingredient lists, flush current recipe form and load recipe view page. OnSuccess handler should prevent premature flush.
     console.log('updateRecipe firing!')
   }
@@ -434,7 +429,7 @@ export class RecipeFormContextProvider extends Component {
       clearRecipe: this.clearRecipe,
       clearIngredients: this.clearIngredients,
       clearForm: this.clearForm,
-      onSubmit: this.handleSubmit,
+      onFormSubmit: this.handleFormSubmit,
 
       onAddIngredient: this.handleAddIngredient,
       onEditIngredient: this.handleEditIngredient,

@@ -40,17 +40,16 @@ export default class RecipeEditForm extends Component {
   //   onEditIngredient(currentIngredient);
   // }
 
-  handle
-
   render() {
     const { allowIngredientEdits } = this.state;
-    const { ingredients, updateRecipeField, onSubmit, disableFieldsets } = this.context;
-    const { recipe, formName } = this.props;
+    const { ingredients, updateRecipeField, disableFieldsets } = this.context;
+    const { recipe, formName, onSubmit, } = this.props;
 
     return (
+
       <form
         className={`Form RecipeForm RecipeForm__${formName}`}
-        onSubmit={event => onSubmit(event, 'edit')}
+        onSubmit={event => onSubmit(event)}
       >
         <BasicInfoFieldset
           nameDefault={recipe.name.value}

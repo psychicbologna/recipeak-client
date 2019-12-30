@@ -31,16 +31,15 @@ const RecipesApiService = {
   },
 
   //TODO test endpoint in api, remove when sure it's working
-  addRecipe(recipe, ingredientsAddList) {
-    return fetch(`${config.API_ENDPOINT}/recipes/add`, {
+  postRecipe(recipe) {
+    return fetch(`${config.API_ENDPOINT}/recipes/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify({
-        recipe,
-        ingredientsAddList
+        ...recipe
       })
     })
       .then(res =>
