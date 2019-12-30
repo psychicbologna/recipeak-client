@@ -20,17 +20,15 @@ export default class UnitSelect extends Component {
             updateField={updateIngredientField}
           />
         </label>
-        {
-          currentIngredient.unit_set.value === 'custom'
-            ? <div className="Fieldset__input-row-fix">
-              <CustomUnitFieldSet
-                single={currentIngredient.unit_single.value}
-                plural={currentIngredient.unit_plural.value}
-                amount={currentIngredient.amount}
-                updateField={updateIngredientField}
-              />
-            </div>
-            : null
+        {currentIngredient.unit_set.value === 'custom'
+          ? <div className="Fieldset__input-row-fix">
+            <CustomUnitFieldSet
+              single={currentIngredient.custom_single.value}
+              plural={currentIngredient.custom_plural.value}
+              updateField={updateIngredientField}
+            />
+          </div>
+          : null
         }
       </>
     )

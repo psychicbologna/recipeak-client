@@ -3,14 +3,20 @@ import { Input } from '../../../Utils/Utils';
 
 export default class CustomUnitFieldset extends Component {
 
+  static defaultProps = {
+    single: '',
+    plural: '',
+  }
+
   render() {
-    const { single, plural, updateField } = this.props;
+    const { defaultUnitData: single, plural, updateField } = this.props;
     return (
       <fieldset className='RecipeForm__CustomUnitFieldset'>
+        <legend>Define Custom Unit</legend>
         <Input
           defaultValue={single}
           updateField={updateField}
-          inputId='unit_single'
+          inputId='custom_single'
           inputLabel='Singular'
           inputType='text'
           parentForm='RecipeForm'
@@ -18,7 +24,7 @@ export default class CustomUnitFieldset extends Component {
         <Input
           defaultValue={plural}
           updateField={updateField}
-          inputId='unit_plural'
+          inputId='custom_plural'
           inputLabel='Plural'
           inputType='text'
           parentForm='RecipeForm'

@@ -177,8 +177,8 @@ export class RecipeFormContextProvider extends Component {
     //Add unit data if custom unit and/or set if unit set.
     if (ingredient.unit_set.value === 'custom') {
       newIngredient.unit_data = {
-        unit_singular: ingredient.unit_singular.value,
-        unit_plural: ingredient.unit_plural.value
+        unit_single: ingredient.custom_single.value,
+        unit_plural: ingredient.custom_plural.value
       }
       this.updateIngredientListsWithAddition(newIngredient);
       return;
@@ -229,74 +229,71 @@ export class RecipeFormContextProvider extends Component {
   handleEditIngredient = (editedIngredient) => {
     const newIngredient = {
       id: editedIngredient.id,
-      amount: editedIngredient.amount.value,
+      amount: parseFloat(editedIngredient.amount.value),
       ing_text: editedIngredient.ing_text.value,
       unit_set: editedIngredient.unit_set.value,
-    }
-    console.log(editedIngredient);
-
-    if (editedIngredient.unit_set === 'custom') {
-      newIngredient.unit_data = {
-        unit_single: editedIngredient.unit_single.value,
-        unit_plural: editedIngredient.unit_plural.value
-      }
     }
 
     //Add unit data if custom unit and/or set if unit set.
     if (newIngredient.unit_set === 'custom') {
       newIngredient.unit_data = {
-        unit_singular: editedIngredient.unit_singular.value,
-        unit_plural: editedIngredient.unit_plural.value
+        unit_single: editedIngredient.custom_single.value,
+        unit_plural: editedIngredient.custom_plural.value
       };
     } else {
       //Fetch unit set data and add to ingredient, as well as conversion.
-      UnitApiService.getUnitData(newIngredient.unit_set)
+      return UnitApiService.getUnitData(newIngredient.unit_set)
         .then(unitData => {
-          newIngredient.class = unitData.class;
-          newIngredient.unit_plural = unitData.unit_plural;
-          newIngredient.unit_single = unitData.unit_single;
+          newIngredient.unit_data = {
+            class: unitData.class,
+            unit_plural: unitData.unit_plural,
+            unit_single: unitData.unit_single
+          };
+          return unitData
+        })
+        .then(unitData => {
           //Generates and attaches conversion
           if (unitData.class === 'Metric' || unitData.class === 'US') {
-            ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
+            return ConversionService.getConversion(newIngredient.amount, newIngredient.unit_set)
               .then(conversion => {
-                newIngredient.conversion = conversion;
+                return newIngredient.conversion = conversion;
               })
+          } else return
+        })
+        .then(() => {
+          //Copy lists
+          const displayList = [...this.state.ingredients];
+          const addList = [...this.state.ingredientsAddList];
+          const editList = [...this.state.ingredientsEditList];
+
+          //Change ingredient on display list.
+          let index = displayList.findIndex(i => i.id === editedIngredient.id)
+          if (!!index) {
+            displayList[index] = newIngredient;
+            this.setState({ ingredients: displayList })
+          }
+
+          //If ingredient is on add list, change it;
+          // else if it's already on edit list, change that edit;
+          // else add it to edit list.
+          index = addList.findIndex(i => i.id === editedIngredient.id)
+          if (index > -1) {
+            addList[index] = newIngredient;
+            this.setState({ ingredientsAddList: addList })
+          } else {
+            index = editList.findIndex(i => i.id === editedIngredient.id)
+            if (index > -1) {
+              editList[index] = newIngredient;
+              this.setState({ ingredientsEditList: editList })
+            } else {
+              editList.push(newIngredient)
+              this.setState({ ingredientsEditList: editList })
+            }
           }
         })
     }
 
-    console.log('New Ingredient: ', newIngredient);
 
-    //Copy lists
-    const displayList = this.state.ingredients;
-    const addList = [...this.state.ingredientsAddList];
-    const editList = [...this.state.ingredientsEditList];
-
-    const index = displayList.findIndex(i => {
-      return i.id === editedIngredient.id
-    })
-
-    displayList[index] = newIngredient;
-
-    this.setState({ ingredients: displayList })
-
-    console.log('State after adding: ', this.state.ingredients[index])
-
-    const indexAddList = addList.findIndex(i => {
-      return i.id === editedIngredient.id
-    })
-
-    displayList[indexAddList] = newIngredient;
-
-    this.setState({ ingredientsAddList: addList })
-
-    const indexEditList = editList.findIndex(i => {
-      return i.id === editedIngredient.id
-    })
-
-    displayList[indexEditList] = newIngredient;
-
-    return this.setState({ ingredientsEditList: editList })
   }
 
   handleDeleteIngredient = (ingredientId) => {

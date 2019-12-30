@@ -19,13 +19,13 @@ export default class IngredientOptionsConvert extends Component {
             className="Ingredient__Options__button convert-to"
             type='button'
             onClick={event => toggleConvert(event)}>
-            Convert to {`${conversion.class} ${conversion.unit_abbr}`}
+            Convert to {`${conversion.class} ${conversion.unit_plural}`}
           </Button>
           : <Button
             className="Ingredient__Options__button convert-back"
             type='button'
             onClick={event => toggleConvert(event)}>
-            Convert back to {`${unit_data.class} ${unit_data.unit_abbr}`}
+            Convert back to {`${unit_data.class} ${unit_data.unit_plural}`}
           </Button>
         }
       </div>

@@ -12,12 +12,12 @@ export default class IngredientFieldset extends Component {
   static defaultProps = {
     ingredient: nullIngredient,
     unit_data: {
+      class: '',
       unit_single: '',
       unit_plural: '',
     },
     disabled: false,
     isAdding: false,
-    allowIngredientEdits: true
   }
 
   state = {
@@ -28,6 +28,8 @@ export default class IngredientFieldset extends Component {
       unit_set: { value: this.props.ingredient.unit_set, touched: false },
       unit_single: this.props.unit_data.unit_single,
       unit_plural: this.props.unit_data.unit_plural,
+      custom_single: { value: this.props.unit_data.unit_single, touched: false },
+      custom_plural: { value: this.props.unit_data.unit_plural, touched: false },
     }
   }
 
@@ -39,14 +41,16 @@ export default class IngredientFieldset extends Component {
   updateIngredientField = (fieldName, value) => {
     if (fieldName === 'unit_set') {
       if (value === 'custom') {
-        return this.setState(prevState => ({
+        //Set display values to the current custom values.
+        this.setState(prevState => ({
           currentIngredient: {
             ...prevState.currentIngredient,
-            unit_single: '',
-            unit_plural: ''
+            unit_single: this.state.currentIngredient.custom_single.value,
+            unit_plural: this.state.currentIngredient.custom_plural.value,
           }
         }))
       } else {
+        //Set display values to preassigned sets.
         return this.getUnitData(value)
           .then(unitDataFromSet => {
             return this.setState(prevState => ({
@@ -60,6 +64,27 @@ export default class IngredientFieldset extends Component {
           })
       }
     }
+
+    if (fieldName === 'custom_single') {
+      this.setState(prevState => ({
+        currentIngredient: {
+          ...prevState.currentIngredient,
+          unit_single: value,
+          custom_single: { value, touched: true }
+        }
+      }))
+    }
+
+    if (fieldName === 'custom_plural') {
+      this.setState(prevState => ({
+        currentIngredient: {
+          ...prevState.currentIngredient,
+          unit_plural: value,
+          custom_plural: { value, touched: true }
+        }
+      }))
+    }
+
     this.setState(prevState => ({
       currentIngredient: {
         ...prevState.currentIngredient,
@@ -78,19 +103,17 @@ export default class IngredientFieldset extends Component {
       });
   }
 
-  setUnitData = (ingredient, unitFields) => {
-    let hasUnits = unitFields.includes('unit_single') && unitFields.includes('unit_plural')
+  setUnitData = (ingredient) => {
     let unitData = {
       unit_single: '',
       unit_plural: ''
     };
 
-    if (ingredient.unit_set === 'custom' && hasUnits) {
-      //TODO must submit both single and plural unit, validate!
-      unitData.unit_single = ingredient.unit_data.unit_single;
-      unitData.unit_plural = ingredient.unit_data.unit_plural;
-      return unitData;
-    } else if (ingredient.unit_set === 'custom' && !hasUnits) {
+    if (ingredient.unit_set === 'custom') {
+      if (!!ingredient.unit_data.unit_single && !!ingredient.unit_data.unit_plural) {
+        unitData.unit_single = ingredient.unit_data.unit_single;
+        unitData.unit_plural = ingredient.unit_data.unit_plural;
+      }
       return unitData;
     } else {
       return this.getUnitData(ingredient.unit_set)
@@ -154,6 +177,8 @@ export default class IngredientFieldset extends Component {
         unit_set: { value: this.props.ingredient.unit_set, touched: false },
         unit_single: this.props.unit_data.unit_single,
         unit_plural: this.props.unit_data.unit_plural,
+        custom_single: { value: this.props.unit_data.unit_single, touched: false },
+        custom_plural: { value: this.props.unit_data.unit_plural, touched: false },
       }
     })
     document.getElementById('ing_text').value = null;
@@ -163,7 +188,7 @@ export default class IngredientFieldset extends Component {
 
   render() {
     const { currentIngredient } = this.state;
-    const { isAdding, onCancelClick, disableFieldsets } = this.props;
+    const { isAdding, onCancelClick, disableFieldsets, unit_data } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
 
     return (
@@ -191,6 +216,7 @@ export default class IngredientFieldset extends Component {
             />
             <UnitSelect
               currentIngredient={currentIngredient}
+              unit_data={unit_data}
               updateIngredientField={this.updateIngredientField}
             />
           </div>
