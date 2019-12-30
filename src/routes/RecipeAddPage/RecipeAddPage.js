@@ -54,17 +54,15 @@ export default class RecipeAddPage extends Component {
   //TODO Handles delete submit
   handleDeleteSubmit = (event, recipeId) => {
     event.preventDefault();
-    console.log('Delete firing!')
     this.clearRecipe();
     this.handleDeleteSuccess()
   }
 
-  //TODO Handles add submit. After context finishes, reroutes the page.
+  //TODO Handles add submit. After context finishes, reroutes to the view page.
   handleAddSubmit = event => {
     event.preventDefault();
     this.context.onFormSubmit()
       .then(res => {
-        console.log(res.id);
         this.handleAddSuccess(res.id)
       })
       .catch(error => {
