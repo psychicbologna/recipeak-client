@@ -1,10 +1,6 @@
-/* .RecipeForm {
-
+.RecipeForm {
+  margin-bottom: 1.5rem;
 }
-
-.RecipeForm__edit {
-  
-} */
 
 .RecipesForm__prep-time {
   grid-template-columns: 1fr 1fr;

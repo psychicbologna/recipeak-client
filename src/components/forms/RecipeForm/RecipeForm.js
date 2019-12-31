@@ -35,13 +35,6 @@ export default class RecipeEditForm extends Component {
     this.setState({ allowAddIngredient: !this.state.allowAddIngredient })
   }
 
-  // handleEditIngredientSubmit = (event, ingredient) => {
-  //   event.preventDefault();
-  //   const { currentIngredient, onEditIngredient } = this.context
-
-  //   onEditIngredient(currentIngredient);
-  // }
-
   render() {
     const { allowIngredientEdits } = this.state;
     const { ingredients, updateRecipeField, disableFieldsets } = this.context;
@@ -71,19 +64,24 @@ export default class RecipeEditForm extends Component {
           ingredients={ingredients}
           showIngredientOptions={true}
         />
-
         <IngredientFieldset
           isAdding={true}
           onSubmit={this.handleAddIngredientSubmit}
           disabled={disableFieldsets}
         />
-        <TextArea
-          updateField={updateRecipeField}
-          defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}
-          areaId='instructions'
-          areaLabel='Instructions'
-          disabled={disableFieldsets}
-        />
+        <fieldset
+          className='Fieldset Fieldset__Instructions'
+          id='instructions_fieldset'
+          disabled={disableFieldsets}>
+          <legend>Instructions</legend>
+          <TextArea
+            updateField={updateRecipeField}
+            defaultValue={!recipe.instructions.value ? null : recipe.instructions.value}
+            areaId='instructions'
+            areaLabel='Description'
+            disabled={disableFieldsets}
+          />
+        </fieldset>
 
         <Button
           type='submit'

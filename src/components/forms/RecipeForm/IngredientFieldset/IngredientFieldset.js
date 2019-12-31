@@ -191,7 +191,7 @@ export default class IngredientFieldset extends Component {
     const { currentIngredient } = this.state;
     const { isAdding, onCancelClick, disableFieldsets, unit_data } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
-    const fieldsetId = isAdding? 'add_ingredient' : `editing_ingredient_${currentIngredient.id}`;
+    const fieldsetId = isAdding? 'add_ingredient_fieldset' : `editing_ingredient_${currentIngredient.id}_fieldset`;
 
     return (
       <>

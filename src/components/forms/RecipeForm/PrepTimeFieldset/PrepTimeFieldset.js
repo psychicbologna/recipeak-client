@@ -8,6 +8,7 @@ export default class PrepTimeFieldset extends Component {
   return (
     <fieldset
       className='Fieldset RecipesForm__prep-time'
+      id='prep_time_fieldset'
       disabled={disabled}>
       <legend>Prep Time</legend>
       <div className="Fieldset__input-row-fix">

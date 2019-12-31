@@ -8,6 +8,7 @@ export default class BasicInfoFieldset extends Component {
     return (
       <fieldset
         className='Fieldset RecipesForm__basic-info'
+        id='basic_info_fieldset'
         disabled={disabled}>
         <legend>Basic Info</legend>
         <Input
