@@ -2,6 +2,24 @@ import config from '../config';
 import TokenService from './token-service';
 
 const RecipesApiService = {
+  postRecipe(recipe) {
+    return fetch(`${config.API_ENDPOINT}/recipes/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify({
+        ...recipe
+      })
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+
   getRecipes() {
     return fetch(`${config.API_ENDPOINT}/recipes`, {
       method: 'GET',
@@ -10,9 +28,9 @@ const RecipesApiService = {
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
       },
     })
-    .then(res =>
-      !res.ok ? res.json().then(e => Promise.reject(e)) : undefined
-    );
+      .then(res =>
+        !res.ok ? res.json().then(e => Promise.reject(e)) : undefined
+      );
   },
 
   getRecipe(recipeId) {
@@ -31,16 +49,20 @@ const RecipesApiService = {
   },
 
   //TODO test endpoint in api, remove when sure it's working
-  postRecipe(recipe) {
-    return fetch(`${config.API_ENDPOINT}/recipes/`, {
-      method: 'POST',
+  updateRecipe(recipeId, newRecipeFields, ingredientsAddList, ingredientsEditList, ingredientsDeleteList) {
+    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-      },
-      body: JSON.stringify({
-        ...recipe
-      })
+        body: JSON.stringify({
+          recipeId,
+          newRecipeFields,
+          ingredientsAddList,
+          ingredientsEditList,
+          ingredientsDeleteList
+        })
+      }
     })
       .then(res =>
         (!res.ok)
@@ -65,20 +87,16 @@ const RecipesApiService = {
       )
   },
 
-  //TODO test endpoint in api, remove when sure it's working
-  updateRecipe(recipeId, newRecipeFields, ingredientsAddList, ingredientsEditList, ingredientsDeleteList) {
-    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
+  getConversion(amount, unit_set) {
+    return fetch(`${config.API_ENDPOINT}/conversion`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-      body: JSON.stringify({
-        recipeId,
-        newRecipeFields,
-        ingredientsAddList,
-        ingredientsEditList,
-        ingredientsDeleteList
-      })
+        body: JSON.stringify({
+          amount,
+          unit_set
+        })
       }
     })
       .then(res =>
@@ -87,26 +105,6 @@ const RecipesApiService = {
           : res.json()
       )
   },
-
-    //TODO test endpoint in api, remove when sure it's working
-    getConversion(amount, unit_set) {
-      return fetch(`${config.API_ENDPOINT}/conversion`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-        body: JSON.stringify({
-          amount,
-          unit_set
-        })
-        }
-      })
-        .then(res =>
-          (!res.ok)
-            ? res.json().then(e => Promise.reject(e))
-            : res.json()
-        )
-    },
 
   getRecipeIngredients(recipeId) {
     return fetch(`${config.API_ENDPOINT}/recipes/${recipeId}/ingredients/`, {

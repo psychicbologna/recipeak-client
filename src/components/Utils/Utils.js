@@ -104,41 +104,6 @@ export function PrepTimeDisplay(props) {
   )
 }
 
-/**
- * Generates an input with appropriate props.
- * 
- * @param {string} defaultValue The default value of the input.
- * @param {string} parentForm Name of the parent form component for child input.
- * @param {string} [inputId=DEFAULT] The input's id, set to DEFAULT for debugging missing props. All inputs should be unique.
- * @param {string} [inputLabel=DEFAULT] The text in the input's label, set to DEFAULT for debugging missing props.
- * @param {string} [inputType] Changes the type of input.
- * @param {Boolean} [disabled] Disables specific input if true.
- * 
- * @callback [updateField] If input is on a real-time form, the callback to use to update state.
- * @param inputId {updateField}
- * @param event.target.value {updateField}
- */
-export function Input(props) {
-  const { defaultValue, updateField, parentForm, inputId = 'DEFAULT', inputLabel = 'DEFAULT', inputType = 'text', required, max, disabled = false } = props;
-  const inputName = parentForm ? `${parentForm}__${inputId}` : inputId;
-
-  return (
-    <label htmlFor={inputName} className={`Input__label ${inputName}`}>
-      <span className='Input__label__description'>{inputLabel}</span>
-      <input
-        className={`Input__input ${inputName}`}
-        type={inputType}
-        max={max ? max : null}
-        required={required ? true : false}
-        name={inputName}
-        id={inputId}
-        defaultValue={defaultValue}
-        onChange={updateField ? event => updateField(inputId, event.target.value) : null}
-        disabled={disabled}
-      />
-    </label>
-  )
-}
 
 export function TextArea(props) {
   const { defaultValue, updateField, areaId, areaLabel, disabled } = props;
@@ -158,77 +123,6 @@ export function TextArea(props) {
   )
 }
 
-export function BasicInfoFieldset(props) {
-  //These fieldset utils set up fieldsets as needed for both the add and edit recipe forms.
-  const { updateRecipeField, nameDefault, authorDefault, servingsDefault, disabled } = props;
-
-  return (
-    <fieldset
-      className='Fieldset RecipesForm__basic-info'
-      disabled={disabled}>
-      <legend>Basic Info</legend>
-      <Input
-        updateField={updateRecipeField}
-        defaultValue={nameDefault}
-        inputId='name'
-        inputName='name'
-        inputType='text'
-        inputLabel='Recipe Name'
-        parentForm='RecipeForm'
-      />
-      <Input
-        updateField={updateRecipeField}
-        defaultValue={authorDefault}
-        inputId='author'
-        inputName='author'
-        inputType='text'
-        inputLabel='Author'
-        parentForm='RecipeForm'
-      />
-      <Input
-        updateField={updateRecipeField}
-        defaultValue={servingsDefault}
-        inputId='servings'
-        inputName='servings'
-        inputType='number'
-        inputLabel='Servings'
-        parentForm='RecipeForm'
-      />
-    </fieldset>
-  )
-}
-
-export function PrepTimeFieldset(props) {
-  const { updateRecipeField, hoursDefault, minutesDefault, disabled } = props;
-  return (
-    <fieldset
-      className='Fieldset RecipesForm__prep-time'
-      disabled={disabled}>
-      <legend>Prep Time</legend>
-      <div className="Fieldset__input-row-fix">
-        <Input
-          updateField={updateRecipeField}
-          defaultValue={!hoursDefault ? null : hoursDefault}
-          inputId='prep_time_hours'
-          inputLabel='Hours'
-          inputType='number'
-          max='59'
-          parentForm='RecipeForm'
-        />
-        <Input
-          updateField={updateRecipeField}
-          defaultValue={!minutesDefault ? null : minutesDefault}
-          inputId='prep_time_minutes'
-          inputLabel='Minutes'
-          inputType='number'
-          max='59'
-          parentForm='RecipeForm'
-        />
-      </div>
-      <PrepTimeDisplay hours={hoursDefault} minutes={minutesDefault} />
-    </fieldset>
-  )
-}
 
 function Option(props) {
   //Sets option field for unit

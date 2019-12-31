@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import RecipeFormContext from '../../../../contexts/RecipeFormContext';
-import Ingredient from './Ingredient/Ingredient';
+import RecipeFormContext from '../../../../../contexts/RecipeFormContext';
+import Ingredient from '../Ingredient/Ingredient';
 
 // Lists the set of ingredients for the recipe. It loads changes to ingredients when they are made, and
 // also prevents changes when necessary by isolating or disabling options on ingredients.

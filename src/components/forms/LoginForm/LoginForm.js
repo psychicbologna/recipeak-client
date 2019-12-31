@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import AuthApiService from '../../../services/auth-api-service';
 import UserHomeContext from '../../../contexts/UserHomeContext'
-import { Button, Input } from '../../Utils/Utils';
+import Input from '../Input/Input';
+import { Button } from '../../Utils/Utils';
 
 export default class LoginForm extends Component {
   static defaultProps = {

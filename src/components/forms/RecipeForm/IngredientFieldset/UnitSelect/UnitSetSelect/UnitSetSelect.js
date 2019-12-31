@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { OptGroup } from '../../../Utils/Utils'
-import UnitContext, { nullUnits } from '../../../../contexts/UnitContext';
+import { OptGroup } from '../../../../../Utils/Utils';
+import UnitContext, { nullUnits } from '../../../../../../contexts/UnitContext';
 
 export default class UnitSetSelect extends Component {
 
@@ -12,7 +12,7 @@ export default class UnitSetSelect extends Component {
 
   componentDidMount() {
     this.context.clearError();
-    this.context.fetchUnits()
+    // this.context.fetchUnits();
   }
 
   render() {

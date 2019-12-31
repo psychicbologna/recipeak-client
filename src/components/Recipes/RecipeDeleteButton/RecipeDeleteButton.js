@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import RecipesApiService from '../../services/recipes-api-service';
+import { Button } from '../../Utils/Utils';
+import RecipesApiService from '../../../services/recipes-api-service';
 
 //Displays the button and handles state of delete modal.
 export default class RecipeEditPage extends Component {
@@ -37,11 +38,11 @@ export default class RecipeEditPage extends Component {
   }
 
   render() {
-    const { handleDeleteClick, handleDeleteSuccess, recipeId } = this.props;
+    const { handleDeleteClick, handleDeleteSuccess } = this.props;
     return (
-      <button className='RecipeDeleteButton' recipeId={recipeId} onClick={handleDeleteClick} onDeleteSuccess={handleDeleteSuccess}>
+      <Button className='RecipeDeleteButton' onClick={handleDeleteClick} onDeleteSuccess={handleDeleteSuccess}>
         Delete Recipe
-      </button>
+      </Button>
     )
   }
 }

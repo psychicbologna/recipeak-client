@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import IngredientOptionsBase from './IngredientOptionsBase';
+import IngredientOptionsBase from './IngredientOptionsBase/IngredientOptionsBase';
 import IngredientFieldSet from '../../../../forms/RecipeForm/IngredientFieldset/IngredientFieldset'
-import IngredientOptionsConvert from './IngredientOptionsConvert';
+import IngredientOptionsConvert from './IngredientOptionsConvert/IngredientOptionsConvert';
 import { DisplayAmountWithUnit } from '../../../../Utils/Utils';
 import RecipeFormContext, { nullIngredient } from '../../../../../contexts/RecipeFormContext';
 import './Ingredient.css'

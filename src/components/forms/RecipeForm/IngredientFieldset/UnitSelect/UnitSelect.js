@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import CustomUnitFieldSet from './CustomUnitFieldset'
-import UnitSetSelect from './UnitSetSelect';
-import RecipeFormContext from '../../../../contexts/RecipeFormContext';
+import CustomUnitFieldSet from './CustomUnitFieldset/CustomUnitFieldset'
+import UnitSetSelect from './UnitSetSelect/UnitSetSelect';
+import RecipeFormContext from '../../../../../contexts/RecipeFormContext';
 
 export default class UnitSelect extends Component {
 

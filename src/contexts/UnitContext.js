@@ -26,6 +26,10 @@ export class UnitContextProvider extends Component {
     error: null,
   }
 
+  componentDidMount = () => {
+    this.fetchUnits();
+  }
+
   fetchUnits = () => {
     if (this.state.units === nullUnits) {
       UnitApiService.getUnits()

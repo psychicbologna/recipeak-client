@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input } from '../../../Utils/Utils';
+import Input from '../../../../Input/Input';
 
 export default class CustomUnitFieldset extends Component {
 

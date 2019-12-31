@@ -32,10 +32,6 @@ const RecipeFormContext = React.createContext({
   ingredientCount: 0,
   ingredients: [],
 
-  ingredientsAddList: [],
-  ingredientsEditList: [],
-  ingredientsDeleteList: [],
-
   disableFieldsets: false,
 
   setRecipe: () => { },
@@ -301,7 +297,7 @@ export class RecipeFormContextProvider extends Component {
     //TODO send recipe and all ingredient lists, flush current recipe form and load recipe view page.
     // OnSuccess handler should prevent premature flush.
     console.log('updateRecipe firing!')
-    const id = await RecipesApiService.updateRecipe(recipe)
+    const id = await RecipesApiService.updateRecipe(recipe) //TODO this path needs to be fleshed out.
     return Promise.resolve(id)
   }
 

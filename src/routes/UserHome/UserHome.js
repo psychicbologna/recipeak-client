@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import UserHomeNav from '../../components/navigation/UserHomeNav/UserHomeNav';
 import UserHomeContext, {nullUser} from '../../contexts/UserHomeContext';
 import { FormatName } from '../../components/Utils/Utils'
-import RecipeCardList from '../../components/Recipes/RecipeCardList';
+import RecipeCardList from '../../components/Recipes/RecipeCardList/RecipeCardList';
 import UserApiService from '../../services/user-api-service'
 import './UserHome.css'
 

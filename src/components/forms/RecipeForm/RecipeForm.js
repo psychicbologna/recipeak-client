@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullRecipe } from '../../../contexts/RecipeFormContext';
-import IngredientsList from '../../Recipes/Recipe/Ingredients/IngredientsList';
+import IngredientsList from '../../Recipes/Recipe/Ingredients/IngredientsList/IngredientsList';
+import BasicInfoFieldset from './BasicInfoFieldset/BasicInfoFieldset';
+import PrepTimeFieldset from './PrepTimeFieldset/PrepTimeFieldset';
 import IngredientFieldset from './IngredientFieldset/IngredientFieldset';
 import './RecipeForm.css';
-import { BasicInfoFieldset, PrepTimeFieldset, TextArea, Button } from '../../Utils/Utils'
+import { TextArea, Button } from '../../Utils/Utils'
 
 export default class RecipeEditForm extends Component {
 

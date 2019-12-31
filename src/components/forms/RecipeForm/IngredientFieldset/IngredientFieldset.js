@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import RecipeFormContext, { nullIngredient } from '../../../../contexts/RecipeFormContext';
 import UnitApiService from '../../../../services/unit-api-service';
-import UnitSelect from './UnitSelect';
-import { IngredientEditUnitOutput, Input, Button } from '../../../Utils/Utils';
+import Input from '../../Input/Input';
+import UnitSelect from './UnitSelect/UnitSelect';
+import { IngredientEditUnitOutput, Button } from '../../../Utils/Utils';
 
 // The fieldset that is use for editing or adding an ingredient.
 export default class IngredientFieldset extends Component {
@@ -165,9 +166,12 @@ export default class IngredientFieldset extends Component {
   onClearClick = (event) => {
     event.preventDefault();
     this.clearCurrentIngredient();
+    document.getElementById('ing_text').value = this.props.ingredient.ing_text;
+    document.getElementById('amount').value = this.props.ingredient.amount;
+    document.getElementById('unit_set').value = this.props.ingredient.unit_set;
   }
 
-  //Clears the inputs.
+  //Clears the inputs back to default state.
   clearCurrentIngredient = () => {
     this.setState({
       currentIngredient: {
@@ -181,15 +185,13 @@ export default class IngredientFieldset extends Component {
         custom_plural: { value: this.props.unit_data.unit_plural, touched: false },
       }
     })
-    document.getElementById('ing_text').value = null;
-    document.getElementById('amount').value = null;
-    document.getElementById('unit_set').value = 'none';
   }
 
   render() {
     const { currentIngredient } = this.state;
     const { isAdding, onCancelClick, disableFieldsets, unit_data } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
+    const fieldsetId = isAdding? 'add_ingredient' : `editing_ingredient_${currentIngredient.id}`;
 
     return (
       <>
@@ -202,6 +204,7 @@ export default class IngredientFieldset extends Component {
         }
         <fieldset
           className='Fieldset Fieldset__Ingredient'
+          id={fieldsetId}
           disabled={disableFieldsets}
         >
           <legend>{title}</legend>
