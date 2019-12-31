@@ -4,7 +4,6 @@ import Header from '../Header/Header';
 import PrivateRoute from '../Utils/PrivateRoute';
 import PublicOnlyRoute from '../Utils/PublicOnlyRoute'
 import LandingPage from '../../routes/LandingPage/LandingPage';
-import AboutPage from '../../routes/AboutPage/AboutPage';
 import SignupPage from '../../routes/SignupPage/SignupPage';
 import LoginPage from '../../routes/LoginPage/LoginPage';
 import RecipePage from '../../routes/RecipePage/RecipePage';
@@ -40,10 +39,6 @@ class App extends Component {
               exact
               path={'/home'}
               component={UserHome}
-            />
-            <Route
-              path={'/about'}
-              component={AboutPage}
             />
             <PublicOnlyRoute
               path={'/signup'}
