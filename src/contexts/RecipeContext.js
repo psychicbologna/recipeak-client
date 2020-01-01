@@ -57,7 +57,6 @@ export class RecipeProvider extends Component {
       setRecipe: this.setRecipe,
       clearRecipe: this.clearRecipe,
       setIngredients: this.setIngredients,
-      addRecipe: this.addIngredient
     };
 
     return (

@@ -23,7 +23,7 @@ export default class RecipeEditPage extends Component {
   }
 
   //Handles click on any button that freezes the form [delete, ingredient edit]
-  handleClick = recipeId => {
+  handleClick = () => {
     this.setState({ disable: true })
     this.context.toggleDisableFieldsets();
   }
@@ -43,8 +43,9 @@ export default class RecipeEditPage extends Component {
 
   //Moves to recipe after submit successful.
   handleEditSuccess = recipeId => {
-    const { history } = this.props
-    history.push(`/recipes/${recipeId}`);
+    console.log(recipeId);
+    // const { history } = this.props
+    // history.push(`/recipes/${recipeId}`);
   }
 
   //Handles delete submit
@@ -65,14 +66,12 @@ export default class RecipeEditPage extends Component {
   //TODO Handles edit submit
   handleEditSubmit = (event, recipeId) => {
     event.preventDefault();
-
-    RecipesApiService.editRecipe(recipeId)
+    this.context.onFormSubmit()
       .then(res => {
-        this.handleEditSuccess()
+        this.handleEditSuccess(res.id)
       })
       .catch(error => {
         this.setState({ error: error })
-        this.setState({ disable: false })
         this.context.toggleDisableFieldsets();
       })
   }
@@ -108,6 +107,7 @@ export default class RecipeEditPage extends Component {
           recipe={recipe}
           ingredients={ingredients}
           onDeleteSuccess={this.handleDeleteSuccess}
+          onSubmit={this.handleEditSubmit}
           disabled={disable}
           formName='edit'
         />

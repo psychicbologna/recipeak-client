@@ -49,20 +49,17 @@ const RecipesApiService = {
   },
 
   //TODO test endpoint in api, remove when sure it's working
-  updateRecipe(recipeId, newRecipeFields, ingredientsAddList, ingredientsEditList, ingredientsDeleteList) {
-    return fetch(`${config.API_ENDPOINT}/recipes/ingredients/${recipeId}`, {
+  updateRecipe(newRecipeFields) {
+    console.log(newRecipeFields)
+    return fetch(`${config.API_ENDPOINT}/recipes/${newRecipeFields.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${TokenService.getAuthToken()}`,
-        body: JSON.stringify({
-          recipeId,
-          newRecipeFields,
-          ingredientsAddList,
-          ingredientsEditList,
-          ingredientsDeleteList
-        })
-      }
+      },
+      body: JSON.stringify({
+        ...newRecipeFields
+      })
     })
       .then(res =>
         (!res.ok)
@@ -71,7 +68,6 @@ const RecipesApiService = {
       )
   },
 
-  //TODO test endpoint in api, remove when sure it's working
   deleteRecipe(recipeId) {
     return fetch(`${config.API_ENDPOINT}/recipes/${recipeId}`, {
       method: 'DELETE',

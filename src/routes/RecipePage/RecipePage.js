@@ -12,6 +12,7 @@ export default class RecipePage extends Component {
   static contextType = RecipeContext;
 
   componentDidMount() {
+
     const recipeId = this.props.match.params.recipe_id;
     this.context.clearError()
     RecipesApiService.getRecipe(recipeId)
@@ -31,23 +32,39 @@ export default class RecipePage extends Component {
 
     return (
       <div>
-        <h3 className="Recipe__name">{recipe.name}</h3>
-        <h4>Prep Time:</h4>
-        <PrepTimeDisplay hours={recipe.prep_time_hours} minutes={recipe.prep_time_minutes}/>
-        <h4>Yields:</h4>
-        <p className="Recipe__servings">{recipe.servings} Servings</p>
-        <section>
-          <h2>Ingredients</h2>
-          {
-          !!ingredients.length
-          ? <Ingredients
-            ingredients={ingredients}
-          />
-          : <p>Loading ingredients...</p>
+        <section className="Recipe__basic-info">
+          <div className="Recipe__basic-info__name">
+            <h3>{recipe.name}</h3>
+          </div>
+          {!!recipe.author
+            && <div className='Recipe__basic-info__author'>
+              <span>by {recipe.author}</span>
+            </div>}
+          {(!!recipe.prep_time_hours || !!recipe.prep_time_minutes)
+            && <div className='Recipe__basic-info__prep-time'>
+              <h4>Prep Time:</h4>
+              <PrepTimeDisplay hours={recipe.prep_time_hours} minutes={recipe.prep_time_minutes} />
+            </div>
+          }
+          {!!recipe.servings
+            && <div className='Recipe__basic-info__servings'>
+              <h4>Yields:</h4>
+              <p className="Recipe__servings">{recipe.servings} Servings</p>
+            </div>
           }
         </section>
-        <section>
-          <h2>Instructions</h2>
+        <section className="Recipe__ingredients">
+          <h3>Ingredients</h3>
+          {
+            !!ingredients.length
+              ? <Ingredients
+                ingredients={ingredients}
+              />
+              : <p className="Ingredients__loading">Loading ingredients...</p>
+          }
+        </section>
+        <section className="Recipe__instructions">
+          <h3>Instructions</h3>
           <p>
             {recipe.instructions}
           </p>

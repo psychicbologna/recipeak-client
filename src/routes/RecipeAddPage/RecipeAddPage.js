@@ -62,22 +62,24 @@ export default class RecipeAddPage extends Component {
   handleAddSubmit = event => {
     event.preventDefault();
     this.context.onFormSubmit()
-      .then(res => {
-        this.handleAddSuccess(res.id)
+      .then(recipeId => {
+        this.handleAddSuccess(recipeId)
       })
       .catch(error => {
         this.setState({ error: error })
-        this.setState({ disable: false })
         this.context.toggleDisableFieldsets();
       })
   }
 
   componentDidMount() {
     this.clearError();
+    this.setState({ disable: false })
+    this.context.enableFieldsets();
   }
 
   componentWillUnmount() {
     this.context.clearRecipe();
+    this.setState({ disable: true })
   }
 
   clearError() {

@@ -51,7 +51,8 @@ const RecipeFormContext = React.createContext({
   onEditIngredient: () => { },
   onDeleteIngredient: () => { },
 
-  toggleDisableFieldsets: () => { }
+  toggleDisableFieldsets: () => { },
+  enableFieldsets: () => { }
 })
 
 export default RecipeFormContext;
@@ -156,7 +157,6 @@ export class RecipeFormContextProvider extends Component {
       })
   }
 
-
   //Add ingredient to preview list and queue for addition
   handleAddIngredient = (ingredient) => {
     //Create new ingredient
@@ -182,22 +182,6 @@ export class RecipeFormContextProvider extends Component {
           return this.updateIngredientListsWithAddition(newIngredient, ingredient)
         })
     }
-  }
-
-  //Prep data for submission
-  serializeIngredientsAddList = ingredients => {
-    return ingredients.map(ingredient => {
-      const newIngredient = {
-        amount: ingredient.amount,
-        unit_set: ingredient.unit_set,
-        ing_text: ingredient.ing_text
-      };
-
-      if (ingredient.unit_set === 'custom') {
-        newIngredient.unit_data = ingredient.unit_data;
-      }
-      return newIngredient;
-    })
   }
 
   //Add ingredient to preview list and queue for addition
@@ -255,8 +239,11 @@ export class RecipeFormContextProvider extends Component {
 
   //Submits the recipe and its ingredients.
   handleFormSubmit = () => {
+    console.log(this.state.recipe)
     const { id, name, author, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
+
+    console.log(ingredientsAddList);
 
     //Set up recipe for post
     const newRecipe = {
@@ -266,25 +253,24 @@ export class RecipeFormContextProvider extends Component {
       prep_time_minutes: prep_time_minutes.value,
       servings: servings.value,
       instructions: instructions.value,
-      ingredientsAddList: [...ingredientsAddList],
-      ingredientsEditList: [...ingredientsEditList],
-      ingredientsDeleteList: [...ingredientsDeleteList]
+      ingredients: {
+        ingredientsAddList: [...ingredientsAddList],
+        ingredientsEditList: [...ingredientsEditList],
+        ingredientsDeleteList: [...ingredientsDeleteList]
+      }
     }
 
-    //Pulls temporary id from new ingredients.
-    //TODO move to backend?
-    newRecipe.ingredientsAddList = this.serializeIngredientsAddList(newRecipe.ingredientsAddList);
-
     if (!id) {
-      delete newRecipe.ingredientsEditList;
-      delete newRecipe.ingredientsDeleteList;
+      delete newRecipe.ingredients.ingredientsEditList;
+      delete newRecipe.ingredients.ingredientsDeleteList;
       return this.addRecipe(newRecipe)
         .then(id => {
+          console.log('id', id)
           return id;
         })
     } else if (!!id) {
       newRecipe.id = id;
-      return this.editRecipe(newRecipe)
+      return this.updateRecipe(newRecipe)
     }
   }
 
@@ -296,7 +282,7 @@ export class RecipeFormContextProvider extends Component {
   updateRecipe = async recipe => {
     //TODO send recipe and all ingredient lists, flush current recipe form and load recipe view page.
     // OnSuccess handler should prevent premature flush.
-    console.log('updateRecipe firing!')
+    console.log(recipe)
     const id = await RecipesApiService.updateRecipe(recipe) //TODO this path needs to be fleshed out.
     return Promise.resolve(id)
   }
@@ -327,11 +313,12 @@ export class RecipeFormContextProvider extends Component {
   }
 
   setRecipe = recipe => {
-    const { name, author, prep_time_hours, prep_time_minutes, servings, instructions } = recipe;
+    const { id, name, author, prep_time_hours, prep_time_minutes, servings, instructions } = recipe;
 
     this.setState(prevState => ({
       recipe: {
         ...prevState.recipe,
+        id: id,
         name: { value: name },
         author: { value: author },
         prep_time_hours: { value: prep_time_hours },
@@ -341,13 +328,6 @@ export class RecipeFormContextProvider extends Component {
       }
     }));
   };
-
-  //Deletes the current recipe.
-  //TODO should send you to home as well. OnSuccess handler.
-  deleteRecipe(recipeId) {
-    RecipesApiService.deleteRecipe(recipeId)
-      .then(() => this.clearRecipe());
-  }
 
   setIngredients = ingredients => {
     this.setState({ ingredients })
@@ -361,6 +341,10 @@ export class RecipeFormContextProvider extends Component {
 
   toggleDisableFieldsets = () => {
     this.setState({ disableFieldsets: !this.state.disableFieldsets })
+  }
+
+  enableFieldsets = () => {
+    this.setState({ disableFieldsets: false })
   }
 
   render() {
@@ -384,6 +368,7 @@ export class RecipeFormContextProvider extends Component {
       onDeleteIngredient: this.handleDeleteIngredient,
 
       toggleDisableFieldsets: this.toggleDisableFieldsets,
+      enableFieldsets: this.enableFieldsets
     };
     return (
       <RecipeFormContext.Provider value={value}>
