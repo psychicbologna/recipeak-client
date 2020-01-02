@@ -8,7 +8,7 @@ export default class RecipeCard extends Component {
 
   render() {
     const { recipe } = this.props
-    const { prep_time_hours, prep_time_minutes, date_created, date_updated } = recipe;
+    const { prep_time_hours, prep_time_minutes, date_created } = recipe;
     return (
       <section className='RecipeCard'>
         <header className='RecipeCard__header'>
@@ -20,7 +20,6 @@ export default class RecipeCard extends Component {
         <h4>Prep Time:</h4>
         <PrepTimeDisplay hours={prep_time_hours} minutes={prep_time_minutes} />
         <RecipeDate prepend='Created' date={date_created} />
-        <RecipeDate prepend='Last Updated' date={date_updated} />
         <RecipeCardFooter recipe={recipe} />
       </section>
 

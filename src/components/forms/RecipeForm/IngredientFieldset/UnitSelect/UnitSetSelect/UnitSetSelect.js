@@ -12,7 +12,6 @@ export default class UnitSetSelect extends Component {
 
   componentDidMount() {
     this.context.clearError();
-    // this.context.fetchUnits();
   }
 
   render() {

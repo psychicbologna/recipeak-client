@@ -10,7 +10,6 @@ describe('RecipeCard component testing', () => {
       prep_time_hours: 0,
       prep_time_minutes: 0,
       date_created: '',
-      date_updated: ''
     }
 
     const div = document.createElement('div');
