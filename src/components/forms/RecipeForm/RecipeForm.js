@@ -26,6 +26,7 @@ export default class RecipeEditForm extends Component {
     this.context.clearForm();
   }
 
+  //Handles context when ingredient added.
   handleAddIngredientSubmit = (newIngredient) => {
     const { onAddIngredient } = this.context
     onAddIngredient(newIngredient)

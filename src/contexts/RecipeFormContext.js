@@ -10,6 +10,7 @@ export const nullLiveInput = {
 }
 
 export const nullRecipe = {
+  id: '',
   name: nullLiveInput,
   author: nullLiveInput,
   prep_time_hours: nullLiveInput,
@@ -239,11 +240,9 @@ export class RecipeFormContextProvider extends Component {
 
   //Submits the recipe and its ingredients.
   handleFormSubmit = () => {
-    console.log(this.state.recipe)
+
     const { id, name, author, prep_time_hours, prep_time_minutes, servings, instructions } = this.state.recipe;
     const { ingredientsAddList, ingredientsEditList, ingredientsDeleteList } = this.state
-
-    console.log(ingredientsAddList);
 
     //Set up recipe for post
     const newRecipe = {
@@ -265,12 +264,14 @@ export class RecipeFormContextProvider extends Component {
       delete newRecipe.ingredients.ingredientsDeleteList;
       return this.addRecipe(newRecipe)
         .then(id => {
-          console.log('id', id)
           return id;
         })
     } else if (!!id) {
       newRecipe.id = id;
-      return this.updateRecipe(newRecipe)
+      return this.updateRecipe(newRecipe, id)
+        .then(id => {
+          return id;
+        })
     }
   }
 
@@ -279,12 +280,9 @@ export class RecipeFormContextProvider extends Component {
     return Promise.resolve(id)
   }
 
-  updateRecipe = async recipe => {
-    //TODO send recipe and all ingredient lists, flush current recipe form and load recipe view page.
-    // OnSuccess handler should prevent premature flush.
-    console.log(recipe)
-    const id = await RecipesApiService.updateRecipe(recipe) //TODO this path needs to be fleshed out.
-    return Promise.resolve(id)
+  updateRecipe = async (recipe, id) => {
+    const successId = await RecipesApiService.updateRecipe(recipe, id)
+    return Promise.resolve(successId)
   }
 
   //Flushes all of the form's state, including all ingredients.

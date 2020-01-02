@@ -48,10 +48,8 @@ const RecipesApiService = {
       )
   },
 
-  //TODO test endpoint in api, remove when sure it's working
-  updateRecipe(newRecipeFields) {
-    console.log(newRecipeFields)
-    return fetch(`${config.API_ENDPOINT}/recipes/${newRecipeFields.id}`, {
+  updateRecipe(newRecipeFields, id) {
+    return fetch(`${config.API_ENDPOINT}/recipes/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

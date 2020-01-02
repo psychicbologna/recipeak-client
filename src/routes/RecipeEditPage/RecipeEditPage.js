@@ -14,11 +14,10 @@ export default class RecipeEditPage extends Component {
     recipe: nullRecipe,
     ingredients: [],
     currentIngredient: nullIngredient,
-    error: null,
   }
 
   state = {
-    error: '',
+    error: null,
     disable: false
   }
 
@@ -43,32 +42,40 @@ export default class RecipeEditPage extends Component {
 
   //Moves to recipe after submit successful.
   handleEditSuccess = recipeId => {
-    console.log(recipeId);
-    // const { history } = this.props
-    // history.push(`/recipes/${recipeId}`);
+    const { history } = this.props
+    history.push(`/recipes/${recipeId}`);
   }
 
   //Handles delete submit
   handleDeleteSubmit = (event, recipeId) => {
     event.preventDefault();
+    //Freeze form editing while it submits.
+    this.context.toggleDisableFieldsets();
 
     RecipesApiService.deleteRecipe(recipeId)
-      .then(res => {
-        this.handleDeleteSuccess()
+      .then(() => {
+        //Push to homepage.
+        this.handleDeleteSuccess();
+        //Allow form editing again.
+        this.context.toggleDisableFieldsets();
       })
       .catch(error => {
         this.setState({ error: error })
-        this.setState({ disable: false })
+        //Allow form editing again.
         this.context.toggleDisableFieldsets();
       })
   }
 
   //TODO Handles edit submit
-  handleEditSubmit = (event, recipeId) => {
+  handleEditSubmit = (event) => {
     event.preventDefault();
-    this.context.onFormSubmit()
-      .then(res => {
-        this.handleEditSuccess(res.id)
+    //Freeze form editing while it submits.
+    this.context.toggleDisableFieldsets();
+
+    return this.context.onFormSubmit()
+      .then(id => {
+        this.handleEditSuccess(id)
+        this.context.toggleDisableFieldsets();
       })
       .catch(error => {
         this.setState({ error: error })
@@ -98,7 +105,7 @@ export default class RecipeEditPage extends Component {
   render() {
     const recipeId = this.props.match.params.recipe_id
     const { recipe, ingredients } = this.context;
-    const { disable } = this.state;
+    const { disable, error } = this.state;
 
     return (
       <section className={`RecipeEdit`}>
@@ -120,6 +127,10 @@ export default class RecipeEditPage extends Component {
               show={this.state.disable}
               onDeleteSubmit={this.handleDeleteSubmit}
               onDeleteCancel={this.handleCancel} />
+        }
+
+        {error
+          && <div className='Alert' role='alert'> <p className='Alert__p'>{error}</p></div>
         }
       </section>
     )
