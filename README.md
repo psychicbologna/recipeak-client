@@ -2,7 +2,20 @@
 
 A friendly recipe app.
 
+Created by Alex Fukui for Thinkful.
+
+[Github](https://github.com/psychicbologna/recipeak-client)
+[Demo](https://recipeak-client.now.sh/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Summary
+
+Recipeak is a recipe storing app.
+
+## Tech Stack
+
+Express.js, React.js, Node.js, Chai, Mocha, Enzyme, Morgan, CORS, Postgres, Postgrator, Supertest.
 
 ## Available Scripts
 
