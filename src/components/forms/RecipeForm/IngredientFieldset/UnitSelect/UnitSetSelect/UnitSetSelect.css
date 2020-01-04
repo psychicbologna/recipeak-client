@@ -1,0 +1,30 @@
+.UnitSetSelect__label,
+.UnitSetSelect__label__description {
+  border: 0;
+}
+
+.UnitSetSelect__label {
+  display: flex;
+  flex-flow: column;
+}
+
+.UnitSetSelect__select {
+  display: block;
+  border: 2px solid var(--dark-gray);
+}
+
+.UnitSetSelect__label {
+  display: flex;
+  flex-flow: column;
+}
+
+.UnitSetSelect__select:focus {
+  border: 2px solid var(--accent-color-1);
+  outline: none;
+}
+
+.UnitSetSelect__select,
+.UnitSetSelect__label__description {
+  font-size: 1.15em;
+  line-height: 1.2;
+}

@@ -1,13 +1,24 @@
-/*TODO some light styling on the text would make it polished*/
-
 .RecipeCard {
   border: 1px solid;
   border-color: var(--dark-gray);
 }
 
 .RecipeCard__header {
+  padding: .25rem 0;
   margin: 1rem 0;
   background-color: var(--light-gray);
+}
+
+.RecipeCard__heading {
+  margin: 1rem;
+}
+
+.RecipeCard__subheading {
+  margin-left: 1.75rem;
+}
+
+.RecipeCard__line {
+  margin-left: 2rem;
 }
 
 .RecipeCard__footer {
@@ -18,4 +29,12 @@
   list-style-type: none;
   display: flex;
   background-color: var(--light-gray);
+}
+
+.RecipeCard__footer_menu li:first-child {
+  margin-left: 1rem;
+}
+
+.RecipeCard__footer_menu li {
+  margin-right: 1rem;
 }

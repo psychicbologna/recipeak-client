@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import RecipeContext from '../../contexts/RecipeContext';
 import RecipesApiService from '../../services/recipes-api-service';
+import IngredientsList from '../../components/Recipes/Recipe/Ingredients/IngredientsList/IngredientsList';
 import { Section, PrepTimeDisplay } from '../../components/Utils/Utils';
+import './RecipePage.css';
 
 export default class RecipePage extends Component {
   static defaultProps = {
@@ -32,42 +34,37 @@ export default class RecipePage extends Component {
 
     return (
       <div>
-        <section className="Recipe__basic-info">
-          <div className="Recipe__basic-info__name">
-            <h3>{recipe.name}</h3>
-          </div>
+        <section className="Recipe__section Recipe__basic-info">
+          <h3 className='Recipe__basic-info__name'>{recipe.name}</h3>
           {!!recipe.author
-            && <div className='Recipe__basic-info__author'>
-              <span>by {recipe.author}</span>
-            </div>}
+            && <p className='Recipe__basic-info__author'>by {recipe.author}</p>
+          }
           {(!!recipe.prep_time_hours || !!recipe.prep_time_minutes)
-            && <div className='Recipe__basic-info__prep-time'>
-              <h4>Prep Time:</h4>
-              <PrepTimeDisplay hours={recipe.prep_time_hours} minutes={recipe.prep_time_minutes} />
+            && <div className='Recipe__basic-info__line'>
+              <h4 className='Recipe__basic-info__title'>Prep Time: </h4>
+              <PrepTimeDisplay className="Recipe__basic-info__line" hours={recipe.prep_time_hours} minutes={recipe.prep_time_minutes} />
             </div>
           }
           {!!recipe.servings
-            && <div className='Recipe__basic-info__servings'>
-              <h4>Yields:</h4>
-              <p className="Recipe__servings">{recipe.servings} Servings</p>
+            && <div className='Recipe__basic-info__line'>
+              <h4 className='Recipe__basic-info__title'>Yields: </h4>
+              <span className="Recipe__basic-info__line">{recipe.servings} Servings</span>
             </div>
           }
         </section>
-        <section className="Recipe__ingredients">
-          <h3>Ingredients</h3>
-          {
-            !!ingredients.length
-              ? <Ingredients
-                ingredients={ingredients}
-              />
-              : <p className="Ingredients__loading">Loading ingredients...</p>
-          }
-        </section>
-        <section className="Recipe__instructions">
+        {
+          !!ingredients.length
+            ? <IngredientsList
+              className='Recipe'
+              ingredients={ingredients}
+            />
+            : <p className="Ingredients__loading">Loading ingredients...</p>
+        }
+        <section className="Recipe__section Recipe__instructions">
           <h3>Instructions</h3>
-          <p>
+          <div className='Recipe__basic-info__line'>
             {recipe.instructions}
-          </p>
+          </div>
         </section>
 
       </div>
@@ -97,7 +94,7 @@ export default class RecipePage extends Component {
 function Ingredients({ ingredients }) {
   if (ingredients.length) {
     return (
-      <ul>
+      <ul className="">
         {ingredients.map(ingredient =>
           <li key={ingredient.id} className='Ingredient'>
             {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ing_text}

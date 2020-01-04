@@ -81,7 +81,7 @@ export function IngredientEditUnitOutput(amount, unit_set, unit_plural, unit_sin
   // return `${!!amount ? amount : '...'} ${!!unit ? unit : '...'}`
 }
 
-export function PrepTimeDisplay(props) {
+export function PrepTimeOutput(props) {
   // Displays the prep time depending on its length:
   //'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
   let content = '';
@@ -103,6 +103,30 @@ export function PrepTimeDisplay(props) {
     <output className="RecipeForm__output">{content}</output>
   )
 }
+
+export function PrepTimeDisplay(props) {
+  // Displays the prep time depending on its length:
+  //'x Hours, x Minutes', 'x Hours', or 'x Minutes'.
+  let content = '';
+  let { className, prepend, hours, minutes } = props
+
+  hours = parseInt(hours)
+  minutes = parseInt(minutes)
+
+  if (!hours && !minutes) {
+    content = 'No prep time entered.'
+  }
+  if (!!hours) { content += `${hours} Hour${(hours > 1 || hours < -1) ? 's' : ''}` }
+  if (!!minutes) {
+    if (!!hours) { content += `, ` }
+    content += `${minutes} Minute${(minutes > 1 || minutes < -1) ? 's' : ''}`
+  }
+
+  return (
+  <span className={className}>{prepend}{content}</span>
+  )
+}
+
 
 
 export function TextArea(props) {

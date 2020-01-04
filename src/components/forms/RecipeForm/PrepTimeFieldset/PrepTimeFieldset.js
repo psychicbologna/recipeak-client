@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Input from '../../Input/Input';
-import { PrepTimeDisplay } from '../../../Utils/Utils';
+import { PrepTimeOutput } from '../../../Utils/Utils';
 
 export default class PrepTimeFieldset extends Component {
   render() {
@@ -31,7 +31,7 @@ export default class PrepTimeFieldset extends Component {
           parentForm='RecipeForm'
         />
       </div>
-      <PrepTimeDisplay hours={hoursDefault} minutes={minutesDefault} />
+      <PrepTimeOutput hours={hoursDefault} minutes={minutesDefault} />
     </fieldset>
   )
   }

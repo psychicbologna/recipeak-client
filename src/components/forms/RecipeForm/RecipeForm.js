@@ -61,6 +61,7 @@ export default class RecipeEditForm extends Component {
           disabled={disableFieldsets}
         />
         <IngredientsList
+          className="RecipeForm"
           allowIngredientEdits={allowIngredientEdits}
           ingredients={ingredients}
           showIngredientOptions={true}

@@ -26,9 +26,7 @@
 
 .Button,
 .Input__input,
-.UnitSetSelect__select,
-.Input__label__description,
-.UnitSetSelect__label__description {
+.Input__label__description {
   font-size: 1.15em;
   line-height: 1.2;
 }
@@ -54,7 +52,8 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.Button:disabled, .Button:hover:disabled {
+.Button:disabled,
+.Button:hover:disabled {
   text-decoration: none;
   background-color: var(--dark-gray);
   color: var(--off-white);
@@ -86,6 +85,8 @@ a:hover {
 
 .Fieldset {
   display: grid;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--accent-color-1);
 }
 
 .Fieldset legend {
@@ -111,7 +112,7 @@ a:hover {
   width: 2rem;
 }
 
-.Input__input:focus, .UnitSetSelect__select:focus {
+.Input__input:focus {
   border: 2px solid var(--accent-color-1);
   outline: none;
 }
@@ -122,24 +123,11 @@ a:hover {
 }
 
 .Input__label,
-.UnitSetSelect__label,
-.Input__label__description,
-.UnitSetSelect__label__description {
+.Input__label__description {
   border: 0;
 }
 
-.Input__label,
-.UnitSetSelect__label {
-  display: flex;
-  flex-flow: column;
-}
-
-.UnitSetSelect__select {
-  display: block;
-  border: 2px solid var(--dark-gray);
-}
-
-.UnitSetSelect__label {
+.Input__label {
   display: flex;
   flex-flow: column;
 }

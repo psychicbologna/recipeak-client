@@ -1,0 +1,24 @@
+.Recipe__section {
+  border-bottom: 1px solid var(--dark-gray);
+}
+
+.Recipe__basic-info__name {
+  margin-bottom: 1rem;
+}
+
+.Recipe__basic-info__title {
+  display: inline;
+}
+
+.Recipe__basic-info__line {
+  margin-bottom: .75rem;
+  margin-left: 1rem;
+}
+
+.Recipe__basic-info__name {
+  font-size: 1.5em;
+}
+
+.Recipe__basic-info__author {
+  font-size: 1.25em;
+}

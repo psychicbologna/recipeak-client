@@ -1,7 +1,6 @@
 .Ingredient {
   display: flex;
   flex-flow: column;
-  padding: .5em 0;
 }
 
 li.Ingredient__editing {

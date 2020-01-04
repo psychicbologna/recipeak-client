@@ -10,5 +10,17 @@
 .RecipeForm__output {
   text-align: center;
   padding: .5rem;
-  border: 1px dotted var(--dark-gray)
+  border: 1px dotted var(--dark-gray);
+  margin-bottom: 1rem;
+}
+
+.RecipeForm__ingredients-list {
+  margin-bottom: 1rem;
+}
+
+.Fieldset__title {
+  font-size: 1.25em;
+  background: var(--light-gray);
+  color: var(--accent-color-3);
+  width: 100%;
 }

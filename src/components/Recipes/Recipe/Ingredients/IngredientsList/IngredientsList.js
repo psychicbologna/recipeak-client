@@ -40,20 +40,20 @@ export default class IngredientList extends Component {
   }
 
   render() {
-    const { ingredients } = this.props
+    const { ingredients, className } = this.props
     const { showOptions, editingId } = this.state
 
     return (
       !ingredients.length
-        ? <section className="RecipeForm__ingredients-preview">
+        ? <section className={`${className}__ingredients-preview`}>
           <h4>A recipe is nothing without ingredients!</h4>
           <p>Enter an ingredient on the add form below to get started. Recipes must be submitted with at least one ingredient.</p>
           <p>NOTE: Changes made to this list won't save until the entire recipe is submitted.</p>
         </section>
 
-        : <section className="RecipeForm__ingredients-preview">
-          <h3>Ingredients</h3>
-          <ul className='RecipeForm__ingredients-list'>
+        : <section className={`${className}__ingredients`}>
+          <h3 className={`${className}__ingredients-title`}>Ingredients</h3>
+          <ul className={`${className}__ingredients-list`}>
             {ingredients.map(ingredient => {
               return (
                 <Ingredient

@@ -1,2 +1,16 @@
 .LandingPage__list {
+  list-style-type: none;
+}
+
+.LandingPage__Copy {
+  margin-bottom: 1rem;
+  border: 1px solid black;
+}
+
+.LandingPage__ol {
+}
+
+.LandingPage__Intro p {
+  line-height: 1.5em;
+  font-size: 1.25em;
 }
