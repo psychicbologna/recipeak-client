@@ -86,6 +86,7 @@ export default class RecipeEditForm extends Component {
         </fieldset>
 
         <Button
+          className='RecipeForm__submit'
           type='submit'
           disabled={disableFieldsets}
         >

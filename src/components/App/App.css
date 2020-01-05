@@ -144,7 +144,7 @@ a:hover {
 
 .Fieldset__input-row-fix {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 

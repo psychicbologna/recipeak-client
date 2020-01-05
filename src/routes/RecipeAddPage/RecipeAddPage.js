@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
-import { Button } from '../../components/Utils/Utils'
 import RecipeForm from '../../components/forms/RecipeForm/RecipeForm';
 import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/RecipeFormContext';
 
@@ -100,15 +98,6 @@ export default class RecipeAddPage extends Component {
           onSubmit={this.handleAddSubmit}
           formName='add'
         />
-        {
-          !disable
-            ? <Button type='button' onClick={() => this.handleClick(recipe.id)}>Delete Recipe</Button>
-            : <DeleteRecipeConfirm
-              recipeName={recipe.name.value}
-              show={this.state.disable}
-              onDeleteSubmit={this.handleDeleteSubmit}
-              onDeleteCancel={this.handleCancel} />
-        }
 
       </section>
     )

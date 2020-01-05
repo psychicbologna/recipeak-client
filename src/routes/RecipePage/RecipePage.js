@@ -62,9 +62,9 @@ export default class RecipePage extends Component {
         }
         <section className="Recipe__section Recipe__instructions">
           <h3>Instructions</h3>
-          <div className='Recipe__basic-info__line'>
+          <p className='instructions'>
             {recipe.instructions}
-          </div>
+          </p>
         </section>
 
       </div>
@@ -88,42 +88,5 @@ export default class RecipePage extends Component {
         {content}
       </Section>
     )
-  }
-}
-
-function Ingredients({ ingredients }) {
-  if (ingredients.length) {
-    return (
-      <ul className="">
-        {ingredients.map(ingredient =>
-          <li key={ingredient.id} className='Ingredient'>
-            {AmountFormat(ingredient.amount, ingredient.unit_data)} {UnitFormat(ingredient.amount, ingredient.unit_data)} {ingredient.ing_text}
-          </li>)}
-      </ul>
-    )
-  }
-}
-
-//Returns the unit as singular or plural depending on the amount.
-function UnitFormat(amount, unitData) {
-  if (amount === 1) {
-    return unitData.unit_single;
-  } else {
-    return unitData.unit_plural;
-  }
-}
-
-function AmountFormat(amount, unitData) {
-  if (unitData.unit_plural && unitData.unit_single && amount > 0) {
-    return amount
-  }
-  if (amount === 0.5) {
-    return 'one half';
-  }
-  if (amount === .75) {
-    return 'two thirds';
-  }
-  if (amount === .25) {
-    return 'one fourth';
   }
 }

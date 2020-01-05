@@ -210,7 +210,8 @@ export default class IngredientFieldset extends Component {
           id={fieldsetId}
           disabled={disableFieldsets}
         >
-          <legend>{title}</legend>
+          <div className='Fieldset__input-row-fix'>
+            <legend>{title}</legend>
             <Input
               defaultValue={currentIngredient.amount.value}
               updateField={this.updateIngredientField}
@@ -224,6 +225,7 @@ export default class IngredientFieldset extends Component {
               unit_data={unit_data}
               updateIngredientField={this.updateIngredientField}
             />
+          </div>
           <Input
             defaultValue={currentIngredient.ing_text.value}
             updateField={this.updateIngredientField}

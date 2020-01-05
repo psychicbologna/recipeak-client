@@ -4,6 +4,7 @@ import RecipeForm from '../../components/forms/RecipeForm/RecipeForm';
 import DeleteRecipeConfirm from '../../components/modals/DeleteRecipeConfirm';
 import { Button } from '../../components/Utils/Utils'
 import RecipeFormContext, { nullRecipe, nullIngredient } from '../../contexts/RecipeFormContext';
+import './RecipeEditPage.css'
 
 
 export default class RecipeEditPage extends Component {
@@ -120,7 +121,7 @@ export default class RecipeEditPage extends Component {
         />
         {
           !disable
-            ? <Button type='button' onClick={() => this.handleClick(recipe.id)}>Delete Recipe</Button>
+            ? <Button className='RecipeDelete__submit' type='button' onClick={() => this.handleClick(recipe.id)}>Delete Recipe</Button>
             : <DeleteRecipeConfirm
               recipeId={recipeId}
               recipeName={recipe.name.value}
