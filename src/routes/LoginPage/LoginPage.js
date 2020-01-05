@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import LoginForm from '../../components/forms/LoginForm/LoginForm';
+import './LoginPage.css'
 
 class LoginPage extends Component {
   static defaultProps = {
@@ -20,10 +21,13 @@ class LoginPage extends Component {
   render() {
     return (
       <section className='LoginPage'>
+        <h2>Log In</h2>
         <LoginForm
           onLoginSuccess={this.handleLoginSuccess}
         />
-        <p>For a demo account, use username test, password Password123!</p>
+        <div className="LoginPage__copy">
+        <p>For a demo account, use username: <code>bonappetite</code>, password: <code>password</code></p>
+        </div>
       </section>
     )
   }

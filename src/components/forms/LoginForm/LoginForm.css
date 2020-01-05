@@ -1,0 +1,9 @@
+.LoginForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.LoginForm__submit {
+  margin: 1rem auto;
+  width: 8rem;
+}

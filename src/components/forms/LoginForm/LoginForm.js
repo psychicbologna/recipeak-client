@@ -3,6 +3,7 @@ import AuthApiService from '../../../services/auth-api-service';
 import UserHomeContext from '../../../contexts/UserHomeContext'
 import Input from '../Input/Input';
 import { Button } from '../../Utils/Utils';
+import './LoginForm.css';
 
 export default class LoginForm extends Component {
   static defaultProps = {
@@ -57,7 +58,7 @@ export default class LoginForm extends Component {
           parentForm='LoginForm'
           type='password'
         />
-        <Button type='submit'>
+        <Button className='LoginForm__submit' type='submit'>
           Login
         </Button>
         {!!error

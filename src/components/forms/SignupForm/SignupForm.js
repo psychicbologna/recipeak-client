@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from '../../Utils/Utils';
 import Input from '../Input/Input';
 import AuthApiService from '../../../services/auth-api-service';
+import './SignupForm.css'
 
 export default class SignupForm extends Component {
 
@@ -65,7 +66,7 @@ export default class SignupForm extends Component {
           >
         </Input>
 
-        <Button type='submit'>
+        <Button className='SignupForm__submit' type='submit'>
           Sign Up!
         </Button>
       </form>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RecipeFormContext from '../../../../../contexts/RecipeFormContext';
 import Ingredient from '../Ingredient/Ingredient';
+import './IngredientsList.css'
 
 // Lists the set of ingredients for the recipe. It loads changes to ingredients when they are made, and
 // also prevents changes when necessary by isolating or disabling options on ingredients.
@@ -45,8 +46,8 @@ export default class IngredientList extends Component {
 
     return (
       !ingredients.length
-        ? <section className={`${className}__ingredients-preview`}>
-          <h4>A recipe is nothing without ingredients!</h4>
+        ? <section className={`${className}__ingredients__empty`}>
+          <h3 className={`${className}__ingredients-title`}>Ingredients</h3>
           <p>Enter an ingredient on the add form below to get started. Recipes must be submitted with at least one ingredient.</p>
           <p>NOTE: Changes made to this list won't save until the entire recipe is submitted.</p>
         </section>

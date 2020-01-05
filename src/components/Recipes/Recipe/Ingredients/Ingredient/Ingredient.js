@@ -113,7 +113,6 @@ export default class Ingredient extends Component {
     this.context.onEditIngredient(ingredient)
     this.props.onClearEditingId();
     this.toggleEditing();
-    return;
   }
   //Abort editing an ingredient and close fieldset.
   handleCancelClick = () => {

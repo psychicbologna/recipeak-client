@@ -160,6 +160,9 @@ export default class IngredientFieldset extends Component {
     event.preventDefault();
     this.props.onSubmit(currentIngredient)
     this.clearCurrentIngredient();
+    document.getElementById('ing_text').value = this.props.ingredient.ing_text;
+    document.getElementById('amount').value = this.props.ingredient.amount;
+    document.getElementById('unit_set').value = this.props.ingredient.unit_set;
   }
 
   //Clears the inputs when clear button is clicked.
@@ -191,7 +194,7 @@ export default class IngredientFieldset extends Component {
     const { currentIngredient } = this.state;
     const { isAdding, onCancelClick, disableFieldsets, unit_data } = this.props;
     const title = isAdding ? 'Add New Ingredient' : `Editing Ingredient`;
-    const fieldsetId = isAdding? 'add_ingredient_fieldset' : `editing_ingredient_${currentIngredient.id}_fieldset`;
+    const fieldsetId = isAdding ? 'add_ingredient_fieldset' : `editing_ingredient_${currentIngredient.id}_fieldset`;
 
     return (
       <>
@@ -208,7 +211,6 @@ export default class IngredientFieldset extends Component {
           disabled={disableFieldsets}
         >
           <legend>{title}</legend>
-          <div className='Fieldset__input-row-fix'>
             <Input
               defaultValue={currentIngredient.amount.value}
               updateField={this.updateIngredientField}
@@ -222,7 +224,6 @@ export default class IngredientFieldset extends Component {
               unit_data={unit_data}
               updateIngredientField={this.updateIngredientField}
             />
-          </div>
           <Input
             defaultValue={currentIngredient.ing_text.value}
             updateField={this.updateIngredientField}

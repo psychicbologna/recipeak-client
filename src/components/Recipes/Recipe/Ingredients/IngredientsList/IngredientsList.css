@@ -1,0 +1,8 @@
+.RecipeForm__ingredients__empty {
+  padding: 1rem;
+  max-width: 500px;
+}
+
+.RecipeForm__ingredients__empty h4 {
+  text-align: center;
+}

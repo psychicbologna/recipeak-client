@@ -16,6 +16,8 @@
 .UnitSetSelect__label {
   display: flex;
   flex-flow: column;
+  padding: 0 0 .5rem 0;
+  margin: 0 1rem;
 }
 
 .UnitSetSelect__select:focus {

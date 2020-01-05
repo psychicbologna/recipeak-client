@@ -71,25 +71,22 @@
 }
 
 .App__main {
-  margin: 0 1em;
+  padding: 1rem;
 }
 
 a:hover {
   text-decoration: underline;
 }
 
-.Form {
-  display: flex;
-  flex-flow: column;
-}
-
 .Fieldset {
   display: grid;
   margin-bottom: 1rem;
-  border-bottom: 1px solid var(--accent-color-1);
+  max-width: 500px;
+  /* border-bottom: 1px solid var(--accent-color-1); */
 }
 
 .Fieldset legend {
+  margin-bottom: 1rem;
   font-size: 1.25em;
   background: var(--light-gray);
   color: var(--accent-color-3);
@@ -109,7 +106,7 @@ a:hover {
 }
 
 .Input__input[type='number'] {
-  width: 2rem;
+  width: 3rem;
 }
 
 .Input__input:focus {
@@ -130,6 +127,13 @@ a:hover {
 .Input__label {
   display: flex;
   flex-flow: column;
+  padding: 0  0 .5rem 0;
+  margin: 0 1rem;
+}
+
+.UnitSelect__label {
+  padding: 0  0 .5rem 0;
+  margin: 0 1rem;
 }
 
 .disabled {
@@ -142,4 +146,15 @@ a:hover {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+}
+
+.TextArea {
+  width: 100%;
+  padding: .5rem;
+  height: 150px;
+  -webkit-appearance: none;
+  max-width: 500px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }

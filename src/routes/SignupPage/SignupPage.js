@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import SignupForm from '../../components/forms/SignupForm/SignupForm';
+import './SignupPage.css'
 
 export default class SignupPage extends Component {
 
@@ -23,7 +24,7 @@ export default class SignupPage extends Component {
           <SignupForm onSignupSuccess={this.handleSignupSuccess} />
         </section>
 
-        <section className="signup-redirect">
+        <section className="SignupPage__copy">
           <p>Already signed up?</p>
           <Link to='/login'>
             Login

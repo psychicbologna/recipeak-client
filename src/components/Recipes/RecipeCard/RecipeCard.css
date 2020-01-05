@@ -1,12 +1,16 @@
 .RecipeCard {
-  border: 1px solid;
-  border-color: var(--dark-gray);
+  display: flex;
+  flex-flow: column;
+  border-width: 0 1px;
+  border-style: solid;
+  border-color: var(--light-gray);
 }
 
 .RecipeCard__header {
-  padding: .25rem 0;
-  margin: 1rem 0;
+  padding: 0.25rem 0;
+  margin: 0 0 1rem 0;
   background-color: var(--light-gray);
+  height: 100%;
 }
 
 .RecipeCard__heading {

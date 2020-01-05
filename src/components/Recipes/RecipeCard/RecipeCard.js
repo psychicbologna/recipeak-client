@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { PrepTimeDisplay, Button } from '../../Utils/Utils';
+import { PrepTimeDisplay } from '../../Utils/Utils';
 import './RecipeCard.css';
 
 

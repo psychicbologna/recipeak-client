@@ -3,11 +3,12 @@
 }
 
 .LandingPage__Copy {
-  margin-bottom: 1rem;
-  border: 1px solid black;
+  max-width: 500px;
+  margin: 0 auto 1rem auto;
 }
 
 .LandingPage__ol {
+  margin-right: 1rem;
 }
 
 .LandingPage__Intro p {

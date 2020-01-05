@@ -131,12 +131,12 @@ export function PrepTimeDisplay(props) {
 
 export function TextArea(props) {
   const { defaultValue, updateField, areaId, areaLabel, disabled } = props;
-  const areaName = `TextArea RecipesForm__${areaId}`
+  const areaName = `RecipeForm__${areaId}`
   return (
     <>
-      <label htmlFor={areaName}>{areaLabel}</label>
+      <label className='Input__label__description' htmlFor={areaId}>{areaLabel}</label>
       <textarea
-        className='Fieldset RecipesForm__TextArea'
+        className={`TextArea ${areaName}`}
         defaultValue={defaultValue}
         id={areaId}
         onChange={e => updateField(areaId, e.target.value)}
