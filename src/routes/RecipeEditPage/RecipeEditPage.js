@@ -131,7 +131,7 @@ export default class RecipeEditPage extends Component {
         }
 
         {error
-          && <div className='Alert' role='alert'> <p className='Alert__p'>{error}</p></div>
+          && <div className='Alert' role='alert'> <p className='Alert__p'>{error.message}</p></div>
         }
       </section>
     )

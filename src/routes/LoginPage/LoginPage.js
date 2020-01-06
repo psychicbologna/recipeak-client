@@ -11,6 +11,7 @@ class LoginPage extends Component {
     },
   }
 
+
   handleLoginSuccess = () => {
     //After confirmed login success, track history, move to '/home'.
     const { location, history, } = this.props
@@ -26,7 +27,7 @@ class LoginPage extends Component {
           onLoginSuccess={this.handleLoginSuccess}
         />
         <div className="LoginPage__copy">
-        <p>For a demo account, use username: <code>bonappetite</code>, password: <code>password</code></p>
+          <p>For a demo account, use username: <code>bonappetite</code>, password: <code>password</code></p>
         </div>
       </section>
     )

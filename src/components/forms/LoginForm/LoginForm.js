@@ -33,8 +33,9 @@ export default class LoginForm extends Component {
         //Move to next/prev page.
         this.props.onLoginSuccess()
       })
-      .catch(res => {
-        this.setState({ error: res.error })
+      .catch(error => {
+        this.setState({ error: error.message })
+        console.log(this.state.error)
       })
 
   }

@@ -15,3 +15,14 @@
   line-height: 1.5em;
   font-size: 1.25em;
 }
+
+.LandingPage__img {
+  width: 100%;
+}
+
+.LandingPage__screenshot {
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid;
+  margin: 0 auto;
+}
