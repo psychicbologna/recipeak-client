@@ -11,11 +11,53 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Summary
 
-Recipeak is a recipe storing app.
+Recipeak's primary function is to store your favorite recipes in one place. You can add, edit and delete these recipes and their components. The server was designed to use a database with associated tables for users, recipes, units and ingredients.
+
+To learn more about the backend functionalities, see the [API documentation](https://github.com/psychicbologna/recipeak-api/blob/master/README.md).
+
+
+### How to Use
+
+1. Create an account or sign in using the demo account `bonappetite` with the password `password`.
+
+![Login Page](./documentation-screenshots/loginscreen.png)
+
+2. Try adding your favorite recipe! Click the Add Recipe button.
+
+![Add Recipe UI](./documentation-screenshots/addrecipebutton.png)
+
+  The form includes a section for listing ingredients, with an 'Add New Ingredient' fieldset.
+
+![Add Ingredient Fieldset](./documentation-screenshots/ingredientadd.png)
+
+   Note that unit measurement select is divided into categories, including approximate and US/Metric. Certain unit sets will show a 'Convert x to x' button, which will show you the converted version of that unit.
+
+  ![Conversion Before](./documentation-screenshots/convert-1.png)
+  ![Conversion After](./documentation-screenshots/convert-2.png)
+   
+   When you select the 'Custom' option in unit sets, the fieldset changes so you can define custom unit data.
+
+   ![Custom Unit Inputs](./documentation-screenshots/customfieldset.png)
+
+3. Click 'Submit' on the bottom of the screen. You should be directed to the new recipe's view page.
+
+ ![Recipe View](./documentation-screenshots/viewrecipe.png)
+
+  The recipe has also been added your homepage in a card list format. You may click on 'View' or the recipe's title to review it.
+
+4. You can also edit the components of your recipe. Click on the 'Edit' link on the card to bring up an editing version of the recipe form.
+
+5. Note you can edit the list of ingredients by adding new ones, editing existing ones and deleting any ones on the list you don't need anymore.
+
+7. Finally, you can delete the recipe using the 'Delete' link under the Submit button on the form. Doing so will permanently remove the recipe from your account!
 
 ## Tech Stack
 
-Express.js, React.js, Node.js, Chai, Mocha, Enzyme, Morgan, CORS, Postgres, Postgrator, Supertest.
+Node, npm, React.js including react-router, react-dom, react-router-dom and react-scripts.
+
+Testing: Enzyme
+
+Logging: Mocha
 
 ## Available Scripts
 
